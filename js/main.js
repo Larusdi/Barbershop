@@ -649,60 +649,94 @@ function setNowPlayingPill(pill, playing){
   setInterval(update, 60 * 60 * 1000);
 })();
 
-/* =============================
-   Live clock (WIB / Asia/Jakarta) — 12h + AM/PM
-   ============================= */
+/* =========================================
+   Live clock (WIB / Asia/Jakarta)
+   - Baca pengaturan dari data-attribute:
+     data-12h="true|false" (default: true)
+     data-seconds="true|false" (default: true)
+   - Sinkron ke pergantian detik
+   - AM/PM ditaruh di .tz saat 12-jam
+   ========================================= */
 (() => {
-  const wrap = document.getElementById('hero-clock');
-  const el = document.getElementById('clock-wib');
-  if (!wrap || !el) return;
-
-  const tzEl = wrap.querySelector('.tz');
   const TZ = 'Asia/Jakarta';
-  const USE_12H = true; // ubah ke false untuk 24-jam
 
-  const fmt = new Intl.DateTimeFormat(USE_12H ? 'en-US' : 'en-GB', {
-    timeZone: TZ,
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hour12: USE_12H
+  function initWIBClock(root) {
+    if (!root) return;
+    const el = root.querySelector('#clock-wib') || root.querySelector('time');
+    if (!el) return;
+    const tzEl = root.querySelector('.tz');
+
+    // Baca konfigurasi dari data-attribute
+    const USE_12H = (root.getAttribute('data-12h') ?? 'true') !== 'false';
+    const SHOW_SECONDS = (root.getAttribute('data-seconds') ?? 'true') !== 'false';
+
+    const locale = USE_12H ? 'en-US' : 'en-GB';
+    const fmtOpts = {
+      timeZone: TZ,
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: USE_12H
+    };
+    if (SHOW_SECONDS) fmtOpts.second = '2-digit';
+
+    const fmt = new Intl.DateTimeFormat(locale, fmtOpts);
+
+    function getParts(date = new Date()) {
+      const parts = fmt.formatToParts(date);
+      let h = '00', m = '00', s = '', period = '';
+      for (const p of parts) {
+        if (p.type === 'hour') h = p.value;
+        else if (p.type === 'minute') m = p.value;
+        else if (p.type === 'second') s = p.value;
+        else if (p.type === 'dayPeriod') period = p.value.toUpperCase();
+      }
+      const text = SHOW_SECONDS ? `${h}:${m}:${s}` : `${h}:${m}`;
+      return { text, period };
+    }
+
+    function render() {
+      const { text, period } = getParts();
+      el.textContent = text;
+      el.setAttribute('datetime', text);
+
+      if (tzEl) {
+        if (USE_12H && period) {
+          tzEl.textContent = `${period} · WIB`;
+          tzEl.setAttribute('aria-label', `Zona waktu WIB, ${period}`);
+        } else {
+          tzEl.textContent = 'WIB';
+          tzEl.setAttribute('aria-label', 'Zona waktu WIB');
+        }
+      }
+    }
+
+    function start() {
+      render();
+      const ms = 1000 - new Date().getMilliseconds();
+      clearTimeout(start._t); clearInterval(start._i);
+      start._t = setTimeout(() => {
+        render();
+        start._i = setInterval(render, 1000);
+      }, ms);
+    }
+
+    start();
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) start();
+    });
+  }
+
+  // Auto-init untuk elemen dengan id #hero-clock
+  document.addEventListener('DOMContentLoaded', () => {
+    const single = document.getElementById('hero-clock');
+    if (single) initWIBClock(single);
+
+    // Jika ingin banyak jam sekaligus, aktifkan ini:
+    // document.querySelectorAll('.hero-clock').forEach(initWIBClock);
   });
 
-  function getTime(){
-    const parts = fmt.formatToParts(new Date());
-    let h='00', m='00', s='00', period='';
-    for (const p of parts){
-      if (p.type==='hour') h=p.value;
-      else if (p.type==='minute') m=p.value;
-      else if (p.type==='second') s=p.value;
-      else if (p.type==='dayPeriod') period=p.value.toUpperCase();
-    }
-    return {text:`${h}:${m}:${s}`, period};
-  }
-
-  function render(){
-    const {text, period} = getTime();
-    el.textContent = text;
-    el.setAttribute('datetime', text);
-    if (tzEl){
-      tzEl.textContent = USE_12H && period ? `${period} · WIB` : 'WIB';
-      tzEl.setAttribute('aria-label', `Zona waktu WIB${USE_12H&&period?`, ${period}`:''}`);
-    }
-  }
-
-  function start(){
-    render();
-    const ms = 1000 - new Date().getMilliseconds();
-    clearTimeout(start._t); clearInterval(start._i);
-    start._t = setTimeout(() => {
-      render();
-      start._i = setInterval(render, 1000);
-    }, ms);
-  }
-
-  start();
-  document.addEventListener('visibilitychange', () => { if (!document.hidden) start(); });
+  // Ekspor ke global kalau mau inisialisasi manual: window.initWIBClock(el)
+  window.initWIBClock = initWIBClock;
 })();
 
 
