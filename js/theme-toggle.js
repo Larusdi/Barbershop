@@ -1,54 +1,54 @@
 /* Logika tombol toggle tema + sinkron dengan sistem */
 (function () {
-  function init() {
-    var btn = document.getElementById('theme-toggle');
-    if (!btn) return;
+  const html = document.documentElement;
+  const btn  = document.getElementById('theme-toggle');
 
-    var root = document.documentElement;
-    var mq = window.matchMedia('(prefers-color-scheme: dark)');
+  const getPreferred = () => {
+    const saved = localStorage.getItem('theme');
+    if (saved === 'light' || saved === 'dark') return saved;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  };
 
-    function getCurrent() {
-      var forced = root.getAttribute('data-theme'); // 'light' | 'dark' | null
-      if (forced) return forced;
-      return mq.matches ? 'dark' : 'light'; // ikut sistem bila tidak dipaksa
+  const setTheme = (mode) => {
+    html.setAttribute('data-theme', mode);
+    localStorage.setItem('theme', mode);
+    // aria-pressed: true ketika mode gelap (tombol dalam keadaan "aktif")
+    btn.setAttribute('aria-pressed', String(mode === 'dark'));
+  };
+
+  // Pasang awal
+  setTheme(getPreferred());
+
+  // Helper: trigger animasi pop ke ikon aktif
+  const popActiveIcon = () => {
+    const sun  = btn.querySelector('.icon.sun');
+    const moon = btn.querySelector('.icon.moon');
+    // reset kelas dulu biar anim bisa retrigger
+    sun.classList.remove('-pop');
+    moon.classList.remove('-pop');
+    // reflow (hack) agar anim ulang
+    void sun.offsetWidth; void moon.offsetWidth;
+
+    const active = (html.getAttribute('data-theme') === 'dark') ? moon : sun;
+    active.classList.add('-pop');
+  };
+
+  // Jalankan pop pada initial mount biar terasa hidup (opsional)
+  popActiveIcon();
+
+  btn.addEventListener('click', () => {
+    const current = html.getAttribute('data-theme') || getPreferred();
+    const next = current === 'dark' ? 'light' : 'dark';
+    setTheme(next);
+    popActiveIcon();
+  });
+
+  // Jika user mengubah preferensi OS di runtime, sinkronkan (opsional)
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    const saved = localStorage.getItem('theme');
+    if (!saved) {               // hanya sinkron kalau user belum paksa manual
+      setTheme(e.matches ? 'dark' : 'light');
+      popActiveIcon();
     }
-
-    function setTheme(mode) { // 'light' | 'dark' | '' (ikut sistem)
-      if (mode === 'light' || mode === 'dark') {
-        root.setAttribute('data-theme', mode);
-        try { localStorage.setItem('theme', mode); } catch (e) {}
-        btn.setAttribute('aria-pressed', String(mode === 'dark'));
-      } else {
-        root.removeAttribute('data-theme');
-        try { localStorage.removeItem('theme'); } catch (e) {}
-        btn.setAttribute('aria-pressed', String(getCurrent() === 'dark'));
-      }
-    }
-
-    // Inisialisasi state tombol
-    var saved = null;
-    try { saved = localStorage.getItem('theme'); } catch (e) {}
-    setTheme(saved || ''); // '' = ikut sistem
-
-    // Klik = toggle
-    btn.addEventListener('click', function () {
-      var next = (getCurrent() === 'dark') ? 'light' : 'dark';
-      setTheme(next);
-    });
-
-    // Jika user tidak memaksa tema, ikut perubahan sistem secara live
-    function onChange() {
-      var hasSaved = false;
-      try { hasSaved = !!localStorage.getItem('theme'); } catch (e) {}
-      if (!hasSaved) setTheme(''); // tetap ikut sistem
-    }
-    if (mq.addEventListener) mq.addEventListener('change', onChange);
-    else if (mq.addListener) mq.addListener(onChange);
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
+  });
 })();
