@@ -614,95 +614,6 @@
         </symbol>
     </svg>
 
-    <script>
-        (() => {
-        const BP = 900;
-        const html = document.documentElement;
-        const header = document.getElementById('site-header') || document.querySelector('.header');
-        const nav = document.getElementById('site-nav') || document.querySelector('.navigation');
-        const toggle = header ? header.querySelector('.nav-toggle') : null;
-
-        if (!nav || !toggle) return;
-
-        // overlay: buat otomatis kalau belum ada
-        let overlay = document.querySelector('.nav-overlay');
-        if (!overlay) {
-            overlay = document.createElement('div');
-            overlay.className = 'nav-overlay';
-            overlay.hidden = true;
-            document.body.appendChild(overlay);
-        }
-
-        const focusSel = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
-        let lastFocused = null;
-
-        function trapFocus(e){
-            if (e.key !== 'Tab') return;
-            const nodes = nav.querySelectorAll(focusSel);
-            if (!nodes.length) return;
-            const first = nodes[0], last = nodes[nodes.length - 1];
-            if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
-            else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
-        }
-
-        function openNav(){
-            lastFocused = document.activeElement;
-            nav.hidden = false;
-            overlay.hidden = false;
-            requestAnimationFrame(() => {
-            nav.classList.add('is-open');
-            overlay.classList.add('is-open');
-            });
-            toggle.setAttribute('aria-expanded', 'true');
-            html.classList.add('no-scroll');
-            document.addEventListener('keydown', onKeydown);
-            document.addEventListener('keydown', trapFocus);
-            // fokus ke item pertama
-            const first = nav.querySelector(focusSel);
-            first && first.focus();
-        }
-
-        function closeNav(){
-            nav.classList.remove('is-open');
-            overlay.classList.remove('is-open');
-            toggle.setAttribute('aria-expanded', 'false');
-            html.classList.remove('no-scroll');
-            const tidy = () => {
-            nav.hidden = true;
-            overlay.hidden = true;
-            nav.removeEventListener('transitionend', tidy);
-            };
-            nav.addEventListener('transitionend', tidy);
-            document.removeEventListener('keydown', onKeydown);
-            document.removeEventListener('keydown', trapFocus);
-            // kembalikan fokus
-            lastFocused && lastFocused.focus && lastFocused.focus();
-        }
-
-        function onKeydown(e){
-            if (e.key === 'Escape') closeNav();
-        }
-
-        // Toggle
-        toggle.addEventListener('click', () => {
-            const expanded = toggle.getAttribute('aria-expanded') === 'true';
-            expanded ? closeNav() : openNav();
-        });
-
-        // Tutup saat klik overlay atau klik link di menu
-        overlay.addEventListener('click', closeNav);
-        nav.addEventListener('click', (e) => {
-            const a = e.target.closest('a');
-            if (a) closeNav();
-        });
-
-        // Auto reset saat melebar ke desktop
-        window.addEventListener('resize', () => {
-            if (window.innerWidth > BP && !nav.hidden) closeNav();
-        });
-        })();
-    </script>
-
     <!-- Quick View Popup -->
     <div class="qv-pop" id="qv-pop" hidden>
       <div class="qv-backdrop" data-qv-close></div>
@@ -813,5 +724,6 @@
     <script src="js/social-proof.js" defer></script>
     <script src="js/aoe.js" defer></script>
     <script src="js/main.js" defer></script>
+    <script src="js/store.js" defer></script>
   </body>
 </html>
