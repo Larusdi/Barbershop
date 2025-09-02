@@ -1,0 +1,168 @@
+/* ==========================================================
+   MOBILE-FIRST FLUID OVERRIDES — 2025 PRO (drop-in)
+   ========================================================== */
+
+/* --- Dasar responsif global --- */
+*,*::before,*::after{ box-sizing:border-box; }
+img,video{ max-width:100%; height:auto; display:block; }
+:root{
+  /* ukuran tap minimal & skala fluid */
+  --tap: 44px;
+  --pad-x: clamp(16px, 4vw, 28px);
+  --gap-s: clamp(6px, 2vw, 10px);
+  --gap-m: clamp(10px, 3vw, 16px);
+  --fs-h1: clamp(24px, 6vw, 36px);
+  --fs-h2: clamp(20px, 4.8vw, 28px);
+  --fs-body: clamp(14px, 3.6vw, 16px);
+}
+
+/* Container ngepas layar */
+.container{
+  width:min(100%, 1200px);
+  margin-inline:auto;
+  padding-inline: var(--pad-x);
+}
+
+/* Tombol & input nyaman di HP */
+.btn{ min-height: var(--tap); padding-inline: clamp(14px, 3.2vw, 18px); }
+input,select,textarea{ min-height: var(--tap); }
+
+/* --- Hero section fluid --- */
+.hero-2025{
+  padding-block: clamp(56px, 12vw, 112px);
+}
+.hero-2025 .hero-title{
+  font-size: var(--fs-h1);
+  line-height: 1.15;
+}
+.hero-2025 .hero-badge{ padding: 6px 12px; font-size: clamp(12px, 3.2vw, 14px); }
+.hero-2025 .hero-actions{ display:flex; flex-wrap:wrap; gap: var(--gap-m); }
+.hero-2025 .hero-chips{ display:flex; flex-wrap:wrap; gap: var(--gap-s); }
+.hero-2025 .chip{ padding: 8px 12px; font-size: clamp(12.5px, 3.4vw, 14px); }
+
+/* --- Grid otomatis: layanan, services, stats, about --- */
+.service-list,
+.services-grid{
+  display:grid;
+  gap: var(--gap-m);
+  /* otomatis 1–4 kolom tergantung lebar */
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+}
+
+.about-2025 .about-grid{
+  display:grid;
+  gap: var(--gap-m);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+}
+
+.about-2025 .about-stats{
+  display:flex; flex-wrap:wrap; gap: var(--gap-m);
+}
+.about-2025 .stat{
+  flex: 1 1 220px; /* otomatis 1–2–3 per baris sesuai ruang */
+  min-width: 200px;
+}
+
+/* --- Kartu layanan lebih kompak di HP --- */
+.service-block{
+  padding: clamp(14px, 3.6vw, 18px);
+  border-radius: clamp(12px, 3vw, 16px);
+}
+.service-icon img{ width: clamp(44px, 10vw, 56px); height: clamp(44px, 10vw, 56px); }
+.price{ padding: 6px 12px; font-size: clamp(13px, 3.6vw, 15px); }
+
+/* --- Form stack otomatis jika sempit --- */
+.input-group{
+  display:flex; gap: var(--gap-s);
+}
+@supports(width: max(100%)){ /* guard modern browser */
+  .input-group{ flex-wrap:wrap; }
+  .input-group > *{ flex:1 1 220px; }
+  .input-group .btn{ flex: 0 0 100%; }
+}
+
+/* --- Footer & nav melebar otomatis --- */
+.navigation ul{ display:flex; flex-wrap:wrap; gap: var(--gap-s); }
+.footer .row{
+  display:grid; gap: var(--gap-m);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+/* --- Hero meta divider dirapikan untuk layar kecil --- */
+.hero-meta{ display:flex; flex-wrap:wrap; gap: var(--gap-s); padding-bottom: 10px; margin-bottom: 16px; }
+
+/* --- Tinggi layar pendek (landscape phone) --- */
+@media (orientation: landscape) and (max-height: 480px){
+  .hero-2025{ padding-block: 36px; min-height: auto; }
+  .hero-2025 .scroll-cue{ display:none; }
+}
+
+/* --- HP tinggi --- */
+@media (min-height: 900px) and (max-width: 600px){
+  .hero-2025{ min-height: 74vh; }
+}
+
+/* --- Safe area notch --- */
+@supports (padding: max(0px)){
+  .hero-2025{
+    padding-bottom: calc(clamp(64px, 9vw, 112px) + env(safe-area-inset-bottom));
+  }
+  .hero-2025 .scroll-cue{
+    bottom: max(18px, calc(env(safe-area-inset-bottom) + 10px));
+  }
+}
+
+/* --- Retina hairlines --- */
+@media (min-resolution: 2dppx){
+  .hero-meta::after, .tiny-footer::before{ opacity:.9; }
+}
+
+/* --- Micro-breakpoints khusus ekstra kecil (≤360 / ≤420) --- */
+@media (max-width: 360px){
+  .container{ padding-inline: 12px; }
+  .hero-2025 .btn{ --btn-h: 42px; --btn-px: 14px; }
+}
+@media (max-width: 420px){
+  .hero-2025 .btn.btn-default{ flex-basis:100%; }
+  .hero-2025 .scroll-cue{ --cue-size: 44px; }
+}
+
+/* === QV POPUP CENTER FIX (all phones) === */
+.qv-pop{
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  display: grid;
+  align-items: center;
+  justify-items: center;   /* center horizontal */
+  padding: 16px;           /* ruang tepi agar tidak “nempel” */
+}
+
+/* Lebar kartu: clamp agar selalu muat di layar kecil */
+.qv-pop .qv-card{
+  margin: 0;
+  /* fallback untuk browser lama */
+  width: clamp(260px, calc(100vw - 32px), 560px);
+  max-width: 100%;
+  /* jangan pernah geser ke samping (hanya Y + scale) */
+  transform: translateY(8px) scale(.98);
+}
+
+/* gunakan viewport dinamis kalau didukung (lebih akurat di mobile) */
+@supports (width: 100dvw){
+  .qv-pop .qv-card{
+    width: clamp(260px, calc(100dvw - 32px), 560px);
+  }
+}
+
+/* Saat modal terbuka: kunci scroll & hindari pergeseran layout */
+body.modal-open{
+  overflow: hidden;
+  width: 100%;
+}
+
+/* Kalau ada elemen yang bikin overflow horizontal, sembunyikan agar fixed benar2 center */
+html, body{
+  max-width: 100%;
+  overflow-x: hidden;
+}

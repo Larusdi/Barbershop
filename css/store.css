@@ -1,0 +1,434 @@
+/* =========================================
+   STORE 2025 PRO — Netral Elegan & Maintainable
+   ========================================= */
+
+/* ===== Design Tokens (Light default) ===== */
+:root{
+  --bg:#0b0d11;
+  --text:#0f172a;        /* teks gelap elegan */
+  --muted:#6b7280;
+  --brand:#3b82f6;       /* brand disoftkan */
+  --accent:#38bdf8;      /* cyan soft */
+  --line:rgba(17,24,39,.12);
+  --card:#ffffff;
+}
+
+/* ===== Auto Dark (fallback bila tidak pakai data-theme) ===== */
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0b0d11;
+    --text:#e7ecf4;
+    --muted:#a9b3c7;
+    --brand:#70a2ff;
+    --accent:#38bdf8;
+    --line:rgba(255,255,255,.14);
+    --card:#0f141c;
+  }
+}
+
+/* ===== Explicit Dark Mode (mengalahkan prefers-color-scheme) ===== */
+html[data-theme="dark"]{
+  --bg:#0b0d11;
+  --text:#e7ecf4;
+  --muted:#a9b3c7;
+  --brand:#70a2ff;
+  --accent:#38bdf8;
+  --line:rgba(255,255,255,.14);
+  --card:#0f141c;
+}
+
+/* ===== Page Spacing ===== */
+.p-store{ padding-block: 36px 72px; }
+.p-store__section{ padding-block: 24px 8px; }
+
+/* ===== Header ===== */
+.store__header{
+  display:flex; align-items:flex-end; gap:10px; flex-wrap:wrap;
+  margin-bottom:14px;
+}
+.store__title{
+  font-size: clamp(22px, 2.6vw, 32px);
+  line-height:1.15; margin:0; letter-spacing:.2px;
+}
+.store__subtitle{
+  margin:4px 0 0; color:var(--muted); font-weight:600;
+}
+
+/* ===== Toolbar (chips + indicator) ===== */
+.store__toolbar{
+  position: relative;
+  display:flex; gap:10px; flex-wrap:wrap;
+  padding:10px; border:1px solid var(--line);
+  border-radius:14px; margin:18px 0 24px;
+  background: color-mix(in srgb, var(--card) 94%, transparent);
+  backdrop-filter: blur(6px) saturate(1.06);
+}
+.store__filter-btn{
+  position: relative;
+  appearance:none; -webkit-tap-highlight-color:transparent; cursor:pointer;
+  border:1px solid var(--line);
+  background: color-mix(in srgb, var(--card) 86%, transparent);
+  color: var(--text);
+  border-radius:999px; padding:8px 14px; font-weight:800;
+  letter-spacing:.2px;
+  transition: transform .12s ease, box-shadow .12s ease, color .12s ease, border-color .12s ease, background-color .12s ease;
+}
+.store__filter-btn:hover{ transform: translateY(-1px); }
+.store__filter-btn:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+
+.store__filter-btn.is-active{
+  color:#fff;
+  border-color: color-mix(in srgb, var(--brand) 40%, var(--line));
+  background: var(--brand);                       /* no harsh gradient */
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--brand) 12%, transparent);
+}
+
+/* Magic indicator garis bawah yang bergerak */
+.store__toolbar-ind{
+  position:absolute; left:10px; bottom:6px; height:2px; width:36px;
+  background: linear-gradient(90deg, var(--accent), var(--brand));
+  border-radius:99px; opacity:.8;
+  transition: transform .28s cubic-bezier(.2,.8,.2,1), width .28s cubic-bezier(.2,.8,.2,1);
+}
+
+/* ===== Grid ===== */
+.store__grid{
+  display:grid; gap:18px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+/* ===== Card ===== */
+.store-card{
+  position:relative; display:flex; flex-direction:column;
+  border:1px solid var(--line);
+  border-radius:18px; overflow:hidden;
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--card) 98%, transparent),
+      color-mix(in srgb, var(--card) 92%, transparent)
+    );
+  backdrop-filter: blur(4px) saturate(1.06);
+  box-shadow:
+    0 14px 32px rgba(2,8,20,.06),
+    0 1px 0 rgba(255,255,255,.04) inset;
+  transform: translateY(0) translateZ(0);
+  transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease, background-color .16s ease, opacity .18s ease;
+  will-change: transform;
+  opacity: 0; transform: translateY(10px); /* for reveal */
+}
+.store-card.is-revealed{ opacity:1; transform: translateY(0); }
+
+@media (hover:hover){
+  .store-card:hover{
+    transform: translateY(-3px);
+    box-shadow:
+      0 20px 44px rgba(2,8,20,.10),
+      0 1px 0 rgba(255,255,255,.05) inset;
+  }
+}
+
+.store-card__thumb{
+  display:block; width:100%; height:auto; aspect-ratio: 4 / 3; object-fit: cover;
+  background: #0e131b;
+  transition: transform .3s cubic-bezier(.2,.8,.2,1), filter .3s ease;
+}
+@media (hover:hover){
+  .store-card:hover .store-card__thumb{ transform: scale(1.03); }
+}
+
+/* Body sebagai grid supaya hierarchy stabil: title → meta/desc → spacer */
+.store-card__body{
+  padding:14px 14px 0;
+  display:grid;
+  grid-template-rows: auto auto 1fr; /* title, meta/desc, spacer */
+  gap:8px;
+}
+.store-card__title{
+  margin:0; font-size: clamp(16px, 1.7vw, 18px);
+  line-height:1.25; letter-spacing:.1px;
+}
+.store-card__meta{
+  margin:0; color:var(--muted); font-size:.95rem;
+}
+/* Opsional: clamp 2 baris untuk deskripsi ringkas */
+.store-card__desc{
+  margin:2px 0 0;
+  color: color-mix(in srgb, var(--text) 78%, transparent);
+  font-size:.95rem; line-height:1.35;
+  display:-webkit-box; -webkit-line-clamp:2; -webkit-box-orient:vertical;
+  overflow:hidden; text-overflow:ellipsis;
+}
+
+/* Foot selalu nempel bawah & ada pemisah halus */
+.store-card__foot{
+  padding:12px 14px 14px; margin-top:auto;
+  display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+  border-top:1px solid color-mix(in srgb, var(--line) 90%, transparent);
+}
+.store-card__price{
+  font-weight:900; letter-spacing:.2px;
+  color: var(--brand);                 /* solid — bukan gradient */
+}
+.store-card__actions{ display:flex; gap:8px; flex-wrap:wrap; }
+
+/* Quick view ghost button */
+.btn-ghost{
+  --gh-bg: color-mix(in srgb, var(--card) 86%, transparent);
+  border:1px solid var(--line);
+  background: var(--gh-bg); color: var(--text);
+  padding:8px 12px; border-radius:12px; font-weight:800;
+  transition: transform .12s ease, border-color .12s ease, background-color .12s ease, box-shadow .12s ease, color .12s ease;
+}
+.btn-ghost:hover{ transform: translateY(-1px); }
+.btn-ghost:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+
+/* Badge lebih subtle (single hue) */
+.store-card__head{ display:flex; align-items:center; justify-content:space-between; gap:8px; }
+.store-card__badge{
+  display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:999px;
+  font-size:.85rem; font-weight:900; letter-spacing:.2px; color:#fff;
+  background: color-mix(in srgb, var(--brand) 85%, #000 0%);
+  box-shadow: 0 8px 20px rgba(0,0,0,.14);
+}
+.store-card__badge--new::before{
+  content:""; width:6px; height:6px; border-radius:50%;
+  background: #fff; opacity:.85; box-shadow: 0 0 16px #fff;
+}
+
+/* ===== Filter show/hide animation ===== */
+.store-card.is-hiding{
+  opacity:.001; transform: translateY(6px) scale(.98);
+  pointer-events:none;
+}
+.store-card.is-hidden{ display:none !important; }
+
+/* ===== Quick View Modal (lebih kalem) ===== */
+.qv-pop{ position:fixed; inset:0; z-index: 90; display:grid; place-items:center; }
+.qv-pop[hidden]{ display:none; }
+.qv-pop .qv-backdrop{
+  position:absolute; inset:0;
+  background: rgba(8,12,20,.55);
+  backdrop-filter: blur(6px);
+  opacity:0; transition: opacity .2s ease;
+}
+.qv-pop .qv-card{
+  position:relative; z-index:1; width:min(560px, calc(100vw - 32px));
+  border:1px solid var(--line); border-radius:16px; overflow:hidden;
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--card) 96%, transparent),
+      color-mix(in srgb, var(--card) 92%, transparent)
+    );
+  box-shadow: 0 24px 64px rgba(0,0,0,.40), 0 8px 22px rgba(0,0,0,.28);
+  transform: translateY(8px) scale(.98); opacity:0;
+  transition: transform .22s cubic-bezier(.2,.8,.2,1), opacity .22s ease;
+}
+.qv-pop.is-open .qv-backdrop{ opacity:1; }
+.qv-pop.is-open .qv-card{ transform: translateY(0) scale(1); opacity:1; }
+
+.qv-head{ display:flex; align-items:center; gap:12px; padding:12px 14px 0; }
+.qv-thumb{
+  width:56px; height:56px; border-radius:10px; object-fit:cover; flex:0 0 56px;
+  box-shadow: 0 6px 18px rgba(0,0,0,.2);
+}
+.qv-title{ margin:0; font-size:18px; line-height:1.2; }
+.qv-body{ padding:10px 14px 14px; color:var(--text); }
+.qv-desc{ margin:6px 0 12px; color:var(--muted); }
+.qv-price{
+  font-weight:900; letter-spacing:.2px; margin-right:auto;
+  color: var(--brand);                 /* no gradient for calmer look */
+}
+.qv-actions{ display:flex; gap:8px; flex-wrap:wrap; align-items:center; padding:0 14px 14px; }
+.qv-close{
+  position:absolute; top:10px; right:10px;
+  width:36px; height:36px; border-radius:10px; border:1px solid var(--line);
+  background: color-mix(in srgb, var(--card) 86%, transparent);
+  display:grid; place-items:center; cursor:pointer;
+  transition: transform .12s ease, background-color .12s ease, border-color .12s ease, box-shadow .12s ease;
+}
+.qv-close:hover{ transform: translateY(-1px); }
+.qv-x{ position:relative; width:16px; height:16px; }
+.qv-x::before,.qv-x::after{ content:""; position:absolute; inset:calc(50% - 1px) 0; height:2px; background: var(--text); border-radius:2px; }
+.qv-x::before{ transform: rotate(45deg); }
+.qv-x::after{ transform: rotate(-45deg); }
+
+/* ===== Hover tilt (gambar) ===== */
+@media (pointer:fine){
+  .store-card[data-tilt="1"] .store-card__thumb{
+    transform: perspective(700px) translateZ(0);
+    transform-origin: center;
+  }
+}
+
+/* ===== Reduced motion ===== */
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; }
+  .store-card, .qv-pop .qv-card{ transform: none !important; }
+}
+
+/* ==== DARK MODE GOLD — 2025 PRO (Overrides) ==== */
+/* Fallback kalau pakai auto dark */
+@media (prefers-color-scheme: dark){
+  :root{
+    /* Soft gold + sedikit black */
+    --brand: color-mix(in srgb, #f1c45f 82%, #000 18%);
+    --accent: color-mix(in srgb, #ffe39a 85%, #000 15%);
+  }
+  /* Kontras teks di atas gold: pakai gelap */
+  .store__filter-btn.is-active{ color:#0b0d11; }
+  .store-card__badge{ color:#0b0d11; }
+}
+
+/* Explicit dark mode (mengalahkan prefers-color-scheme) */
+html[data-theme="dark"]{
+  --brand: color-mix(in srgb, #f1c45f 82%, #000 18%);
+  --accent: color-mix(in srgb, #ffe39a 85%, #000 15%);
+}
+
+/* Pastikan kontras bagus di dark theme */
+html[data-theme="dark"] .store__filter-btn.is-active{ color:#0b0d11; }
+html[data-theme="dark"] .store-card__badge{ color:#0b0d11; }
+
+/* (Opsional tapi enak dilihat): indikator toolbar sedikit lebih hangat di dark */
+html[data-theme="dark"] .store__toolbar-ind{
+  background: linear-gradient(90deg, var(--accent), var(--brand));
+}
+
+/* (Opsional) kalau mau badge lebih “deep gold” saat dark */
+html[data-theme="dark"] .store-card__badge{
+  background: color-mix(in srgb, var(--brand) 90%, #000 10%);
+}
+html[data-theme="dark"] .store-card__badge--new{
+  background-image:
+    linear-gradient(135deg, rgba(255,255,255,.08), rgba(255,255,255,0) 28%),
+    linear-gradient(135deg, color-mix(in srgb, var(--brand) 90%, #000 10%),
+                          color-mix(in srgb, var(--brand) 70%, #000 18%));
+}
+
+
+/* ===========================
+   POPUP — Layout refinement
+   (berlaku untuk light & dark)
+   =========================== */
+
+/* Head jadi grid: thumb + title */
+.qv-head{
+  display:grid; grid-template-columns: 56px 1fr; gap:12px; align-items:center;
+  padding:12px 14px 0; /* re-assert (biar konsisten) */
+}
+.qv-thumb{
+  width:56px; height:56px; border-radius:10px; object-fit:cover; flex:0 0 56px;
+  box-shadow: 0 6px 18px rgba(0,0,0,.2);
+}
+.qv-title{
+  margin:0; font-size: clamp(17px, 1.8vw, 19px); line-height:1.25;
+  letter-spacing:.1px; color: var(--text);
+}
+
+/* Body: deskripsi full width, harga tampil tegas di bawahnya */
+.qv-body{
+  display:grid; grid-template-columns: 1fr; gap:6px; align-items:start;
+  padding:10px 14px 14px; color:var(--text);
+}
+.qv-desc{
+  margin:2px 0 6px; color:var(--muted); line-height:1.4;
+  display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical;
+  overflow:hidden; text-overflow:ellipsis;
+}
+.qv-price{
+  align-self:start;
+  font-weight:900; letter-spacing:.2px;
+  color: var(--brand);
+  font-size:1.05rem;
+}
+
+/* Actions: tarik ke kanan + pembatas halus di atas */
+.qv-actions{
+  display:flex; gap:8px; flex-wrap:wrap; align-items:center;
+  padding:10px 14px 14px;
+  border-top:1px solid color-mix(in srgb, var(--line) 90%, transparent);
+  justify-content:flex-end;
+}
+
+/* ===========================
+   DARK MODE — Quick View Gold Soft
+   =========================== */
+
+/* Backdrop lebih pekat & hangat */
+html[data-theme="dark"] .qv-pop .qv-backdrop{
+  background:
+    radial-gradient(60% 80% at 50% 20%, rgba(241,196,95,.08), transparent 60%),
+    rgba(8,12,20,.62);
+  backdrop-filter: blur(8px);
+}
+
+/* Kartu popup dengan aksen emas lembut + border subtle */
+html[data-theme="dark"] .qv-pop .qv-card{
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--card) 95%, transparent),
+      color-mix(in srgb, var(--card) 90%, transparent)
+    );
+  border:1px solid color-mix(in srgb, var(--brand) 24%, var(--line));
+  box-shadow:
+    0 28px 70px rgba(0,0,0,.45),
+    0 10px 24px rgba(0,0,0,.30);
+}
+
+/* Judul/teks tetap terang, deskripsi lebih kalem */
+html[data-theme="dark"] .qv-title{ color: var(--text); }
+html[data-theme="dark"] .qv-desc{ color: color-mix(in srgb, var(--muted) 92%, transparent); }
+
+/* Harga: gold tegas, sedikit chip background agar terbaca */
+html[data-theme="dark"] .qv-price{
+  color: #0b0d11;                 /* teks gelap di atas chip gold */
+  background: color-mix(in srgb, var(--brand) 85%, #000 15%);
+  border:1px solid color-mix(in srgb, var(--brand) 35%, #000 0%);
+  padding:6px 10px; border-radius:10px; display:inline-block;
+}
+
+/* Tombol di popup — primary & ghost versi dark gold */
+html[data-theme="dark"] .qv-actions .btn-default,
+html[data-theme="dark"] .qv-actions a.btn-default{
+  background: color-mix(in srgb, var(--brand) 88%, #000 12%);
+  color:#0b0d11; border:1px solid color-mix(in srgb, var(--brand) 36%, #000 0%);
+  box-shadow: 0 10px 20px color-mix(in srgb, var(--brand) 18%, transparent);
+}
+html[data-theme="dark"] .qv-actions .btn-default:hover,
+html[data-theme="dark"] .qv-actions a.btn-default:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 14px 26px color-mix(in srgb, var(--brand) 22%, transparent);
+}
+
+html[data-theme="dark"] .qv-actions .btn-ghost{
+  background: color-mix(in srgb, var(--card) 82%, transparent);
+  border-color: color-mix(in srgb, var(--line) 100%, transparent);
+  color: var(--text);
+}
+
+/* Tombol close kontras jelas */
+html[data-theme="dark"] .qv-close{
+  background: color-mix(in srgb, var(--card) 82%, transparent);
+  border-color: color-mix(in srgb, var(--line) 100%, transparent);
+}
+html[data-theme="dark"] .qv-x::before,
+html[data-theme="dark"] .qv-x::after{
+  background: var(--text);
+}
+
+/* Garis aksen halus di tepi atas kartu (gold soft) */
+html[data-theme="dark"] .qv-card::before{
+  content:""; position:absolute; left:0; right:0; top:0; height:2px;
+  background: linear-gradient(90deg,
+    color-mix(in srgb, var(--brand) 0%, transparent),
+    color-mix(in srgb, var(--brand) 55%, transparent) 30%,
+    color-mix(in srgb, var(--accent) 55%, transparent) 70%,
+    color-mix(in srgb, var(--brand) 0%, transparent));
+  opacity:.65;
+}
+
+/* Responsif kecil: beri ruang dan cegah layout pecah */
+@media (max-width: 420px){
+  .qv-title{ font-size:17px; }
+  .qv-actions{ justify-content:space-between; }
+}

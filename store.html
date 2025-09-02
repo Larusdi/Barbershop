@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <!-- Meta dasar -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="description" content="Barber Store — pomade, clay, sea-salt spray, tonic, dan perawatan rambut pilihan.">
+    <meta name="keywords" content="barbershop, hair studio, pomade, clay, sea salt spray, tonic, grooming, store">
+    <meta name="color-scheme" content="light dark">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <title>Toko | Adam jr | Hair Studio</title>
+    <link rel="icon" type="image/x-icon" href="images/favicon.png">
+
+    <!-- PWA / Ikon (opsional) -->
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+    <meta name="theme-color" content="#0b0d11" media="(prefers-color-scheme: dark)">
+
+    <!-- ===== Styles utama (CSS terpisah) ===== -->
+    <link rel="stylesheet" href="css/app.css">
+    <link rel="stylesheet" href="css/theme-toggle.css">
+    <link rel="stylesheet" href="css/media-quaries.css">
+    <link rel="stylesheet" href="css/aoe.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/store.css">
+    <link rel="stylesheet" href="css/footer.css">
+
+    <style>
+      /* ===== Store page tweaks (ringan, mengikuti app.css) ===== */
+      .store-toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:8px 0 18px}
+      .filter-chip{
+        padding:8px 12px;border-radius:999px;border:1px solid var(--line);
+        background: color-mix(in srgb, var(--card) 92%, transparent);cursor:pointer
+      }
+      .filter-chip[aria-pressed="true"]{
+        border-color: var(--accent);
+        box-shadow: 0 6px 18px color-mix(in srgb, var(--accent) 16%, transparent);
+      }
+      .store-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:18px}
+      .product-card{
+        grid-column: span 12;
+        border:1px solid var(--line);border-radius:18px;
+        background: color-mix(in srgb, var(--card) 92%, transparent);
+        padding:14px;display:flex;flex-direction:column;gap:12px;
+        transition:transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+      }
+      .product-card:hover{
+        transform: translateY(-2px);
+        box-shadow: 0 14px 32px color-mix(in srgb, var(--brand) 10%, transparent);
+        border-color: color-mix(in srgb, var(--line) 60%, transparent);
+      }
+      .product-thumb{width:100%;aspect-ratio:4/3;border-radius:12px;object-fit:cover;background:var(--line)}
+      .product-title{font-size:1.05rem;margin:0}
+      .product-meta{color:var(--muted);font-size:.95rem;margin:0}
+      .product-foot{display:flex;align-items:center;justify-content:space-between;gap:10px}
+      .price{font-weight:700}
+      .btn-row{display:flex;gap:10px;flex-wrap:wrap}
+      .btn-ghost{
+        border:1px dashed var(--line);background:transparent;color:var(--brand);
+        padding:8px 12px;border-radius:10px;display:inline-flex;align-items:center;gap:8px
+      }
+      .badge-new{padding:4px 8px;border-radius:999px;border:1px solid var(--line);font-size:.8rem;color:var(--muted)}
+      @media(min-width:700px){ .product-card{grid-column: span 6;} }
+      @media(min-width:1024px){ .product-card{grid-column: span 4;} }
+
+      /* Hero kompakan */
+      .hero-section.--compact{padding-block:48px}
+      .hero-actions.--with-divider{height:10px;margin:10px 0 0;border-top:1px dashed var(--line);opacity:.7}
+
+      /* Hero clock separator */
+      #open-badge{display:inline-flex;align-items:center;gap:6px;line-height:1}
+      .hero-clock{display:inline-flex;align-items:center;gap:6px;vertical-align:middle;margin-left:10px;line-height:1;color:var(--muted);font-variant-numeric:tabular-nums}
+      .hero-clock svg{width:16px;height:16px;display:block}
+      #open-badge + .hero-clock::before{content:"";display:inline-block;width:1px;height:1.1em;margin:0 10px;background: color-mix(in srgb, var(--line) 90%, transparent);opacity:.9}
+      html[data-theme="dark"] #open-badge + .hero-clock::before{background: color-mix(in srgb, #fff 28%, var(--line));opacity:.8}
+      /* Badge dot */
+      #open-badge .dot{display:inline-block;width:.55em;height:.55em;border-radius:999px;margin-right:6px;vertical-align:middle;box-shadow:0 0 0 2px color-mix(in srgb,var(--card) 90%, transparent)}
+      #open-badge[data-state="open"] .dot{background:#22c55e}
+      #open-badge[data-state="closed"] .dot{background:#ef4444}
+      html[data-theme="dark"] #open-badge .dot{box-shadow:0 0 0 2px color-mix(in srgb, var(--line) 70%, transparent)}
+    </style>
+  </head>
+
+  <body>
+    <!-- ===== HEADER / NAV ===== -->
+    <header class="header" role="banner" id="site-header">
+      <div class="container">
+        <div class="row">
+          <a href="index.html" class="site-brand" aria-label="Beranda Adam jr | Hair Studio">
+            <img class="site-logo" src="images/logo.png" alt="Adam jr | Hair Studio" width="160" height="48" decoding="async">
+          </a>
+
+          <button class="nav-toggle" type="button"
+                  aria-label="Buka menu" aria-controls="site-nav" aria-expanded="false">
+            <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+          </button>
+
+          <nav id="site-nav" class="navigation" aria-label="Navigasi utama" hidden>
+            <ul>
+              <li><a href="index.html" title="Beranda">Home</a></li>
+              <li><a href="services.html" title="Layanan">Services</a></li>
+              <li><a href="payments.html" title="Pembayaran">Payments</a></li>
+              <li><a href="about.html" title="Tentang Kami">About</a></li>
+              <li><a href="contact.html" title="Kontak">Contact</a></li>
+              <li class="active"><a href="store.html" title="Store">Store</a></li>
+              <li>
+                <button id="theme-toggle" class="theme-toggle" type="button"
+                        aria-label="Ganti tema gelap/terang" aria-pressed="false">
+                  <span class="theme-switch" aria-hidden="true">
+                    <svg class="icon sun" viewBox="0 0 24 24" width="18" height="18">
+                      <path d="M12 4V2m0 20v-2M4.93 4.93 3.52 3.52m16.96 16.96-1.41-1.41M4 12H2m20 0h-2M4.93 19.07l-1.41 1.41m16.96-16.96-1.41 1.41M12 8a4 4 0 1 1 0 8 4 4 0 0 1 0-8Z"/>
+                    </svg>
+                    <span class="theme-thumb"></span>
+                    <svg class="icon moon" viewBox="0 0 24 24" width="18" height="18">
+                      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/>
+                    </svg>
+                  </span>
+                  <span class="sr-only">Ganti tema</span>
+                </button>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <!-- ===== STORE PAGE ===== -->
+    <main class="p-store">
+
+      <!-- ===== HERO (kompak) ===== -->
+      <section class="hero-section hero-2025 hero--compact p-store__hero" aria-labelledby="hero-title">
+        <div class="container">
+          <div class="hero-grid">
+            <div class="hero-copy" data-aoe="fade-up" data-aoe-delay="40">
+              <span class="hero-badge" id="open-badge" aria-live="polite">
+                Buka hari ini • <time datetime="11:00">11:00</time>–<time datetime="23:00">23:00</time>
+              </span>
+              <span class="hero-clock" id="hero-clock">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.75a10.25 10.25 0 1 0 0 20.5 10.25 10.25 0 0 0 0-20.5zm-.75 3.5h1.5v5.1l4 2.4-.75 1.3L11.25 12V6.75z"/></svg>
+                <time id="clock-wib" datetime="00:00:00">00:00:00</time>
+                <span class="tz">WIB</span>
+              </span>
+
+              <h1 id="hero-title" class="hero-title" data-aoe="slide-up" data-aoe-delay="80">Barber Store</h1>
+              <p class="hero-text" data-aoe="fade-up" data-aoe-delay="120">
+                Produk kurasi barber—original & aman—sesuai jenis rambutmu. Konsultasi gratis.
+              </p>
+
+              <div class="hero-actions hero-actions--divider"></div>
+            </div>
+
+            <div class="hero-media" aria-hidden="true" data-aoe="zoom-in" data-aoe-delay="80">
+              <picture>
+                <source srcset="images/hero.png" type="image/png">
+                <img src="images/hero.png" width="520" height="620" alt="" loading="lazy" decoding="async">
+              </picture>
+              <div class="hero-glow"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ===== STORE CONTENT ===== -->
+      <section class="store p-store__section" aria-labelledby="store-title">
+        <div class="container">
+          <div class="row">
+            <div class="store__wrap">
+              <header class="store__header" data-aoe="fade-up" data-aoe-delay="0">
+                <h2 id="store-title" class="store__title">Produk Pilihan</h2>
+                <p class="store__subtitle">Styling • Care • Tools • Bundles</p>
+              </header>
+
+              <!-- Toolbar filter -->
+              <div class="store__toolbar" role="toolbar" aria-label="Filter produk" data-aoe="fade-up" data-aoe-delay="60">
+                <button class="store__filter-btn is-active" type="button" data-filter="all" aria-pressed="true">Semua</button>
+                <button class="store__filter-btn" type="button" data-filter="pomade" aria-pressed="false">Pomade</button>
+                <button class="store__filter-btn" type="button" data-filter="care" aria-pressed="false">Care</button>
+                <button class="store__filter-btn" type="button" data-filter="tools" aria-pressed="false">Tools</button>
+                <button class="store__filter-btn" type="button" data-filter="bundle" aria-pressed="false">Bundles</button>
+              </div>
+
+              <!-- Grid produk -->
+              <div class="store__grid" id="store-grid" data-aoe-stagger="60">
+
+                <!-- Card: Pomade Matte -->
+                <article class="store-card" data-cat="pomade">
+                  <img class="store-card__thumb" src="images/products/uppercut-deluxe.jpg" alt="Uppercut Deluxe Featherweight"
+                      width="640" height="480" loading="lazy" decoding="async">
+
+                  <div class="store-card__body">
+                    <h3 class="store-card__title">Uppercut Deluxe Featherweight</h3>
+                    <p class="store-card__meta">uppercut, pomade, medium hold, matte finish, berbasis air</p>
+                  </div>
+
+                  <footer class="store-card__foot">
+                    <span class="store-card__price">Rp 230,000</span>
+                    <div class="store-card__actions">
+                      <a class="btn btn-default"
+                        href="https://wa.me/6281374154373?text=Halo%20Adam%20jr%2C%20saya%20mau%20order%20Pomade%20Matte%20Finish%20(85k)."
+                        rel="noopener">WhatsApp Order</a>
+                      <button class="btn-ghost store-card__qv"
+                              type="button"
+                              data-qv='{"title":"Uppercut Deluxe Featherweight","desc":"uppercut, pomade, medium hold, matte finish, berbasis air","price":"Rp 230,000"}'>
+                        Detail
+                      </button>
+                    </div>
+                  </footer>
+                </article>
+
+                <!-- Card: Clay -->
+                <article class="store-card" data-cat="pomade">
+                  <img class="store-card__thumb" src="images/products/pomade-deluxe.jpg" alt="Uppercut Deluxe Pomade Clay Midi 25gr"
+                      width="640" height="480" loading="lazy" decoding="async">
+
+                  <div class="store-card__body">
+                    <h3 class="store-card__title">Uppercut Deluxe Pomade Clay Midi 25gr</h3>
+                    <p class="store-card__meta">Hold kuat • Tekstur tegas • Volume tanpa lepek</p>
+                  </div>
+
+                  <footer class="store-card__foot">
+                    <span class="store-card__price">Rp 170.000</span>
+                    <div class="store-card__actions">
+                      <a class="btn btn-default"
+                        href="https://wa.me/6281374154373?text=Halo%20Adam%20jr%2C%20saya%20mau%20order%20Clay%20Strong%20Texture%20(95k)."
+                        rel="noopener">WhatsApp Order</a>
+                      <button class="btn-ghost store-card__qv" type="button"
+                              data-qv='{"title":"Uppercut Deluxe Pomade Clay Midi 25gr","desc":"Hold kuat • Tekstur tegas • Volume tanpa lepek","price":"Rp 170.000"}'>
+                        Detail
+                      </button>
+                    </div>
+                  </footer>
+                </article>
+
+                <!-- Card: Sea Salt -->
+                <article class="store-card" data-cat="pomade">
+                  <img class="store-card__thumb" src="images/products/smith-pomade.jpg" alt="Smith Pomade Bold Hold"
+                      width="640" height="480" loading="lazy" decoding="async">
+
+                  <div class="store-card__body">
+                    <h3 class="store-card__title">Smith Pomade Bold Hold</h3>
+                    <p class="store-card__meta">smith pomade, kuat tahan, bersinar sedang, berbasis minyak bumi</p>
+                  </div>
+
+                  <footer class="store-card__foot">
+                    <span class="store-card__price">Rp 98.000</span>
+                    <div class="store-card__actions">
+                      <a class="btn btn-default"
+                        href="https://wa.me/6281374154373?text=Halo%20Adam%20jr%2C%20saya%20mau%20order%20Sea%20Salt%20Spray%20(75k)."
+                        rel="noopener">WhatsApp Order</a>
+                      <button class="btn-ghost store-card__qv" type="button"
+                              data-qv='{"title":"Smith Pomade Bold Hold","desc":"smith pomade, kuat tahan, bersinar sedang, berbasis minyak bumi.","price":"Rp 98.000"}'>
+                        Detail
+                      </button>
+                    </div>
+                  </footer>
+                </article>
+
+                <!-- Card: Hair Tonic -->
+                <article class="store-card" data-cat="pomade">
+                  <img class="store-card__thumb" src="images/products/hairnerds.jpg" alt="Hairnerds Professional Waterbased Pomade"
+                      width="640" height="480" loading="lazy" decoding="async">
+
+                  <div class="store-card__body">
+                    <h3 class="store-card__title">Hairnerds Professional Waterbased Pomade</h3>
+                    <p class="store-card__meta">Produk penata rambut ini diperuntukkan bagi kalian yang suka dengan penampilan rambut yang terlihat rapi dan berkilau, dengan hold yang kuat, mudah diatur, dan dapat membantu mengatur rambut secara maksimal</p>
+                  </div>
+
+                  <footer class="store-card__foot">
+                    <span class="store-card__price">Rp 70.000</span>
+                    <div class="store-card__actions">
+                      <a class="btn btn-default"
+                        href="https://wa.me/6281374154373?text=Halo%20Adam%20jr%2C%20saya%20mau%20order%20Hair%20Tonic%20(70k)."
+                        rel="noopener">WhatsApp Order</a>
+                      <button class="btn-ghost store-card__qv" type="button"
+                              data-qv='{"title":"Hair Tonic","desc":"Memberi sensasi segar, membantu sirkulasi & mengurangi lepek.","price":"Rp 70.000"}'>
+                        Detail
+                      </button>
+                    </div>
+                  </footer>
+                </article>
+
+                <!-- Card: Shampoo -->
+                <article class="store-card" data-cat="pomade">
+                  <img class="store-card__thumb" src="images/products/chief-black.jpg" alt="Chief Black Pomade"
+                      width="640" height="480" loading="lazy" decoding="async">
+
+                  <div class="store-card__body">
+                    <h3 class="store-card__title">Chief Black Pomade</h3>
+                    <p class="store-card__meta">Produk Chief Solid Black Pomade adalah produk terbaik dengan tingkat kilau dan daya rekat maksimal, bagi rambut kami yang susah diatur dapat ditata dengan gaya apapun. Bagi kalian yang bergaya klasik dan tampil klimis, ini adalah pilihan yang tepat.</p>
+                  </div>
+
+                  <footer class="store-card__foot">
+                    <span class="store-card__price">Rp 140.000</span>
+                    <div class="store-card__actions">
+                      <a class="btn btn-default"
+                        href="https://wa.me/6281374154373?text=Halo%20Adam%20jr%2C%20saya%20mau%20order%20Shampoo%20Gentle%20Clean%20(60k)."
+                        rel="noopener">WhatsApp Order</a>
+                      <button class="btn-ghost store-card__qv" type="button"
+                              data-qv='{"title":"Shampoo — Gentle Clean","desc":"Membersihkan tanpa membuat rambut kering, cocok untuk pemakaian harian.","price":"Rp 60.000"}'>
+                        Detail
+                      </button>
+                    </div>
+                  </footer>
+                </article>
+
+                <!-- Card: Aftershave -->
+                <article class="store-card" data-cat="pomade">
+                  <img class="store-card__thumb" src="images/products/smith.jpg" alt="SMITH Hair Styling"
+                      width="640" height="480" loading="lazy" decoding="async">
+
+                  <div class="store-card__body">
+                    <h3 class="store-card__title">SMITH Hair Styling & Volumizing Powder OCEAN DUST 11gr</h3>
+                    <p class="store-card__meta">Produk yang sangat mudah dipakai untuk menciptakan tampilan gaya rambut natural yang sempurna dengan tingkat kekuatan yang tinggi bagi mereka yang menginginkan tampilan rambut natural yang tertata tanpa kilau (matte finish) dan bertahan sepanjang hari. Hair powder yang sangat halus dan ringan akan menambah volume rambut sehingga rambut terlihat lebih penuh dan tebal setelah ditaburkan dan ditata ke rambut.</p>
+                  </div>
+
+                  <footer class="store-card__foot">
+                    <span class="store-card__price">Rp 75.000</span>
+                    <div class="store-card__actions">
+                      <a class="btn btn-default"
+                        href="https://wa.me/6281374154373?text=Halo%20Adam%20jr%2C%20saya%20mau%20order%20Aftershave%20Soothing%20(55k)."
+                        rel="noopener">WhatsApp Order</a>
+                      <button class="btn-ghost store-card__qv" type="button"
+                              data-qv='{"title":"Aftershave — Soothing","desc":"Menenangkan kulit pasca-cukur, cepat menyerap & tidak lengket.","price":"Rp 55.000"}'>
+                        Detail
+                      </button>
+                    </div>
+                  </footer>
+                </article>
+
+                <!-- Card: Sisir -->
+                <article class="store-card" data-cat="tools">
+                  <img class="store-card__thumb" src="images/products/suavecito.jpg" alt="suavecito"
+                      width="640" height="480" loading="lazy" decoding="async">
+
+                  <div class="store-card__body">
+                    <h3 class="store-card__title">Suavecito Asli Tahan Pomade</h3>
+                    <p class="store-card__meta">Pomade Original dari Suavecito ini adalah salah satu masalah yang yang menjadi yang terbaik dengan satu dan jenis rambut tipe orang Indonesia pricing seami segini Anda dengan penger dapat dapatn Pomade Pomade yang yang pernah likedada.</p>
+                  </div>
+
+                  <footer class="store-card__foot">
+                    <span class="store-card__price">Rp 210.000</span>
+                    <div class="store-card__actions">
+                      <a class="btn btn-default"
+                        href="https://wa.me/6281374154373?text=Halo%20Adam%20jr%2C%20saya%20mau%20order%20Sisir%20Barber%20Anti-Static%20(35k)."
+                        rel="noopener">WhatsApp Order</a>
+                      <button class="btn-ghost store-card__qv" type="button"
+                              data-qv='{"title":"Sisir Barber — Anti Static","desc":"Sisir ringan anti-statis, pas untuk styling harian & finishing.","price":"Rp 35.000"}'>
+                        Detail
+                      </button>
+                    </div>
+                  </footer>
+                </article>
+
+                <!-- Card: Sisir -->
+                <article class="store-card" data-cat="tools">
+                  <img class="store-card__thumb" src="images/products/uppercut-deluxe-monster.jpg" alt="Uppercut Deluxe Monster"
+                      width="640" height="480" loading="lazy" decoding="async">
+
+                  <div class="store-card__body">
+                    <h3 class="store-card__title">Uppercut Deluxe Monster Hold Pomade Midi 30g</h3>
+                    <p class="store-card__meta">Ini adalah lilin yang ekstra kuat dan tahan keringat yang diciptakan khusus untuk gaya tradisional atau lebih berani yang membutuhkan sedikit tambahan. Produk ini memiliki berat badan, membuatnya sempurna untuk mengontrol gaya Anda sepanjang hari.</p>
+                  </div>
+
+                  <footer class="store-card__foot">
+                    <span class="store-card__price">Rp 170.000</span>
+                    <div class="store-card__actions">
+                      <a class="btn btn-default"
+                        href="https://wa.me/6281374154373?text=Halo%20Adam%20jr%2C%20saya%20mau%20order%20Sisir%20Barber%20Anti-Static%20(35k)."
+                        rel="noopener">WhatsApp Order</a>
+                      <button class="btn-ghost store-card__qv" type="button"
+                              data-qv='{"title":"Sisir Barber — Anti Static","desc":"Sisir ringan anti-statis, pas untuk styling harian & finishing.","price":"Rp 35.000"}'>
+                        Detail
+                      </button>
+                    </div>
+                  </footer>
+                </article>
+
+                <!-- Card: Bundle -->
+                <article class="store-card" data-cat="bundle">
+                  <img class="store-card__thumb" src="images/products/paket-uppercut.jpg" alt="Uppercut Deluxe Monster Hold Pomade Midi 30g"
+                      width="640" height="480" loading="lazy" decoding="async">
+
+                  <div class="store-card__body">
+                    <div class="store-card__head">
+                      <h3 class="store-card__title">Uppercut Deluxe Field Kit</h3>
+                      <span class="store-card__badge store-card__badge--new">Hemat 15%</span>
+                    </div>
+                    <p class="store-card__meta">Field Kit adalah pilihan perjalanan yang berguna yang menampilkan desain lipat unik dengan kait untuk menggantung, kanvas tugas berat untuk menjaga barang-barang berharga Anda dilindungi & beberapa kompartemen untuk apa pun yang Anda butuhkan untuk tetap tajam.</p>
+                  </div>
+
+                  <footer class="store-card__foot">
+                    <span class="store-card__price">Rp 413.000</span>
+                    <div class="store-card__actions">
+                      <a class="btn btn-default"
+                        href="https://wa.me/6281374154373?text=Halo%20Adam%20jr%2C%20saya%20mau%20order%20Bundle%20Grooming%20Kit%20(190k)."
+                        rel="noopener">WhatsApp Order</a>
+                      <button class="btn-ghost store-card__qv" type="button"
+                              data-qv='{"title":"Bundle — Grooming Kit","desc":"Paket hemat: styling + pre-styler + tools. Rekomendasi barber untuk start kit.","price":"Rp 190.000"}'>
+                        Detail
+                      </button>
+                    </div>
+                  </footer>
+                </article>
+
+              </div><!-- /.store__grid -->
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer" role="contentinfo">
+        <div class="container">
+            <div class="footer-block">
+                <div class="row">
+                    <!-- Alamat (kolom kiri) -->
+                    <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                        <div class="footer-widget">
+                            <h2 class="widget-title">Alamat Barbershop</h2>
+                            <ul class="listnone contact">
+                                <li>
+                                    <svg aria-hidden="true" width="18" height="18"><use href="#icon-map"></use></svg>
+                                    Jl. Talao Mundam No.55, Katapiang, Kec. Batang Anai, Kabupaten Padang Pariaman, Sumatera Barat 25586
+                                </li>
+                                <li>
+                                    <svg aria-hidden="true" width="18" height="18"><use href="#icon-phone"></use></svg>
+                                    <a href="tel:+6281374154373">+62 813-7415-4373</a>
+                                </li>
+                                <li>
+                                    <svg aria-hidden="true" width="18" height="18"><use href="#icon-mail"></use></svg>
+                                    <a href="mailto:info@adamjrhairstudio.com">info@adamjrhairstudio.com</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Sosial (tengah) -->
+                    <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                        <div class="footer-widget footer-social">
+                            <h2 class="widget-title">Ikuti Kami</h2>
+                            <ul class="listnone social-png">
+                                <li>
+                                    <a class="social-chip" href="#" rel="noopener">
+                                        <img class="social-ico" src="images/social/tiktok.png"
+                                            srcset="images/social/tiktok.png 1x, images/social/tiktok.png 2x"
+                                            alt="" aria-hidden="true">
+                                        <span>TikTok</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="social-chip" href="https://www.instagram.com/ajrhairstudio?igsh=b2lkZXhnbTB5MTlr" target="_blank" rel="noopener">
+                                        <img class="social-ico" src="images/social/instagram.png"
+                                            srcset="images/social/instagram.png 1x, images/social/instagram.png 2x"
+                                            alt="" aria-hidden="true">
+                                        <span>Instagram</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="social-chip" href="#" rel="noopener">
+                                        <img class="social-ico" src="images/social/x.png"
+                                            srcset="images/social/x.png 1x, images/social/x.png 2x"
+                                            alt="" aria-hidden="true">
+                                        <span>Twitter</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="social-chip" href="https://maps.app.goo.gl/nZq79M4P2rXddajx6?g_st=ac" target="_blank" rel="noopener">
+                                        <img class="social-ico" src="images/social/gps.png"
+                                            srcset="images/social/gps.png 1x, images/social/gps.png 2x"
+                                            alt="" aria-hidden="true">
+                                        <span>Maps</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Newsletter (kanan) -->
+                    <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+                        <div class="footer-widget widget-newsletter">
+                            <h2 class="widget-title">Berlangganan</h2>
+                            <p>Masukkan email untuk menerima style, promo, dan update terbaru.</p>
+                            <div class="input-group">
+                                <input type="email" class="form-control" placeholder="Alamat email" aria-label="Alamat email">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button">Subscribe</button>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Hak Cipta -->
+                <div class="tiny-footer">
+                    <div class="row">
+                    <div class="col-lg-12">
+                        <div class="copyright-content">
+                        <p>© 2025 Adam jr | Hair Studio — All Rights Reserved</p>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+            </div><!-- /.footer-block -->
+        </div>
+    </footer>
+
+    <script>
+      // Filter sederhana
+      (() => {
+        const chips = document.querySelectorAll('.filter-chip');
+        const grid  = document.getElementById('store-grid');
+        if (!grid) return;
+        const cards = grid.querySelectorAll('.product-card');
+
+        function apply(filter){
+          cards.forEach(c => {
+            if (filter === 'all'){ c.style.display = ''; return; }
+            const cat = (c.getAttribute('data-cat') || '').split(/\s+/);
+            c.style.display = cat.includes(filter) ? '' : 'none';
+          });
+        }
+        chips.forEach(ch => {
+          ch.addEventListener('click', () => {
+            chips.forEach(b => b.setAttribute('aria-pressed','false'));
+            ch.setAttribute('aria-pressed','true');
+            apply(ch.dataset.filter);
+          });
+        });
+      })();
+
+      // Quick View modal
+      (() => {
+        const qv = document.getElementById('qv');
+        if (!qv) return;
+        const t = qv.querySelector('#qv-title');
+        const d = qv.querySelector('#qv-desc');
+        const p = qv.querySelector('#qv-price');
+
+        document.addEventListener('click', (e) => {
+          const btn = e.target.closest('button[data-qv]');
+          if (!btn) return;
+          const data = JSON.parse(btn.getAttribute('data-qv'));
+          t.textContent = data.title || 'Detail';
+          d.textContent = data.desc || '';
+          p.textContent = data.price || '';
+          qv.showModal();
+        });
+      })();
+
+      // Drawer nav (sama seperti index.html)
+      (() => {
+        const BP = 900;
+        const html = document.documentElement;
+        const header = document.getElementById('site-header') || document.querySelector('.header');
+        const nav = document.getElementById('site-nav') || document.querySelector('.navigation');
+        const toggle = header ? header.querySelector('.nav-toggle') : null;
+        if (!nav || !toggle) return;
+
+        let overlay = document.querySelector('.nav-overlay');
+        if (!overlay) { overlay = Object.assign(document.createElement('div'), {className:'nav-overlay', hidden:true}); document.body.appendChild(overlay); }
+
+        const focusSel = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+        let lastFocused = null;
+
+        function trapFocus(e){
+          if (e.key !== 'Tab') return;
+          const nodes = nav.querySelectorAll(focusSel);
+          if (!nodes.length) return;
+          const first = nodes[0], last = nodes[nodes.length - 1];
+          if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+          else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+        }
+        function openNav(){
+          lastFocused = document.activeElement;
+          nav.hidden = false; overlay.hidden = false;
+          requestAnimationFrame(()=>{ nav.classList.add('is-open'); overlay.classList.add('is-open'); });
+          toggle.setAttribute('aria-expanded','true');
+          html.classList.add('no-scroll');
+          document.addEventListener('keydown', onKeydown);
+          document.addEventListener('keydown', trapFocus);
+          nav.querySelector(focusSel)?.focus();
+        }
+        function closeNav(){
+          nav.classList.remove('is-open'); overlay.classList.remove('is-open');
+          toggle.setAttribute('aria-expanded','false'); html.classList.remove('no-scroll');
+          const tidy = () => { nav.hidden = true; overlay.hidden = true; nav.removeEventListener('transitionend', tidy); };
+          nav.addEventListener('transitionend', tidy);
+          document.removeEventListener('keydown', onKeydown);
+          document.removeEventListener('keydown', trapFocus);
+          lastFocused?.focus?.();
+        }
+        function onKeydown(e){ if (e.key === 'Escape') closeNav(); }
+
+        toggle.addEventListener('click', () => (toggle.getAttribute('aria-expanded') === 'true' ? closeNav() : openNav()));
+        overlay.addEventListener('click', closeNav);
+        nav.addEventListener('click', (e) => { if (e.target.closest('a')) closeNav(); });
+        window.addEventListener('resize', () => { if (window.innerWidth > BP && !nav.hidden) closeNav(); });
+      })();
+    </script>
+
+    <!-- ===== SVG Sprite (ikon ringan, tanpa Font Awesome) ===== -->
+    <svg style="display:none" aria-hidden="true">
+        <symbol id="icon-map" viewBox="0 0 24 24">
+            <path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/>
+        </symbol>
+        <symbol id="icon-phone" viewBox="0 0 24 24">
+            <path d="M6.6 10.8a15.5 15.5 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25c1.1.37 2.3.57 3.5.57a1 1 0 0 1 1 1V20a2 2 0 0 1-2 2C9.6 22 2 14.4 2 5a2 2 0 0 1 2-2h2.5a1 1 0 0 1 1 1c0 1.2.2 2.4.57 3.5a1 1 0 0 1-.25 1L6.6 10.8z"/>
+        </symbol>
+        <symbol id="icon-mail" viewBox="0 0 24 24">
+            <path d="M4 6h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2zm0 2 8 5 8-5"/>
+        </symbol>
+    </svg>
+
+    <script>
+        (() => {
+        const BP = 900;
+        const html = document.documentElement;
+        const header = document.getElementById('site-header') || document.querySelector('.header');
+        const nav = document.getElementById('site-nav') || document.querySelector('.navigation');
+        const toggle = header ? header.querySelector('.nav-toggle') : null;
+
+        if (!nav || !toggle) return;
+
+        // overlay: buat otomatis kalau belum ada
+        let overlay = document.querySelector('.nav-overlay');
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.className = 'nav-overlay';
+            overlay.hidden = true;
+            document.body.appendChild(overlay);
+        }
+
+        const focusSel = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+        let lastFocused = null;
+
+        function trapFocus(e){
+            if (e.key !== 'Tab') return;
+            const nodes = nav.querySelectorAll(focusSel);
+            if (!nodes.length) return;
+            const first = nodes[0], last = nodes[nodes.length - 1];
+            if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+            else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+        }
+
+        function openNav(){
+            lastFocused = document.activeElement;
+            nav.hidden = false;
+            overlay.hidden = false;
+            requestAnimationFrame(() => {
+            nav.classList.add('is-open');
+            overlay.classList.add('is-open');
+            });
+            toggle.setAttribute('aria-expanded', 'true');
+            html.classList.add('no-scroll');
+            document.addEventListener('keydown', onKeydown);
+            document.addEventListener('keydown', trapFocus);
+            // fokus ke item pertama
+            const first = nav.querySelector(focusSel);
+            first && first.focus();
+        }
+
+        function closeNav(){
+            nav.classList.remove('is-open');
+            overlay.classList.remove('is-open');
+            toggle.setAttribute('aria-expanded', 'false');
+            html.classList.remove('no-scroll');
+            const tidy = () => {
+            nav.hidden = true;
+            overlay.hidden = true;
+            nav.removeEventListener('transitionend', tidy);
+            };
+            nav.addEventListener('transitionend', tidy);
+            document.removeEventListener('keydown', onKeydown);
+            document.removeEventListener('keydown', trapFocus);
+            // kembalikan fokus
+            lastFocused && lastFocused.focus && lastFocused.focus();
+        }
+
+        function onKeydown(e){
+            if (e.key === 'Escape') closeNav();
+        }
+
+        // Toggle
+        toggle.addEventListener('click', () => {
+            const expanded = toggle.getAttribute('aria-expanded') === 'true';
+            expanded ? closeNav() : openNav();
+        });
+
+        // Tutup saat klik overlay atau klik link di menu
+        overlay.addEventListener('click', closeNav);
+        nav.addEventListener('click', (e) => {
+            const a = e.target.closest('a');
+            if (a) closeNav();
+        });
+
+        // Auto reset saat melebar ke desktop
+        window.addEventListener('resize', () => {
+            if (window.innerWidth > BP && !nav.hidden) closeNav();
+        });
+        })();
+    </script>
+
+    <!-- Quick View Popup -->
+    <div class="qv-pop" id="qv-pop" hidden>
+      <div class="qv-backdrop" data-qv-close></div>
+
+      <article class="qv-card" role="dialog" aria-modal="true"
+              aria-labelledby="qv-title" aria-describedby="qv-desc">
+        <button class="qv-close" type="button" aria-label="Tutup detail" data-qv-close>
+          <span class="qv-x" aria-hidden="true"></span>
+        </button>
+
+        <header class="qv-head">
+          <img class="qv-thumb" id="qv-thumb" src="" alt="">
+          <h3 class="qv-title" id="qv-title"></h3>
+        </header>
+
+        <div class="qv-body">
+          <p class="qv-desc" id="qv-desc"></p>
+          <span class="qv-price" id="qv-price"></span>
+        </div>
+
+        <div class="qv-actions">
+          <a class="btn btn-default" id="qv-wa" href="#" rel="noopener">WhatsApp Order</a>
+          <button class="btn-ghost" type="button" data-qv-close>Tutup</button>
+        </div>
+      </article>
+    </div>
+
+    <script>
+      (function(){
+        const pop = document.getElementById('qv-pop');
+        if(!pop){ console.warn('[QV] Container #qv-pop tidak ditemukan'); return; }
+
+        const body = document.body;
+        const els = {
+          title: pop.querySelector('#qv-title'),
+          desc:  pop.querySelector('#qv-desc'),
+          price: pop.querySelector('#qv-price'),
+          thumb: pop.querySelector('#qv-thumb'),
+          wa:    pop.querySelector('#qv-wa'),
+        };
+
+        function parseData(str){ try { return JSON.parse(str); } catch { return {}; } }
+        function waLink(title, price){
+          const text = `Halo Adam jr, saya mau order ${title} (${price}).`;
+          return `https://wa.me/6281374154373?text=${encodeURIComponent(text)}`;
+        }
+
+        function openQV(btn){
+          const card = btn.closest('.store-card');
+          const img  = card?.querySelector('.store-card__thumb');
+          const d    = parseData(btn.getAttribute('data-qv') || '{}');
+
+          const title = d.title || card?.querySelector('.store-card__title')?.textContent?.trim() || '';
+          const desc  = d.desc  || card?.querySelector('.store-card__meta')?.textContent?.trim()  || '';
+          const price = d.price || card?.querySelector('.store-card__price')?.textContent?.trim() || '';
+
+          els.title.textContent = title;
+          els.desc.textContent  = desc;
+          els.price.textContent = price;
+
+          if(img){ els.thumb.src = img.currentSrc || img.src || ''; els.thumb.alt = img.alt || title; }
+          else   { els.thumb.removeAttribute('src'); els.thumb.alt=''; }
+
+          els.wa.href = waLink(title, price);
+
+          pop.removeAttribute('hidden');
+          pop.classList.add('is-open');
+          body.classList.add('modal-open');
+
+          // Focus trap & Esc
+          const focusables = pop.querySelectorAll('a[href], button, textarea, input, select, [tabindex]:not([tabindex="-1"])');
+          const first = focusables[0], last = focusables[focusables.length - 1];
+          first?.focus();
+
+          function onKey(e){
+            if(e.key === 'Escape'){ closeQV(); }
+            if(e.key === 'Tab' && focusables.length){
+              if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+              else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+            }
+          }
+          pop._onKey = onKey;
+          pop.addEventListener('keydown', onKey);
+        }
+
+        function closeQV(){
+          pop.classList.remove('is-open');
+          pop.setAttribute('hidden','');
+          body.classList.remove('modal-open');
+          if(pop._onKey){ pop.removeEventListener('keydown', pop._onKey); pop._onKey = null; }
+        }
+
+        // Delegasi klik: buka dengan .store-card__qv, tutup dengan data-qv-close atau klik backdrop
+        document.addEventListener('click', (e)=>{
+          const qvBtn = e.target.closest('.store-card__qv');
+          if(qvBtn){ e.preventDefault(); openQV(qvBtn); return; }
+
+          if(e.target.closest('[data-qv-close]')){ closeQV(); }
+        });
+        pop.addEventListener('click', (e)=>{
+          if(e.target.classList.contains('qv-backdrop')) closeQV();
+        });
+      })();
+    </script>
+
+    <script src="js/theme-toggle.js" defer></script>
+    <script src="js/hero-rotator.js" defer></script>
+    <script src="js/social-proof.js" defer></script>
+    <script src="js/aoe.js" defer></script>
+    <script src="js/main.js" defer></script>
+  </body>
+</html>

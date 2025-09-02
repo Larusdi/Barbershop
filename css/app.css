@@ -1,0 +1,2553 @@
+/* ==========================================================================
+   ADAM JR | HAIR STUDIO — APP.CSS (2025 PRO)
+   - Modern, ringan, tanpa library eksternal (no Bootstrap/FA)
+   - Dark mode via prefers-color-scheme
+   - Aksesibilitas: fokus jelas, reduce-motion
+   - Grid responsif: layanan, about, footer
+   ========================================================================== */
+
+
+/* ==========================================================================
+   1) TOKEN, RESET & PREFERENSI
+   ========================================================================== */
+
+:root{
+  /* Warna dasar */
+  --bg:#ffffff;
+  --text:#0f1115;
+  --muted:#6b7280;
+
+  /* Brand & aksen (ubah sesuai identitas) */
+  --brand:#111315;
+  --accent:#d4af37;
+
+  /* UI tokens */
+  --card:#ffffff;
+  --line:#eef0f3;
+  --radius:16px;
+  --space:22px;
+  --maxw:1100px; /* lebar maksimum container */
+  --gap:18px;    /* jarak grid default */
+
+  /* Tipografi */
+  --fs-hero: clamp(28px, 5vw, 44px);
+  --fs-h1: clamp(24px, 3.2vw, 36px);
+  --fs-h2: clamp(20px, 2.8vw, 28px);
+  --fs-h3: clamp(18px, 2.2vw, 22px);
+  --fs-body: 16px;
+}
+
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0b0d11;
+    --text:#e7e9ee;
+    --muted:#98a1b3;
+    --brand:#e7e9ee;
+    --card:#11141a;
+    --line:#1a1e26;
+    --accent:#e6c35a;
+  }
+  img{ filter:saturate(1.05); }
+}
+
+/* Hormati preferensi “reduce motion” */
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:0.01ms !important; animation-iteration-count:1 !important; transition-duration:0.01ms !important; scroll-behavior:auto !important; }
+}
+
+/* Reset ringan & tipografi default */
+html{ scroll-behavior:smooth; }
+*{ box-sizing:border-box; }
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font: 400 var(--fs-body)/1.6 ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, "Noto Sans", sans-serif;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+}
+img{ max-width:100%; height:auto; display:block; }
+
+/* Link default */
+a{ color:inherit; text-underline-offset:2px; }
+a:hover{ text-decoration:underline; }
+a:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+
+/* Headings scale */
+h1{ font-size:var(--fs-h1); margin:0 0 .6rem; }
+h2{ font-size:var(--fs-h2); margin:0 0 .6rem; }
+h3{ font-size:var(--fs-h3); margin:0 0 .4rem; }
+
+
+/* ==========================================================================
+   2) LAYOUT DASAR & UTILITAS
+   ========================================================================== */
+
+.container{ max-width:var(--maxw); margin-inline:auto; padding-inline:16px; }
+.text-center{ text-align:center; }
+.mt30{ margin-top:30px; }
+.mb60{ margin-bottom:60px; }
+.mb20{ margin-bottom:20px; }
+
+/* Grid baris default — hanya diterapkan spesifik per section di bawah */
+
+
+/* ==========================================================================
+   3) HEADER & NAVIGASI
+   ========================================================================== */
+.header{
+  position: sticky; top: 0; z-index: 100;
+  backdrop-filter: saturate(1.2) blur(10px);
+  background: color-mix(in srgb, var(--bg) 80%, transparent);
+  border-bottom: 1px solid var(--line);
+}
+.header .row{
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 12px; padding-block: 12px;
+}
+
+/* Brand / logo */
+.site-brand{ display:flex; align-items:center; gap:10px; text-decoration:none; }
+.site-logo{ height:auto; max-height:48px; width:auto; display:block; }
+
+/* Link menu (style umum) */
+.navigation ul{ list-style:none; padding:0; margin:0; }
+.navigation a{
+  display:block; padding:10px 12px; border-radius:10px;
+  color: var(--muted); text-decoration:none; white-space:nowrap;
+  transition: background-color .15s ease, color .15s ease;
+}
+.navigation .active a,
+.navigation a:hover{ color: var(--brand); background: var(--line); }
+.navigation a:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+
+/* ---------------- DESKTOP (≥901px) ---------------- */
+@media (min-width: 901px){
+  /* force show walau ada [hidden] di HTML */
+  .navigation[hidden]{ display:block !important; }
+
+  .nav-toggle{ display:none; }
+  .navigation{
+    position: static; transform: none; background: transparent;
+    border: 0; box-shadow: none; padding: 0; height: auto; width: auto;
+  }
+  .navigation ul{ display:flex; gap:14px; align-items:center; }
+}
+
+/* ---------------- MOBILE (≤900px): drawer ---------------- */
+@media (max-width: 900px){
+  /* ——— HAMBURGER (TETAP DI POSISI SEKARANG) ——— */
+  .nav-toggle{
+    appearance:none; border:0; background:transparent;
+    width:44px; height:44px; border-radius:12px;
+    display:inline-flex; align-items:center; justify-content:center;
+    -webkit-tap-highlight-color: transparent;
+    position: relative; z-index: 101;
+    transition: background-color .15s ease, box-shadow .15s ease, transform .15s ease;
+  }
+  .nav-toggle:hover{ background: color-mix(in srgb, var(--line) 60%, transparent); }
+  .nav-toggle:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  .nav-toggle:active{ transform: scale(.98); }
+
+  /* ring halus saat menu open */
+  .nav-toggle[aria-expanded="true"]{
+    background: color-mix(in srgb, var(--line) 70%, transparent);
+    box-shadow: 0 10px 26px color-mix(in srgb, var(--brand) 12%, transparent);
+  }
+
+  /* 3 bar → X */
+  .nav-toggle .bar{
+    position:absolute; left:50%; translate:-50% 0;
+    width:22px; height:2px; border-radius:2px; background: var(--brand);
+    transition: transform .22s ease, opacity .22s ease, top .22s ease, background-color .22s ease;
+  }
+  .nav-toggle .bar:nth-child(1){ top: 15px; }
+  .nav-toggle .bar:nth-child(2){ top: 21px; }
+  .nav-toggle .bar:nth-child(3){ top: 27px; }
+  .nav-toggle[aria-expanded="true"] .bar:nth-child(1){ top:21px; transform:rotate(45deg); }
+  .nav-toggle[aria-expanded="true"] .bar:nth-child(2){ opacity:0; }
+  .nav-toggle[aria-expanded="true"] .bar:nth-child(3){ top:21px; transform:rotate(-45deg); }
+
+  /* ——— DRAWER ——— */
+  .navigation{
+    position: fixed; inset: 0 0 0 auto; z-index: 100;
+    width: min(88vw, 380px);
+    height: 100svh; /* stabil di iOS/Android */
+    padding:
+      max(16px, env(safe-area-inset-top))
+      clamp(16px, 3vw, 22px)
+      max(16px, env(safe-area-inset-bottom))
+      clamp(16px, 3vw, 22px);
+    background: color-mix(in srgb, var(--card) 88%, transparent);
+    backdrop-filter: saturate(1.15) blur(12px);
+    -webkit-backdrop-filter: saturate(1.15) blur(12px);
+    border-left: 1px solid var(--line);
+    box-shadow: -18px 0 42px rgba(0,0,0,.12);
+    transform: translateX(104%); /* off-screen */
+    transition: transform .28s cubic-bezier(.2,.7,.2,1), box-shadow .28s ease;
+    display:block; overflow:auto; -webkit-overflow-scrolling:touch;
+    overscroll-behavior: contain;
+  }
+  .navigation.is-open{ transform: translateX(0); }
+  /* agar transisi jalan setelah [hidden] dihapus via JS */
+  .navigation[hidden]{ display:block; }
+
+  /* header kecil “Menu” (tanpa ubah HTML) */
+  .navigation::before{
+    content:"Menu";
+    display:block; font-weight:700; letter-spacing:.2px;
+    color:var(--brand); margin:2px 2px 10px;
+  }
+
+  /* list & item */
+  .navigation ul{
+    list-style:none; margin:0; padding:0;
+    display:flex; flex-direction:column; gap:6px;
+  }
+  .navigation li{ width: 100%; }
+
+  .navigation a, .navigation .theme-toggle{
+    display:flex; align-items:center; justify-content:space-between;
+    gap:10px; padding:12px 12px;
+    color:var(--muted); text-decoration:none;
+    border:1px solid transparent; border-radius:12px; background:transparent;
+    transform: translateX(6px); opacity:0; /* state awal untuk animasi */
+    transition: transform .14s ease, background-color .14s ease,
+                color .14s ease, border-color .14s ease, box-shadow .14s ease;
+  }
+  .navigation a:hover, .navigation .theme-toggle:hover{
+    background: color-mix(in srgb, var(--line) 70%, transparent);
+    color: var(--brand);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 22px color-mix(in srgb, var(--brand) 12%, transparent);
+  }
+  .navigation .active a{
+    color: var(--brand);
+    background: color-mix(in srgb, var(--line) 75%, transparent);
+    border-color: color-mix(in srgb, var(--accent) 28%, var(--line) 72%);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--line) 60%, transparent);
+  }
+
+  /* animasi stagger saat drawer dibuka */
+  .navigation.is-open a,
+  .navigation.is-open .theme-toggle{
+    animation: navItemIn .26s cubic-bezier(.2,.7,.2,1) forwards;
+  }
+  .navigation.is-open li:nth-child(1) > *{ animation-delay:.02s; }
+  .navigation.is-open li:nth-child(2) > *{ animation-delay:.06s; }
+  .navigation.is-open li:nth-child(3) > *{ animation-delay:.10s; }
+  .navigation.is-open li:nth-child(4) > *{ animation-delay:.14s; }
+  .navigation.is-open li:nth-child(5) > *{ animation-delay:.18s; }
+  .navigation.is-open li:nth-child(6) > *{ animation-delay:.22s; }
+
+  @keyframes navItemIn{
+    from{ opacity:0; transform:translateX(6px); }
+    to  { opacity:1; transform:translateX(0); }
+  }
+
+  /* overlay belakang */
+  .nav-overlay{
+    position: fixed; inset: 0; z-index: 99;
+    background: rgba(0,0,0,.22);
+    backdrop-filter: blur(2px);
+    opacity: 0; pointer-events: none;
+    transition: opacity .2s ease;
+  }
+  .nav-overlay.is-open{ opacity:1; pointer-events:auto; }
+
+  /* kunci scroll saat menu buka (ditambah ke <html> via JS) */
+  .no-scroll{ overflow:hidden; }
+}
+
+/* Dark mode (mobile) */
+html[data-theme="dark"] .nav-toggle .bar{ background:#fff; }
+@media (max-width:900px){
+  html[data-theme="dark"] .navigation{
+    background: color-mix(in srgb, var(--card) 70%, transparent);
+    border-left-color: color-mix(in srgb, var(--line) 70%, transparent);
+    box-shadow: -18px 0 46px rgba(0,0,0,.35);
+  }
+  html[data-theme="dark"] .navigation a,
+  html[data-theme="dark"] .navigation .theme-toggle{
+    color: color-mix(in srgb, var(--muted) 88%, transparent);
+  }
+  html[data-theme="dark"] .navigation a:hover,
+  html[data-theme="dark"] .navigation .theme-toggle:hover{
+    background: color-mix(in srgb, var(--line) 30%, transparent);
+    color: var(--brand);
+    box-shadow: 0 10px 26px rgba(0,0,0,.35);
+  }
+}
+
+/* Prefer reduced motion: matikan animasi berat */
+@media (prefers-reduced-motion: reduce){
+  @media (max-width:900px){
+    .nav-toggle,
+    .navigation,
+    .navigation a, .navigation .theme-toggle,
+    .nav-overlay{ transition:none !important; }
+    .navigation.is-open a,
+    .navigation.is-open .theme-toggle{ animation:none !important; opacity:1; transform:none; }
+  }
+}
+
+
+/* ==========================================================================
+   4) HERO
+   ========================================================================== */
+
+.hero-2025{
+  position:relative;
+  padding: clamp(64px, 9vw, 112px) 0;
+  min-height: clamp(420px, 70vh, 720px);              /* tinggi nyaman di atas fold */
+  /* spotlight aksen halus */
+  background:
+    radial-gradient(1200px 600px at 15% -10%,
+      color-mix(in srgb, var(--accent) 18%, transparent) 0%,
+      transparent 60%);
+}
+
+/* Grid dua kolom; stack di mobile */
+.hero-2025 .hero-grid{
+  display:grid;
+  gap: clamp(18px, 3vw, 32px);
+}
+@media (min-width: 900px){
+  .hero-2025 .hero-grid{
+    grid-template-columns: 1.05fr 1fr;
+    align-items:center;
+  }
+}
+
+/* --- kiri (copy) --- */
+.hero-2025 .hero-badge{
+  position: relative;
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  line-height: 1;
+  color: var(--brand);
+  background: color-mix(in srgb, var(--line) 55%, transparent);
+  border: 1px solid var(--line);
+  backdrop-filter: saturate(1.1) blur(6px);
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--brand) 10%, transparent);
+  overflow: hidden; /* untuk shine sweep */
+  transition: transform .15s ease, box-shadow .15s ease, background-color .15s ease, border-color .15s ease;
+  animation: badgeIn .4s ease-out both;
+}
+.hero-2025 .hero-badge:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px color-mix(in srgb, var(--brand) 14%, transparent);
+}
+
+/* Angka jam lurus rapi (tabular) */
+.hero-2025 .hero-badge time{
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+  letter-spacing: .2px;
+  color: var(--text);
+}
+
+/* ================================
+   HERO: Badge "Buka/Tutup" + Jam
+   ================================ */
+
+/* Badge status */
+#open-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  line-height:1;
+}
+
+/* Jam realtime (di kanan badge) */
+/* ===== Hero Clock (WIB) — sejajar dengan badge ===== */
+
+/* pastikan badge inline & rata tengah */
+#open-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  line-height:1;
+}
+
+/* clock nempel di kanan badge */
+.hero-clock{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  vertical-align:middle;
+  margin-left:10px;                 /* jarak dari badge */
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;  /* digit stabil */
+  letter-spacing:.3px;
+  line-height:1;
+}
+
+/* ikon jam */
+.hero-clock svg{
+  width:16px; height:16px;
+  display:block; flex:0 0 auto;
+}
+.hero-clock svg path{
+  fill:none;
+  stroke: currentColor;
+  stroke-width:1.8;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+  opacity:.9;
+}
+
+/* label zona waktu */
+.hero-clock .tz{
+  opacity:.85;
+  font-size:.85em;
+}
+
+/* pemisah vertikal antara badge & jam */
+#open-badge + .hero-clock::before{
+  content:"";
+  display:inline-block;
+  width:1px;                 /* hairline */
+  height:1.1em;              /* setinggi teks */
+  margin:0 10px;
+  vertical-align:middle;
+  background: color-mix(in srgb, var(--line) 90%, transparent);
+  opacity:.9;
+}
+
+/* ===== Dark mode tweaks ===== */
+html[data-theme="dark"] .hero-clock{
+  color: color-mix(in srgb, #fff 86%, var(--muted));
+}
+html[data-theme="dark"] #open-badge + .hero-clock::before{
+  background: color-mix(in srgb, #fff 28%, var(--line));
+  opacity:.9;
+}
+html[data-theme="dark"] .hero-clock svg path{
+  opacity:.95;
+}
+
+/* ===== Responsive ===== */
+@media (max-width:560px){
+  .hero-clock{ gap:4px; margin-left:8px; }
+  #open-badge + .hero-clock::before{ margin:0 8px; height:1em; }
+}
+
+/* Hero badge + indikator status */
+.hero-badge{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:6px 10px; border-radius:999px;
+  background: color-mix(in srgb, var(--card) 85%, transparent);
+  border: 1px solid var(--line);
+}
+
+/* Dot dasar */
+.hero-badge .dot{
+  width:9px; height:9px; border-radius:50%;
+  display:inline-block; flex:0 0 auto;
+  box-shadow: 0 0 0 3px color-mix(in srgb, currentColor 18%, transparent);
+}
+
+/* Warna status */
+.hero-badge[data-state="open"]   .dot{ background:#22c55e; color:#22c55e; }  /* hijau */
+.hero-badge[data-state="closed"] .dot{ background:#ef4444; color:#ef4444; }  /* merah */
+
+/* Mode gelap: sedikit tingkatkan kontras outline dot */
+html[data-theme="dark"] .hero-badge .dot{
+  box-shadow: 0 0 0 3px color-mix(in srgb, #ffffff 12%, transparent);
+}
+
+/* Kilau “shine sweep” lembut */
+.hero-2025 .hero-badge::after{
+  content:"";
+  position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255,255,255,.22) 45%,
+    rgba(255,255,255,.55) 50%,
+    rgba(255,255,255,.22) 55%,
+    transparent 100%
+  );
+  mix-blend-mode: screen;
+  transform: translateX(-150%);
+  animation: badgeShine 4.6s cubic-bezier(.2,.7,.2,1) infinite;
+}
+
+/* Dark mode: kontras pas, shine lebih tenang */
+html[data-theme="dark"] .hero-2025 .hero-badge{
+  background: color-mix(in srgb, var(--line) 22%, transparent);
+  border-color: color-mix(in srgb, var(--line) 65%, transparent);
+  box-shadow: 0 10px 28px rgba(0,0,0,.35);
+}
+html[data-theme="dark"] .hero-2025 .hero-badge time{ color: var(--brand); }
+html[data-theme="dark"] .hero-2025 .hero-badge::after{
+  background: linear-gradient(
+    120deg,
+    transparent 0%,
+    rgba(255,255,255,.12) 45%,
+    rgba(255,255,255,.28) 50%,
+    rgba(255,255,255,.12) 55%,
+    transparent 100%
+  );
+}
+
+/* Optional: state “tutup” (tinggal tambah data-status="closed") */
+.hero-2025 .hero-badge[data-status="closed"]{
+  color: var(--muted);
+  background: color-mix(in srgb, var(--line) 45%, transparent);
+}
+.hero-2025 .hero-badge[data-status="closed"]::before{
+  background: #ef4444;            /* merah */
+  box-shadow: none; animation: none;
+}
+.hero-2025 .hero-badge[data-status="closed"]::after{ display:none; }
+
+/* ===== Animations ===== */
+@keyframes badgePulse{
+  0%   { box-shadow: 0 0 0 0 rgba(34,197,94,.55); transform: scale(1); }
+  60%  { box-shadow: 0 0 0 10px rgba(34,197,94,0); transform: scale(1.05); }
+  100% { box-shadow: 0 0 0 0 rgba(34,197,94,0); transform: scale(1); }
+}
+@keyframes badgeShine{
+  0%   { transform: translateX(-150%); }
+  38%  { transform: translateX(150%); }
+  100% { transform: translateX(150%); }
+}
+@keyframes badgeIn{
+  from { opacity: 0; transform: translateY(3px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Reduce motion: matikan animasi */
+@media (prefers-reduced-motion: reduce){
+  .hero-2025 .hero-badge{ animation: none !important; }
+  .hero-2025 .hero-badge::before,
+  .hero-2025 .hero-badge::after{ animation: none !important; }
+}
+
+.hero-2025 .hero-title{
+  font-size: clamp(28px, 5vw, 48px);
+  line-height:1.1;
+  margin: 6px 0 8px;
+  letter-spacing:.2px;
+}
+
+
+/* ===== Hero Meta ===== */
+.meta-pop__x { pointer-events: none; }
+
+.hero-meta{
+  position: relative;                 /* untuk divider di bawah */
+  display: flex; flex-wrap: wrap;
+  gap: 10px 12px;                     /* row-gap / column-gap */
+  margin: 14px 0 18px;                /* jarak atas & bawah */
+  padding: 0 0 12px;                  /* ruang untuk divider */
+  list-style: none;
+}
+
+/* Divider hairline modern */
+.hero-meta::after{
+  content: "";
+  position: absolute; left: 0; right: 0; bottom: 0;
+  height: 1px; pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--line) 85%, transparent) 15%,
+    color-mix(in srgb, var(--line) 100%, transparent) 50%,
+    color-mix(in srgb, var(--line) 85%, transparent) 85%,
+    transparent 100%
+  );
+  opacity: .95;
+  transform: translateZ(0);           /* hairline tajam di retina */
+}
+
+/* === Pill item ========================================================== */
+.hero-meta .meta-pill{
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--line) 55%, transparent);
+  backdrop-filter: saturate(1.1) blur(6px);
+  color: var(--brand); line-height: 1;
+  transition:
+    transform .15s ease,
+    box-shadow .15s ease,
+    border-color .15s ease,
+    background-color .15s ease;
+}
+
+.hero-meta .meta-pill:hover{
+  transform: translateY(-1px);
+  background: color-mix(in srgb, var(--line) 65%, transparent);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--brand) 12%, transparent);
+}
+
+.hero-meta .meta-pill:focus-within{
+  outline: 2px solid var(--accent); outline-offset: 2px;
+}
+
+/* ==== DARK MODE — terlihat jelas ==== */
+html[data-theme="dark"] .meta-pop{ z-index: 9999; isolation: isolate; }
+
+html[data-theme="dark"] .meta-pop__backdrop{
+  /* lebih pekat + blur, supaya konten belakang tenggelam */
+  background: rgba(8,12,20,.70);
+  backdrop-filter: blur(8px) saturate(112%);
+}
+
+/* kartu “glass” gelap tapi masih terang dibaca */
+html[data-theme="dark"] .meta-pop__card{
+  background:
+    radial-gradient(900px 540px at 70% -20%, rgba(255,255,255,.06), transparent 35%),
+    linear-gradient(150deg, rgba(28,36,48,.96), rgba(15,22,33,.96));
+  border: 1px solid rgba(255,255,255,.18);
+  box-shadow: 0 40px 110px rgba(0,0,0,.70), 0 10px 32px rgba(0,0,0,.50);
+  color: #f1f5fb;                          /* isi teks default */
+  scrollbar-color: rgba(255,255,255,.28) transparent; /* Firefox */
+}
+html[data-theme="dark"] .meta-pop__card::-webkit-scrollbar-thumb{
+  background: rgba(255,255,255,.28);
+}
+
+/* judul & paragraf lebih kontras */
+html[data-theme="dark"] .meta-pop__title{ color:#ffffff; }
+html[data-theme="dark"] .meta-pop__prose{ color:#dbe7fb; }
+
+/* tile icon & garis */
+html[data-theme="dark"] .meta-pop__icon{
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.18);
+}
+html[data-theme="dark"] .meta-pop__icon svg *{ stroke:#cfe1ff; }
+
+/* tombol X */
+html[data-theme="dark"] .meta-pop__close{
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.18);
+}
+html[data-theme="dark"] .meta-pop__x::before,
+html[data-theme="dark"] .meta-pop__x::after{ background:#e5ecf7; }
+
+/* tombol aksi */
+html[data-theme="dark"] .meta-pop__btn{
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.18);
+  color:#f1f5fb;
+}
+html[data-theme="dark"] .meta-pop__btn:hover{
+  box-shadow: 0 14px 28px rgba(0,0,0,.60);
+}
+
+/* heading & body copy */
+html[data-theme="dark"] .meta-pop__title{ color:#fff; }
+html[data-theme="dark"] .meta-pop__prose{ color:#e5e7eb; }
+
+/* icon tile */
+html[data-theme="dark"] .meta-pop__icon{
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.16);
+}
+html[data-theme="dark"] .meta-pop__icon svg *{
+  stroke: #cbd5e1;                         /* slate-200 */
+}
+
+/* tombol X */
+html[data-theme="dark"] .meta-pop__close{
+  background: rgba(255,255,255,.06);
+  border-color: rgba(255,255,255,.16);
+}
+html[data-theme="dark"] .meta-pop__x::before,
+html[data-theme="dark"] .meta-pop__x::after{
+  background:#fff;
+}
+
+/* tombol aksi */
+html[data-theme="dark"] .meta-pop__btn{
+  background: rgba(255,255,255,.08);
+  border-color: rgba(255,255,255,.16);
+  color:#fff;
+}
+html[data-theme="dark"] .meta-pop__btn:hover{
+  box-shadow: 0 14px 28px rgba(0,0,0,.45);
+}
+
+/* Teks & link */
+.hero-meta .meta-pill span,
+.hero-meta .meta-pill a{
+  color: var(--muted); text-decoration: none;
+}
+.hero-meta .meta-pill a:hover{ color: var(--brand); text-decoration: underline; }
+.hero-meta .meta-pill b{ color: var(--brand); font-weight: 700; }
+
+/* === Ikon SVG (outline modern) ========================================= */
+.hero-meta .meta-pill svg{
+  width: 18px; height: 18px; flex: 0 0 auto; display: block;
+}
+.hero-meta .meta-pill svg path,
+.hero-meta .meta-pill svg circle,
+.hero-meta .meta-pill svg rect,
+.hero-meta .meta-pill svg line,
+.hero-meta .meta-pill svg polyline,
+.hero-meta .meta-pill svg polygon{
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke .15s ease, opacity .15s ease;
+}
+.hero-meta .meta-pill:hover svg path,
+.hero-meta .meta-pill:hover svg circle,
+.hero-meta .meta-pill:hover svg rect,
+.hero-meta .meta-pill:hover svg line,
+.hero-meta .meta-pill:hover svg polyline,
+.hero-meta .meta-pill:hover svg polygon{
+  stroke: var(--brand);
+}
+
+/* === Opsional selalu di baris kedua (browser modern) ==================== */
+@supports(selector(:has(*))){
+  /* sisipkan breaker 1 baris penuh hanya jika ada item opsional */
+  .hero-meta:has(.meta-pill.hide-sm)::before{
+    content: ""; flex-basis: 100%; order: 1;   /* line break */
+  }
+  /* item opsional diletakkan setelah breaker */
+  .hero-meta .meta-pill.hide-sm{ order: 2; }
+}
+
+/* Fallback (untuk paksa line-break manual di browser lama):
+   tambahkan <li class="meta-break"></li> di HTML */
+.hero-meta .meta-break{ flex-basis: 100%; height: 0; }
+
+/* === Dark mode tweaks =================================================== */
+html[data-theme="dark"] .hero-meta .meta-pill{
+  background: color-mix(in srgb, var(--line) 22%, transparent);
+  border-color: color-mix(in srgb, var(--line) 65%, transparent);
+}
+html[data-theme="dark"] .hero-meta .meta-pill:hover{
+  box-shadow: 0 12px 28px rgba(0,0,0,.35);      /* jangan terlalu glow di OLED */
+}
+html[data-theme="dark"] .hero-meta .meta-pill svg path,
+html[data-theme="dark"] .hero-meta .meta-pill svg circle,
+html[data-theme="dark"] .hero-meta .meta-pill svg rect,
+html[data-theme="dark"] .hero-meta .meta-pill svg line,
+html[data-theme="dark"] .hero-meta .meta-pill svg polyline,
+html[data-theme="dark"] .hero-meta .meta-pill svg polygon{
+  stroke: color-mix(in srgb, var(--muted) 88%, transparent);
+}
+
+/* === Responsif ========================================================== */
+@media (max-width: 560px){
+  .hero-meta{ gap: 8px; padding-bottom: 10px; margin-bottom: 16px; }
+  .hero-meta .meta-pill{ padding: 7px 10px; gap: 7px; }
+  .hero-meta .meta-pill svg{ width: 16px; height: 16px; }
+  .hero-meta .hide-sm{ display: none; }          /* sembunyikan opsi di mobile */
+}
+
+/* === Reduce motion ====================================================== */
+@media (prefers-reduced-motion: reduce){
+  .hero-meta .meta-pill,
+  .hero-meta .meta-pill svg path,
+  .hero-meta .meta-pill svg circle,
+  .hero-meta .meta-pill svg rect,
+  .hero-meta .meta-pill svg line,
+  .hero-meta .meta-pill svg polyline,
+  .hero-meta .meta-pill svg polygon{
+    transition: none !important;
+  }
+}
+
+
+/* ===== HERO META DIVIDER — terlihat di light & dark ===== */
+.hero-2025 .hero-meta{
+  position: relative;
+  padding-bottom: 14px;                        /* ruang untuk garis */
+  margin-bottom: clamp(16px, 3vw, 20px);       /* jarak setelah garis */
+}
+
+/* Garis hairline dengan gradien halus */
+.hero-2025 .hero-meta::after{
+  content: "";
+  position: absolute; left: 0; right: 0; bottom: 0;
+  height: 1px;
+  pointer-events: none;
+
+  /* Fallback (browser lama): garis solid */
+  background: var(--line);
+
+  /* Modern (browser baru): gradien hairline */
+  background:
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      color-mix(in srgb, var(--line) 82%, transparent) 12%,
+      color-mix(in srgb, var(--line) 100%, transparent) 50%,
+      color-mix(in srgb, var(--line) 82%, transparent) 88%,
+      transparent 100%
+    );
+
+  opacity: .95;
+  transform: translateZ(0);                     /* tajam di retina */
+  will-change: opacity;
+}
+
+/* Mode gelap: sedikit “dinaikkan” supaya kebaca di bg gelap */
+html[data-theme="dark"] .hero-2025 .hero-meta::after{
+  /* Fallback solid */
+  background: color-mix(in srgb, #ffffff 20%, var(--line));
+
+  /* Gradien yang lebih terang di tengah */
+  background:
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      color-mix(in srgb, #ffffff 18%, var(--line)) 15%,
+      color-mix(in srgb, #ffffff 28%, var(--line)) 50%,
+      color-mix(in srgb, #ffffff 18%, var(--line)) 85%,
+      transparent 100%
+    );
+  opacity: .8;                                   /* hindari glare di OLED */
+}
+
+/* (Opsional) versi lebih kuat jika butuh kontras lebih */
+.hero-2025 .hero-meta.--strong::after{
+  opacity: 1;
+  height: 1.25px;                                /* sedikit lebih tebal */
+}
+
+/* Sedikit penyesuaian di layar kecil */
+@media (max-width:560px){
+  .hero-2025 .hero-meta{
+    padding-bottom: 12px;
+  }
+}
+
+/* ---------- 1) Dark mode hover yang jelas ---------- */
+html[data-theme="dark"] .hero-meta .meta-pill:hover{
+  background: color-mix(in srgb, var(--line) 38%, transparent);
+  border-color: color-mix(in srgb, var(--line) 82%, transparent);
+  box-shadow: 0 12px 28px rgba(0,0,0,.42);
+  transform: translateY(-1px);
+}
+
+/* Pastikan ikon ikut berubah ke brand saat hover di dark mode */
+html[data-theme="dark"] .hero-meta .meta-pill:hover svg path,
+html[data-theme="dark"] .hero-meta .meta-pill:hover svg circle,
+html[data-theme="dark"] .hero-meta .meta-pill:hover svg rect,
+html[data-theme="dark"] .hero-meta .meta-pill:hover svg line,
+html[data-theme="dark"] .hero-meta .meta-pill:hover svg polyline,
+html[data-theme="dark"] .hero-meta .meta-pill:hover svg polygon{
+  stroke: var(--brand);
+}
+
+/* Teks tebal tetap brand di dark mode */
+html[data-theme="dark"] .hero-meta .meta-pill b{ color: var(--brand); }
+
+/* ---------- 2) Mobile: tampilkan Wi-Fi & Parkir (ikon-only yang rapi) ---------- */
+@media (max-width: 560px){
+  /* Buang aturan lama yang menyembunyikan item opsional */
+  .hero-meta .hide-sm{ 
+    display: inline-flex;                   /* tampilkan lagi */
+    padding: 8px;                           /* kompak */
+    gap: 0;
+    min-width: auto;
+    justify-content: center;
+  }
+
+  /* Jadikan ikon-only tapi tetap aksesibel (teks disembunyikan secara visual) */
+  .hero-meta .hide-sm span{
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    margin: -1px !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    clip: rect(0 0 0 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+  }
+
+  /* Perkecil ikon supaya grid tetap rapih */
+  .hero-meta .hide-sm svg{ width: 16px; height: 16px; }
+
+  /* Sedikit rapikan keseluruhan spacing baris */
+  .hero-meta{ gap: 8px 10px; padding-bottom: 12px; margin-bottom: 16px; }
+}
+
+/* ---------- Micro-interaction 2025: active & focus ----------- */
+.hero-meta .meta-pill:active{
+  transform: translateY(0);                 /* netralisir hover saat tekan */
+  box-shadow: 0 6px 16px color-mix(in srgb, var(--brand) 10%, transparent);
+}
+
+.hero-meta .meta-pill:focus-within{
+  outline: 2px solid color-mix(in srgb, var(--brand) 60%, transparent);
+  outline-offset: 2px;
+}
+
+/* ---------- Reduce motion: hormati preferensi pengguna ---------- */
+@media (prefers-reduced-motion: reduce){
+  .hero-meta .meta-pill,
+  .hero-meta .meta-pill:hover,
+  .hero-meta .meta-pill:active{
+    transition: none !important;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+}
+
+
+/* ===== Rotating hero text (fade+slide) ===== */
+.hero-rotator{
+  display:inline-block;
+  will-change: transform, opacity;
+}
+
+/* state animasi */
+.hero-rotator.is-leaving{
+  animation: heroFadeOut .22s ease forwards;
+}
+.hero-rotator.is-entering{
+  animation: heroFadeIn  .24s ease forwards;
+}
+
+/* keyframes */
+@keyframes heroFadeOut{
+  from{ opacity:1; transform: translateY(0); }
+  to  { opacity:0; transform: translateY(6px); }
+}
+@keyframes heroFadeIn{
+  from{ opacity:0; transform: translateY(-6px); }
+  to  { opacity:1; transform: translateY(0); }
+}
+
+/* Saat hover/focus: jeda putaran (JS menghormati ini),
+   plus kurangi gerak untuk pengguna yang sensitif animasi */
+.hero-text:hover .hero-rotator,
+.hero-text:focus-within .hero-rotator{
+  /* animasi tetap dikontrol JS; ini hanya hint visual opsional */
+}
+
+@media (prefers-reduced-motion: reduce){
+  .hero-rotator{
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+
+/* Layanan populer */
+.hero-2025 .hero-chips{
+  display:flex; flex-wrap:wrap; gap:10px;
+  padding:0; margin:14px 0 0; list-style:none;
+  /* mobile: horizontal scroll + snaps */
+  overflow:auto; -webkit-overflow-scrolling:touch;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+}
+
+/* (opsional) Haluskan tampilan scrollbar di WebKit */
+.hero-2025 .hero-chips::-webkit-scrollbar{ height:6px; }
+.hero-2025 .hero-chips::-webkit-scrollbar-track{ background: transparent; }
+.hero-2025 .hero-chips::-webkit-scrollbar-thumb{
+  background: color-mix(in srgb, var(--line) 70%, transparent);
+  border-radius: 999px;
+}
+
+/* Chip dasar */
+.hero-2025 .chip{
+  scroll-snap-align: start;
+  display:inline-flex; align-items:center; justify-content:center;
+  gap:8px; padding:8px 14px; border-radius:999px;
+  font-size:14.5px; line-height:1; letter-spacing:.1px;
+  color: var(--text);
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--line) 60%, transparent);
+  text-decoration:none; user-select:none; white-space:nowrap;
+
+  /* interaksi modern */
+  transition:
+    transform .14s ease,
+    box-shadow .14s ease,
+    background-color .14s ease,
+    color .14s ease,
+    border-color .14s ease;
+}
+
+/* Hover: efek mengambang lembut */
+.hero-2025 .chip:hover{
+  transform: translateY(-1px);
+  background: color-mix(in srgb, var(--line) 75%, transparent);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--brand) 12%, transparent);
+}
+
+/* Active (klik): sedikit “menekan” */
+.hero-2025 .chip:active{
+  transform: translateY(0);
+  box-shadow: 0 2px 10px color-mix(in srgb, var(--brand) 10%, transparent);
+}
+
+/* Focus ring aksesibel */
+.hero-2025 .chip:focus-visible{
+  outline: none;
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--accent) 70%, transparent),
+    0 6px 18px color-mix(in srgb, var(--accent) 20%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 45%, var(--line) 55%);
+}
+
+/* State aktif/terpilih (bisa pakai aria-pressed="true" atau .is-active) */
+.hero-2025 .chip[aria-pressed="true"],
+.hero-2025 .chip.is-active{
+  color: var(--brand);
+  border-color: color-mix(in srgb, var(--accent) 40%, var(--line) 60%);
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--accent) 16%, transparent),
+      color-mix(in srgb, var(--line) 70%, transparent));
+  box-shadow: 0 10px 30px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+
+/* Dark mode tweak: chip lebih “clean” (tanpa putih berlebih) */
+html[data-theme="dark"] .hero-2025 .chip{
+  background: color-mix(in srgb, var(--line) 28%, transparent);
+  border-color: color-mix(in srgb, var(--line) 65%, transparent);
+}
+html[data-theme="dark"] .hero-2025 .chip:hover{
+  background: color-mix(in srgb, var(--line) 40%, transparent);
+}
+
+/* Responsif kecil: rapatkan gap & naikkan touch target */
+@media (max-width: 520px){
+  .hero-2025 .hero-chips{ gap:8px; }
+  .hero-2025 .chip{ padding:10px 14px; }
+}
+
+/* Aksesibilitas: kurangi gerak bila diminta */
+@media (prefers-reduced-motion: reduce){
+  .hero-2025 .chip{ transition: none !important; }
+}
+
+
+/* ===== SPASI ANTARA CHIPS → AKSI UTAMA ===== */
+/* Secara default, tombol akan punya jarak ekstra saat muncul setelah chips */
+.hero-2025 .hero-chips + .hero-actions{
+  margin-top: clamp(18px, 3.2vw, 28px); /* responsif, 2025-style */
+}
+
+/* (Opsional) Tambah hairline tipis sebelum tombol — aktifkan dengan class .--with-divider */
+.hero-2025 .hero-chips + .hero-actions.--with-divider{
+  position: relative;
+  padding-top: 14px; /* ruang untuk garis */
+}
+.hero-2025 .hero-chips + .hero-actions.--with-divider::before{
+  content:"";
+  position:absolute; left:0; right:0; top:0; height:1px; pointer-events:none;
+
+  /* fallback solid */
+  background: var(--line);
+
+  /* gradien hairline modern */
+  background:
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      color-mix(in srgb, var(--line) 82%, transparent) 12%,
+      color-mix(in srgb, var(--line) 100%, transparent) 50%,
+      color-mix(in srgb, var(--line) 82%, transparent) 88%,
+      transparent 100%
+    );
+  opacity:.95;
+  transform: translateZ(0);
+}
+
+/* Dark mode: sedikit lebih terang agar kebaca */
+html[data-theme="dark"] .hero-2025 .hero-chips + .hero-actions.--with-divider::before{
+  background:
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      color-mix(in srgb, #ffffff 18%, var(--line)) 15%,
+      color-mix(in srgb, #ffffff 28%, var(--line)) 50%,
+      color-mix(in srgb, #ffffff 18%, var(--line)) 85%,
+      transparent 100%
+    );
+  opacity:.8;
+}
+
+/* Mobile tweak: sedikit rapat biar compact */
+@media (max-width:560px){
+  .hero-2025 .hero-chips + .hero-actions{ margin-top: 18px; }
+  .hero-2025 .hero-chips + .hero-actions.--with-divider{ padding-top: 12px; }
+}
+
+
+/* ==========================================================================
+   Aksi Utama (Button Group) — 2025 Pro
+   ========================================================================== */
+.hero-2025 .hero-actions{
+  display:flex; align-items:center; flex-wrap:wrap;
+  gap:12px; margin-top:16px;
+}
+
+/* Tombol dasar */
+.hero-2025 .btn{
+  --btn-h: 44px;          /* tinggi tombol */
+  --btn-r: 12px;          /* radius */
+  --btn-px: 16px;         /* padding horizontal */
+
+  display:inline-flex; align-items:center; justify-content:center;
+  min-height:var(--btn-h); padding:0 var(--btn-px);
+  border-radius:var(--btn-r);
+  font-weight:600; letter-spacing:.2px;
+  text-decoration:none; user-select:none; cursor:pointer;
+
+  border:1px solid transparent;
+  transition:
+    transform .12s ease,
+    box-shadow .12s ease,
+    background-color .12s ease,
+    color .12s ease,
+    border-color .12s ease;
+}
+
+/* Filled / utama */
+.hero-2025 .btn.btn-default{
+  color:#fff;
+  background: linear-gradient(
+    180deg,
+    var(--brand),
+    color-mix(in srgb, var(--brand) 85%, #000 15%)
+  );
+  border-color: color-mix(in srgb, var(--brand) 40%, transparent);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--brand) 18%, transparent);
+}
+.hero-2025 .btn.btn-default:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 12px 28px color-mix(in srgb, var(--brand) 22%, transparent);
+}
+.hero-2025 .btn.btn-default:active{
+  transform: translateY(0);
+  box-shadow: 0 4px 14px color-mix(in srgb, var(--brand) 16%, transparent);
+}
+
+/* Outline / sekunder */
+.hero-2025 .btn.btn-outline{
+  background: transparent;
+  color: var(--brand);
+  border-color: var(--line);
+}
+.hero-2025 .btn.btn-outline:hover{
+  background: color-mix(in srgb, var(--line) 65%, transparent);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px color-mix(in srgb, var(--brand) 12%, transparent);
+}
+.hero-2025 .btn.btn-outline:active{
+  transform: translateY(0);
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--brand) 10%, transparent);
+}
+
+/* Fokus aksesibel */
+.hero-2025 .btn:focus-visible{
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* State nonaktif / loading */
+.hero-2025 .btn[aria-busy="true"],
+.hero-2025 .btn:disabled{
+  opacity: .6; pointer-events: none;
+}
+
+/* Catatan kecil di bawah tombol */
+.hero-2025 .action-note{
+  margin:6px 0 0;
+  color: var(--muted);
+  font-size: 13.5px;
+}
+
+/* Tint otomatis: Call & WhatsApp */
+.hero-2025 .hero-actions a[href^="tel:"]{
+  border-color: color-mix(in srgb, #2b7cff 45%, var(--line) 55%);
+  color: color-mix(in srgb, #2b7cff 70%, var(--brand) 30%);
+}
+.hero-2025 .hero-actions a[href^="tel:"]:hover{
+  background: color-mix(in srgb, #2b7cff 10%, var(--line) 90%);
+  box-shadow: 0 8px 24px color-mix(in srgb, #2b7cff 24%, transparent);
+}
+.hero-2025 .hero-actions a[href^="https://wa.me"]{
+  border-color: color-mix(in srgb, #25D366 50%, var(--line) 50%);
+  color: color-mix(in srgb, #25D366 75%, var(--brand) 25%);
+}
+.hero-2025 .hero-actions a[href^="https://wa.me"]:hover{
+  background: color-mix(in srgb, #25D366 12%, var(--line) 88%);
+  box-shadow: 0 8px 24px color-mix(in srgb, #25D366 22%, transparent);
+}
+
+/* Responsif kecil */
+@media (max-width: 520px){
+  .hero-2025 .hero-actions{ gap:10px; }
+  .hero-2025 .btn{ flex: 1 1 auto; text-align:center; }
+  .hero-2025 .btn.btn-default{ flex-basis: 100%; } /* Book Now full-width */
+}
+
+/* Kurangi animasi jika user minta */
+@media (prefers-reduced-motion: reduce){
+  .hero-2025 .btn{ transition:none !important; }
+}
+
+/* ===== Dark mode: tombol utama (Order Now) putih, teks hitam ===== */
+html[data-theme="dark"] .hero-2025 .btn.btn-default{
+  color: #0f1115;                       /* teks hitam */
+  background: #ffffff;                  /* latar putih */
+  border-color: color-mix(in srgb, #ffffff 70%, var(--line) 30%);
+  box-shadow: 0 10px 28px rgba(0,0,0,.35);
+  text-shadow: none;
+}
+html[data-theme="dark"] .hero-2025 .btn.btn-default:hover{
+  background: #f6f7f9;                  /* sedikit lebih gelap saat hover */
+  border-color: color-mix(in srgb, #ffffff 85%, var(--line) 15%);
+  transform: translateY(-1px);
+  box-shadow: 0 14px 32px rgba(0,0,0,.4);
+}
+html[data-theme="dark"] .hero-2025 .btn.btn-default:active{
+  background: #f0f2f5;
+  transform: translateY(0);
+  box-shadow: 0 6px 16px rgba(0,0,0,.35);
+}
+
+/* (opsional) util paksa versi “putih” di dark mode untuk tombol lain */
+html[data-theme="dark"] .btn--light{
+  color:#0f1115 !important;
+  background:#fff !important;
+  border:1px solid color-mix(in srgb, #ffffff 70%, var(--line) 30%) !important;
+  box-shadow: 0 10px 28px rgba(0,0,0,.35) !important;
+}
+
+
+/* ==========================================================================
+   Social Proof (Bintang + Rating + Aksi Sosial) — 2025 Pro
+   ========================================================================== */
+.hero-2025 .hero-proof .stars{
+  --star-size: 18px;
+
+  /* Intensitas default (mode terang) */
+  --aura-alpha: .42;        /* kekuatan glow lembut */
+  --aura-scale-min: .92;    /* napas glow: skala minimum */
+  --aura-scale-max: 1.06;   /* napas glow: skala maksimum */
+  --shine-alpha-1: .52;     /* garis kilau tengah */
+  --shine-alpha-2: .24;     /* pinggir garis kilau */
+  --twinkle-scale: 1.08;    /* besaran twinkle */
+  --twinkle-time: 3.4s;     /* durasi twinkle */
+
+  position:relative;
+  display:inline-flex; align-items:center; gap:6px;
+  padding-inline:6px;
+  isolation:isolate;
+}
+@media (max-width:520px){
+  .hero-2025 .hero-proof .stars{ --star-size:16px; }
+}
+
+/* Wrapper tiap bintang */
+.hero-2025 .hero-proof .stars .star{
+  position:relative;
+  display:inline-grid; place-items:center;
+  width:var(--star-size); height:var(--star-size);
+  contain: paint; /* optimasi */
+}
+
+/* SVG bintang */
+.hero-2025 .hero-proof .stars .star svg{
+  width:100%; height:100%;
+  fill: var(--accent);
+  opacity:.98;
+  filter: drop-shadow(0 .5px 0 color-mix(in srgb, var(--accent) 35%, transparent));
+  transform-origin:50% 50%;
+}
+
+/* Napas glow (aura) di belakang bintang */
+.hero-2025 .hero-proof .stars .star::before{
+  content:"";
+  position:absolute; inset:-40% -40%;
+  border-radius:50%;
+  pointer-events:none;
+  z-index:-1;
+  /* campuran radial untuk glow lembut */
+  background:
+    radial-gradient(60% 60% at 50% 50%,
+      color-mix(in srgb, var(--accent) 65%, #fff 15%) var(--aura-alpha),
+      transparent 65%);
+  filter: blur(16px);
+  opacity: var(--aura-alpha);
+  transform: scale(var(--aura-scale-min));
+}
+
+/* Garis kilau melintas (hanya saat animated) */
+.hero-2025 .hero-proof .stars.is-animated .star::after{
+  content:"";
+  position:absolute; inset:-16% -38%;
+  border-radius:50%;
+  pointer-events:none;
+  mix-blend-mode: screen; /* halus di mode terang */
+  background:
+    linear-gradient(76deg,
+      transparent 0%,
+      rgba(255,255,255,var(--shine-alpha-2)) 47%,
+      rgba(255,255,255,var(--shine-alpha-1)) 50%,
+      rgba(255,255,255,var(--shine-alpha-2)) 53%,
+      transparent 100%);
+  transform: translateX(-120%);
+  opacity:0;
+  animation: spStarShine 3.2s linear infinite;
+}
+
+/* Twinkle lembut (skala kecil) — aktif saat animated */
+.hero-2025 .hero-proof .stars.is-animated .star svg{
+  animation: spTwinkle var(--twinkle-time) ease-in-out infinite;
+}
+.hero-2025 .hero-proof .stars.is-animated .star:nth-child(1) svg{ animation-delay: .00s; }
+.hero-2025 .hero-proof .stars.is-animated .star:nth-child(2) svg{ animation-delay: .18s; }
+.hero-2025 .hero-proof .stars.is-animated .star:nth-child(3) svg{ animation-delay: .36s; }
+.hero-2025 .hero-proof .stars.is-animated .star:nth-child(4) svg{ animation-delay: .54s; }
+.hero-2025 .hero-proof .stars.is-animated .star:nth-child(5) svg{ animation-delay: .72s; }
+
+/* Shine tiap bintang: geser + fade */
+.hero-2025 .hero-proof .stars.is-animated .star:nth-child(1)::after{ animation-delay: .00s; }
+.hero-2025 .hero-proof .stars.is-animated .star:nth-child(2)::after{ animation-delay: .28s; }
+.hero-2025 .hero-proof .stars.is-animated .star:nth-child(3)::after{ animation-delay: .56s; }
+.hero-2025 .hero-proof .stars.is-animated .star:nth-child(4)::after{ animation-delay: .84s; }
+.hero-2025 .hero-proof .stars.is-animated .star:nth-child(5)::after{ animation-delay: 1.12s; }
+
+/* Keyframes */
+@keyframes spTwinkle{
+  0%,100% { transform: scale(1); }
+  50%     { transform: scale(var(--twinkle-scale)); }
+}
+@keyframes spStarShine{
+  0%   { transform: translateX(-120%); opacity:0; }
+  20%  { opacity:.85; }
+  60%  { transform: translateX(120%); opacity:.85; }
+  100% { transform: translateX(120%); opacity:0; }
+}
+
+/* ===================== MODE GELAP — lebih tenang, OLED-friendly ===================== */
+html[data-theme="dark"] .hero-2025 .hero-proof .stars{
+  --aura-alpha: .28;          /* glow lebih kalem */
+  --aura-scale-min: .96;
+  --aura-scale-max: 1.03;
+  --shine-alpha-1: .26;       /* kurangi terang garis */
+  --shine-alpha-2: .10;
+  --twinkle-scale: 1.03;      /* twinkle lebih kecil */
+  --twinkle-time: 3.8s;       /* durasi sedikit lebih panjang */
+}
+html[data-theme="dark"] .hero-2025 .hero-proof .stars .star svg{
+  opacity:.92;
+  filter: drop-shadow(0 .25px 0 color-mix(in srgb, var(--accent) 14%, transparent));
+}
+/* aura: ganti tint jadi lebih “accent” daripada putih */
+html[data-theme="dark"] .hero-2025 .hero-proof .stars .star::before{
+  background:
+    radial-gradient(60% 60% at 50% 50%,
+      color-mix(in srgb, var(--accent) 80%, #fff 0%) var(--aura-alpha),
+      transparent 65%);
+  filter: blur(18px) saturate(.95);
+}
+/* shine: hindari over-bloom di layar OLED */
+html[data-theme="dark"] .hero-2025 .hero-proof .stars.is-animated .star::after{
+  mix-blend-mode: normal;
+  filter: blur(6px) saturate(.9);
+}
+
+/* ===================== REDUCE MOTION ===================== */
+@media (prefers-reduced-motion: reduce){
+  .hero-2025 .hero-proof .stars.is-animated .star svg,
+  .hero-2025 .hero-proof .stars.is-animated .star::after,
+  .hero-2025 .hero-proof .stars .star::before{
+    animation:none !important;
+    transition:none !important;
+  }
+}
+
+/* Aksi sosial (Like • Komentar • Share) */
+.hero-2025 .social-actions{
+  display:flex; align-items:center; flex-wrap:wrap; gap:10px 12px;
+  margin-top:12px;
+}
+
+/* Base button */
+.hero-2025 .icon-btn{
+  --btn-bg: color-mix(in srgb, var(--line) 55%, transparent);
+  --btn-bd: var(--line);
+  --btn-fg: var(--brand);
+
+  appearance:none; border:1px solid var(--btn-bd);
+  background: var(--btn-bg);
+  backdrop-filter: saturate(1.15) blur(6px);
+  border-radius:999px; padding:9px 13px;
+  display:inline-flex; align-items:center; gap:8px;
+  color:var(--btn-fg); text-decoration:none; line-height:1;
+  transform: translateZ(0);
+  transition:
+    transform .18s cubic-bezier(.2,.7,.2,1),
+    box-shadow .18s ease,
+    background-color .18s ease,
+    border-color .18s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+.hero-2025 .icon-btn:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 10px 26px color-mix(in srgb, var(--brand) 14%, transparent);
+}
+.hero-2025 .icon-btn:active{ transform: translateY(0); }
+.hero-2025 .icon-btn:focus-visible{
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Ikon FIX 18x18 */
+.hero-2025 .icon-btn svg{
+  width:18px; height:18px; fill:var(--muted);
+  transition: fill .18s ease, transform .18s ease, filter .18s ease;
+}
+
+/* Label & count */
+.hero-2025 .icon-btn .count,
+.hero-2025 .icon-btn .label{
+  color:var(--muted);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+/* Like aktif */
+.hero-2025 .like-btn[aria-pressed="true"] svg{
+  fill: var(--accent);
+  transform: scale(1.08);
+  animation: heartPop .25s cubic-bezier(.2,.8,.2,1);
+}
+@keyframes heartPop{
+  0%{ transform: scale(.9); } 60%{ transform: scale(1.12); } 100%{ transform: scale(1.08); }
+}
+
+/* Share sukses (opsional via JS: .shared) */
+.hero-2025 .icon-btn.shared{
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--accent) 45%, transparent),
+    0 12px 28px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+/* ===== Attention animations (dipicu JS: .attn) ===== */
+/* Like */
+.hero-2025 .like-btn.attn svg{
+  animation: heartSpin .9s cubic-bezier(.2,.7,.2,1);
+  filter: drop-shadow(0 6px 12px color-mix(in srgb, var(--accent) 35%, transparent));
+}
+@keyframes heartSpin{
+  0%{ transform: rotate(0deg) scale(.92); }
+  60%{ transform: rotate(300deg) scale(1.18); }
+  100%{ transform: rotate(360deg) scale(1); }
+}
+
+/* Comment */
+.hero-2025 .comment-btn.attn{ box-shadow: 0 10px 26px color-mix(in srgb, var(--brand) 18%, transparent); }
+.hero-2025 .comment-btn.attn svg{ animation: commentPulse .9s cubic-bezier(.2,.7,.2,1); }
+@keyframes commentPulse{
+  0%{ transform: translateY(0) scale(1); }
+  20%{ transform: translateY(-3px) scale(1.08); }
+  45%{ transform: translateY(0) scale(1); }
+  70%{ transform: translateY(-2px) scale(1.05); }
+  100%{ transform: translateY(0) scale(1); }
+}
+
+/* Share */
+.hero-2025 .share-btn{ position:relative; overflow:visible; }
+.hero-2025 .share-btn.attn svg{
+  animation: shareWiggle .9s ease-in-out;
+  filter: drop-shadow(0 6px 14px color-mix(in srgb, var(--brand) 22%, transparent));
+}
+.hero-2025 .share-btn.attn::after{
+  content:""; position:absolute; inset:-6px -8px; pointer-events:none;
+  --ring: color-mix(in srgb, var(--accent) 50%, transparent);
+  background: radial-gradient(closest-side, var(--ring) 0%, rgba(0,0,0,0) 60%) center/0 0 no-repeat;
+  animation: shareRipple .9s ease-out;
+}
+@keyframes shareWiggle{
+  0%{ transform: rotate(0); }
+  15%{ transform: rotate(12deg); }
+  35%{ transform: rotate(-10deg); }
+  55%{ transform: rotate(6deg); }
+  75%{ transform: rotate(-4deg); }
+  100%{ transform: rotate(0); }
+}
+@keyframes shareRipple{
+  0%{ background-size:0 0; opacity:.75; }
+  60%{ background-size:220% 220%; opacity:.25; }
+  100%{ background-size:260% 260%; opacity:0; }
+}
+
+/* Hover micro */
+.hero-2025 .like-btn:hover svg{ transform: scale(1.06); }
+.hero-2025 .comment-btn:hover svg{ transform: translateY(-2px); }
+.hero-2025 .share-btn:hover svg{ transform: rotate(6deg); }
+
+/* Reduce motion */
+@media (prefers-reduced-motion: reduce){
+  .hero-2025 .icon-btn,
+  .hero-2025 .icon-btn svg{ transition:none !important; animation:none !important; }
+  .hero-2025 .icon-btn:hover{ transform:none !important; box-shadow:none !important; }
+}
+
+/* =========================================================
+   SA-POP (Komentar & Share) — Paksa terang saat DARK MODE
+   ========================================================= */
+html[data-theme="dark"] .sa-pop .sa-backdrop{
+  /* tetap gelap tipis agar latar meredup */
+  background: rgba(0,0,0,.45) !important;
+}
+
+html[data-theme="dark"] .sa-pop .sa-card{
+  /* kartu terang */
+  background: linear-gradient(180deg, #ffffff 98%, #f8fafc 100%) !important;
+  color:#0f1115 !important;
+  border-color: rgba(17,24,39,.12) !important;
+  box-shadow: 0 30px 80px rgba(0,0,0,.30), 0 8px 24px rgba(0,0,0,.20) !important;
+}
+
+/* Header & tombol close */
+html[data-theme="dark"] .sa-pop .sa-title{ color:#0f1115 !important; }
+html[data-theme="dark"] .sa-pop .sa-close{
+  background:#f3f4f6 !important;
+  border-color:#e5e7eb !important;
+}
+html[data-theme="dark"] .sa-pop .sa-x::before,
+html[data-theme="dark"] .sa-pop .sa-x::after{ background:#111827 !important; }
+
+/* Form komentar (field terang) */
+html[data-theme="dark"] .sa-pop .sa-cmt-form input,
+html[data-theme="dark"] .sa-pop .sa-cmt-form textarea{
+  background:#ffffff !important;
+  color:#0f1115 !important;
+  border-color:#e5e7eb !important;
+}
+html[data-theme="dark"] .sa-pop .sa-cmt-form ::placeholder{ color:#6b7280 !important; }
+
+/* Item komentar */
+html[data-theme="dark"] .sa-pop .sa-item{
+  background:#f8fafc !important;
+  border-color:#e5e7eb !important;
+}
+html[data-theme="dark"] .sa-pop .sa-item .sa-name{ color:#0f1115 !important; }
+html[data-theme="dark"] .sa-pop .sa-item .sa-time{ color:#6b7280 !important; }
+
+/* Tombol channel share (kartu putih) */
+html[data-theme="dark"] .sa-pop .sa-share-btn{
+  background:#ffffff !important;
+  color:#0f1115 !important;
+  border-color:#e5e7eb !important;
+  box-shadow:none !important;
+}
+
+/* Ikon PNG di popup: jangan dibalik, kasih sedikit shadow biar tajam */
+html[data-theme="dark"] .sa-pop .sa-share-ico,
+html[data-theme="dark"] .sa-pop img{
+  filter: none !important;
+  mix-blend-mode: normal !important;
+  /* garis tipis agar logo transparan tetap kebaca */
+  image-rendering:auto;
+  -webkit-user-drag:none;
+  box-shadow: 0 0 0 .5px rgba(17,24,39,.10);
+}
+
+/* Input copy-link + tombolnya */
+html[data-theme="dark"] .sa-pop .sa-mini .copy-field,
+html[data-theme="dark"] .sa-pop .sa-mini .copy-btn{
+  background:#ffffff !important;
+  color:#0f1115 !important;
+  border-color:#e5e7eb !important;
+}
+
+/* (Opsional) Hover elevasi halus di dark */
+html[data-theme="dark"] .sa-pop .sa-share-btn:hover{
+  box-shadow: 0 10px 22px rgba(0,0,0,.08) !important;
+}
+
+/* ---------------------------------------------------------
+   Jika kamu TIDAK pakai data-theme dan hanya ikut sistem:
+   buka komentar blok di bawah ini.
+--------------------------------------------------------- */
+/*
+@media (prefers-color-scheme: dark){
+  .sa-pop .sa-card{ background:#fff !important; color:#0f1115 !important; border-color:#e5e7eb !important; }
+  .sa-pop .sa-share-btn,
+  .sa-pop .sa-cmt-form input,
+  .sa-pop .sa-cmt-form textarea,
+  .sa-pop .sa-mini .copy-field,
+  .sa-pop .sa-mini .copy-btn{ background:#fff !important; color:#0f1115 !important; border-color:#e5e7eb !important; }
+  .sa-pop img{ filter:none !important; mix-blend-mode:normal !important; }
+}
+*/
+
+
+
+/* --- kanan (media) --- */
+.hero-2025 .hero-media{ position:relative; }
+.hero-2025 .hero-media picture,
+.hero-2025 .hero-media img{
+  position:relative; z-index:1;
+  display:block; width:100%; height:100%;
+  object-fit:cover;
+  /* Atur framing wajah/aksi supaya fokus */
+  object-position: center 20%; /* coba center top/bottom sesuai fotonya */
+}
+
+/* =================== LIGHT (sistem) =================== */
+@media (prefers-color-scheme: light){
+  .hero-2025 .hero-media img{
+    /* tampil default; kalau mau tetap pakai punch ringan, hapus baris ini */
+    filter: none;
+    mix-blend-mode: normal;
+  }
+}
+
+/* ==================== DARK (sistem) ==================== */
+@media (prefers-color-scheme: dark){
+  .hero-2025 .hero-media img{
+    /* ubah semua piksel non-transparan jadi putih bersih */
+    filter: brightness(0) invert(1);
+    mix-blend-mode: normal; /* pastikan tidak tercampur dengan latar */
+  }
+}
+
+/* ====== MANUAL OVERRIDE via data-theme (kalau kamu pakai toggle) ====== */
+html[data-theme="light"] .hero-2025 .hero-media img{
+  filter: none;
+  mix-blend-mode: normal;
+}
+html[data-theme="dark"] .hero-2025 .hero-media img{
+  filter: brightness(0) invert(1);
+  mix-blend-mode: normal;
+}
+
+/* ==========================================================================
+   SCROLL CUE — Modern 2025 (glassy, idle-animate, accessible)
+   ========================================================================== */
+
+:root{
+  --cue-size: 40px;          /* ukuran tombol (tap target >= 40–44px) */
+  --cue-blur: 10px;          /* kekuatan blur glass */
+}
+
+/* Tombol panah ke bawah */
+.hero-2025 .scroll-cue{
+  position: absolute;
+  left: 50%;
+  /* aman untuk iPhone yang ada notch/home bar */
+  bottom: max(18px, env(safe-area-inset-bottom, 0px) + 10px);
+  transform: translateX(-50%);
+  width: var(--cue-size);
+  height: var(--cue-size);
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  cursor: pointer;
+
+  /* Glassy background (fallback + modern) */
+  background: rgba(127,127,127,.06);                 /* fallback */
+  background: color-mix(in srgb, var(--bg) 70%, transparent);
+  border: 1px solid var(--line);
+  backdrop-filter: saturate(1.2) blur(var(--cue-blur));
+  -webkit-backdrop-filter: saturate(1.2) blur(var(--cue-blur));
+  box-shadow: 0 1px 6px rgba(0,0,0,.05);
+
+  opacity: .85;
+  transition:
+    opacity .18s ease,
+    transform .18s ease,
+    box-shadow .18s ease,
+    border-color .18s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Ring aksen halus saat hover (layer di atas border) */
+.hero-2025 .scroll-cue::before{
+  content: "";
+  position: absolute; inset: 0;
+  border-radius: inherit;
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
+  opacity: 0;
+  transition: opacity .2s ease;
+}
+
+.hero-2025 .scroll-cue:hover{
+  opacity: 1;
+  transform: translateX(-50%) translateY(-2px);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--brand) 12%, transparent);
+}
+.hero-2025 .scroll-cue:hover::before{ opacity: .6; }
+.hero-2025 .scroll-cue:active{ transform: translateX(-50%); }
+
+.hero-2025 .scroll-cue:focus-visible{
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 12px;
+}
+
+/* Ikon panah */
+.hero-2025 .scroll-cue svg{
+  width: 18px; height: 18px;
+  fill: var(--muted);
+  pointer-events: none;
+  transition: transform .2s ease, opacity .2s ease, fill .2s ease;
+}
+
+/* Idle animation (pelan), lalu lebih cepat saat hover */
+@keyframes cueIdle { 0%,100% { transform: translateY(0); } 50% { transform: translateY(3px); } }
+@keyframes cueFloat{ 0%,100% { transform: translateY(0); } 50% { transform: translateY(2px); } }
+
+@media (prefers-reduced-motion: no-preference){
+  .hero-2025 .scroll-cue svg{ animation: cueIdle 2.8s ease-in-out infinite; }
+  .hero-2025 .scroll-cue:hover svg{ animation: cueFloat 1.2s ease-in-out infinite; }
+}
+
+/* Responsif kecil: besarkan tap target, rapikan aksi hero */
+@media (max-width: 520px){
+  :root{ --cue-size: 44px; }
+  .hero-2025 .hero-actions{ flex-wrap: wrap; }
+  .hero-2025 .btn.btn-outline{ flex: 1 1 auto; text-align: center; }
+}
+
+/* Aksesibilitas: kurangi animasi */
+@media (prefers-reduced-motion: reduce){
+  .hero-2025 .scroll-cue,
+  .hero-2025 .scroll-cue:hover svg{
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* High-contrast/forced colors: hindari blur, pakai warna sistem */
+@media (forced-colors: active){
+  .hero-2025 .scroll-cue{
+    background: transparent;
+    border-color: CanvasText;
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+  .hero-2025 .scroll-cue svg{
+    fill: CanvasText;
+    animation: none;
+  }
+}
+
+
+/* ==========================================================================
+   5) TOMBOL
+   ========================================================================== */
+/* ===== Button Invert 2025 Pro (Light: Black/White • Dark: White/Black) ===== */
+
+/* Base token ukuran */
+:root{
+  --btn-h: 46px;
+  --btn-r: 12px;
+  --btn-px: 16px;
+}
+
+/* Reset & struktur */
+.btn,
+.btn-default{
+  appearance:none;
+  -webkit-tap-highlight-color:transparent;
+  user-select:none;
+  cursor:pointer;
+
+  display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  min-height:var(--btn-h);
+  padding:0 var(--btn-px);
+  border-radius:var(--btn-r);
+  text-decoration:none;
+  font-weight:700; letter-spacing:.2px;
+
+  border:1px solid var(--btn-bd, #111827);
+  color:var(--btn-fg, #fff);
+  background: var(--btn-bg, #0b0d11);
+
+  /* kedalaman halus */
+  background-image: linear-gradient(180deg,
+    color-mix(in srgb, var(--btn-bg, #0b0d11) 92%, #fff 8%),
+    var(--btn-bg, #0b0d11));
+  box-shadow:
+    0 10px 24px var(--btn-shadow, rgba(0,0,0,.18)),
+    0 1px 0 rgba(255,255,255,.06) inset;
+
+  transition:
+    transform .12s ease,
+    box-shadow .14s ease,
+    background-color .14s ease,
+    border-color .14s ease,
+    filter .14s ease,
+    color .14s ease;
+}
+
+/* ===== LIGHT MODE (default): hitam / teks putih */
+html:not([data-theme="dark"]) .btn,
+html:not([data-theme="dark"]) .btn-default{
+  --btn-bg: #0b0d11;          /* black rich */
+  --btn-fg: #ffffff;          /* white text */
+  --btn-bd: #111827;          /* deep border */
+  --btn-shadow: rgba(0,0,0,.22);
+}
+
+/* ===== DARK MODE: putih / teks hitam */
+html[data-theme="dark"] .btn,
+html[data-theme="dark"] .btn-default{
+  --btn-bg: #ffffff;
+  --btn-fg: #0b0d11;
+  --btn-bd: rgba(255,255,255,.28);
+  --btn-shadow: rgba(255,255,255,.14);
+  /* gradient tipis biar tidak silau di dark */
+  background-image: linear-gradient(180deg,
+    color-mix(in srgb, #ffffff 92%, #000 8%), #ffffff);
+}
+
+/* Hover / Active */
+.btn:hover,
+.btn-default:hover{
+  transform: translateY(-1px);
+  box-shadow:
+    0 14px 30px var(--btn-shadow),
+    0 1px 0 rgba(255,255,255,.08) inset;
+  filter: saturate(1.02);
+}
+.btn:active,
+.btn-default:active{
+  transform: translateY(0);
+  box-shadow:
+    0 6px 16px color-mix(in srgb, var(--btn-bg) 20%, transparent) inset,
+    0 1px 0 rgba(0,0,0,.12);
+}
+
+/* Focus ring aksesibel (pakai --accent kalau ada) */
+.btn:focus-visible,
+.btn-default:focus-visible{
+  outline:2px solid var(--accent, #2b90ff);
+  outline-offset:2px;
+}
+
+/* Disabled / busy */
+.btn:disabled,
+.btn[aria-busy="true"],
+.btn-default:disabled,
+.btn-default[aria-busy="true"]{
+  opacity:.65;
+  pointer-events:none;
+}
+
+/* Ikon ikut warna teks */
+.btn > svg,
+.btn > img,
+.btn-default > svg,
+.btn-default > img{
+  width:18px; height:18px; flex:0 0 auto;
+}
+.btn > svg *,
+.btn-default > svg *{
+  fill: currentColor;
+  stroke: currentColor;
+}
+
+/* ===== Optional: Outline & Ghost (ikut invert juga) ===== */
+.btn-outline{
+  background: transparent;
+  color: var(--btn-fg, #fff);
+  border:1.5px solid currentColor;
+  box-shadow:none;
+}
+.btn-outline:hover{ transform: translateY(-1px); }
+
+.btn-ghost{
+  background: transparent;
+  border-color: transparent;
+  color: var(--btn-fg, #fff);
+}
+.btn-ghost:hover{ background: color-mix(in srgb, var(--btn-fg) 10%, transparent); }
+
+/* ==========================================================================
+   6) SECTION GENERIK
+   ========================================================================== */
+
+.space-medium{ padding:56px 0; }
+.section-title h1, .section-title h2{ margin:0 0 6px; }
+.small-title{ color:var(--muted); margin:0; }
+
+
+/* ==========================================================================
+   7) GRID LAYANAN (SERVICES)
+   ========================================================================== */
+:root{
+  --svc-gap: 24px;
+  --svc-radius: 16px;
+}
+
+@supports(selector(:has(*))){
+  .row:has(.service-block){
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: var(--svc-gap);
+    align-items: stretch;                  /* samakan tinggi kartu */
+  }
+}
+
+/* Fallback kalau tidak pakai :has() */
+.service-list, .services-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: var(--svc-gap);
+  align-items: stretch;
+}
+
+/* =========================
+   KARTU LAYANAN
+   ========================= */
+.service-block{
+  min-height: 100%;
+  display: flex;                           /* kolom */
+  flex-direction: column;
+  padding: 18px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--svc-radius);
+  transition:
+    transform .15s ease,
+    box-shadow .15s ease,
+    border-color .15s ease,
+    background-color .15s ease;
+}
+.service-block:hover{
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(0,0,0,.08);
+  border-color: color-mix(in srgb, var(--line) 70%, transparent);
+}
+
+/* Ikon */
+.service-icon{ line-height: 0; }
+.service-icon img{
+  width:56px; height:56px; object-fit:contain;
+  filter: drop-shadow(0 1px 8px color-mix(in srgb, var(--brand) 7%, transparent));
+}
+
+/* Konten: judul, deskripsi, harga (harga selalu bawah) */
+.service-content{
+  display: grid;
+  grid-template-rows: auto 1fr auto;       /* judul | deskripsi fleksibel | HARGA */
+  gap: 8px;
+  flex: 1;
+  min-height: 0;
+}
+.service-content .title{
+  color: var(--brand);
+  text-decoration: none;
+  letter-spacing: .2px;
+}
+.service-content .title:hover{ text-decoration: underline; }
+.service-content p{
+  margin: .4rem 0 0;
+  color: var(--muted);
+}
+
+/* =========================
+   BADGE HARGA — auto width
+   ========================= */
+.price{
+  grid-row: 3;                              /* baris terakhir */
+  align-self: start;                        /* kiri */
+  margin-top: 12px;
+
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 12px;
+  inline-size: max-content;                 /* ikut panjang angka */
+  white-space: nowrap;                      /* jangan pindah baris */
+  border-radius: 999px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;       /* digit rata & stabil */
+  font-feature-settings: "tnum" 1;
+
+  color: var(--brand);
+  background: color-mix(in srgb, var(--accent) 14%, var(--line) 86%); /* tint lembut */
+  border: 1px solid var(--line);
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, var(--line) 40%, transparent),
+    0 4px 14px color-mix(in srgb, var(--brand) 6%, transparent);
+}
+
+/* Varian: kalau kamu ingin “Mulai Rp …” punya aksen lebih */
+.price.is-start{
+  background: color-mix(in srgb, var(--accent) 20%, var(--line) 80%);
+}
+
+/* =========================
+   DARK MODE
+   ========================= */
+html[data-theme="dark"] .service-block{
+  background: color-mix(in srgb, var(--line) 22%, transparent);
+  border-color: color-mix(in srgb, var(--line) 65%, transparent);
+}
+html[data-theme="dark"] .service-block:hover{
+  box-shadow: 0 16px 34px rgba(0,0,0,.35);
+}
+html[data-theme="dark"] .price{
+  background: color-mix(in srgb, var(--line) 28%, transparent);
+  border-color: color-mix(in srgb, var(--line) 70%, transparent);
+  color: var(--brand);
+}
+
+/* =========================
+   RESPONSIF
+   ========================= */
+@media (max-width: 560px){
+  :root{ --svc-gap: 16px; }
+  .service-block{ padding: 14px; border-radius: 14px; }
+  .service-icon img{ width:48px; height:48px; }
+  .price{ padding: 6px 10px; }
+}
+
+/* Animasi halus saat tema berganti */
+.service-icon img{
+  transition: filter .2s ease, opacity .2s ease;
+}
+
+/* ===== Dark mode via OS (prefers-color-scheme) ===== */
+@media (prefers-color-scheme: dark){
+  .service-icon img{
+    /* ubah ikon PNG jadi putih + tetap ada glow brand */
+    filter:
+      brightness(0) invert(1) grayscale(1) contrast(1.08)
+      drop-shadow(0 1px 8px color-mix(in srgb, var(--brand) 10%, transparent));
+  }
+}
+
+/* ===== Dark mode via toggle manual (html[data-theme="dark"]) ===== */
+html[data-theme="dark"] .service-icon img{
+  filter:
+    brightness(0) invert(1) grayscale(1) contrast(1.08)
+    drop-shadow(0 1px 8px color-mix(in srgb, var(--brand) 10%, transparent));
+}
+
+/* Ikon tertentu yang TIDAK boleh dibalik warnanya beri class .no-invert */
+.service-icon img.no-invert{ filter: none !important; }
+html[data-theme="dark"] .service-icon img.no-invert{ filter: none !important; }
+@media (prefers-color-scheme: dark){
+  .service-icon img.no-invert{ filter: none !important; }
+}
+
+/* === PATCH: Harga sejajar bawah-kiri + angka tabular + pill rapat === */
+
+/* Jadikan area konten grid 3-baris:
+   1) Judul
+   2) Deskripsi (fleksibel)
+   3) Harga (lengket di bawah) */
+.service-content{
+  display:grid;
+  grid-template-rows: auto 1fr auto;
+  align-content: stretch;
+  gap: 4px;
+  min-width: 0; /* biar teks bisa wrap */
+}
+
+/* Pastikan deskripsi “mengisi” ruang tengah */
+.service-content p{ grid-row: 2; }
+
+/* Harga: lengket bawah-kiri, angka tabular, pill pas-isi */
+.service-content .price{
+  grid-row: 3;
+  justify-self: start;
+  align-self: end;
+
+  /* tampilan */
+  padding: 7px 12px;          /* pill pas dengan teks */
+  border-radius: 10px;        /* sedikit lebih rapat */
+  line-height: 1;             /* tinggi pill presisi */
+  white-space: nowrap;        /* harga tidak patah baris */
+
+  /* angka sejajar (lebar digit sama) */
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+
+  /* border & bg halus (sinkron dengan tema) */
+  border: 1px solid color-mix(in srgb, var(--line) 86%, transparent);
+  background: color-mix(in srgb, var(--card) 92%, transparent);
+}
+
+/* Saat hover kartu, pill ikut sedikit “glow” (nggak lebay) */
+.service-block:hover .price{
+  border-color: color-mix(in srgb, var(--brand) 22%, var(--line));
+  box-shadow:
+    0 10px 22px color-mix(in srgb, var(--brand) 14%, transparent),
+    inset 0 0 0 1px color-mix(in srgb, var(--brand) 18%, var(--line));
+}
+
+/* Dark mode – kontras tetap kebaca */
+html[data-theme="dark"] .service-content .price{
+  background: color-mix(in srgb, var(--card) 65%, transparent);
+  border-color: color-mix(in srgb, var(--line) 72%, transparent);
+}
+
+/* ==== (OPSIONAL) Samakan baseline harga antar kartu
+   Biar baris harga sejajar persis di satu baris grid,
+   kasih tinggi minimum kartu yang konsisten.
+   Silakan atur angka clamp sesuai panjang deskripsi kamu. */
+.service-block{
+  min-height: clamp(160px, 22vw, 220px);
+}
+
+
+/* ==========================================================================
+   8) TENTANG KAMI (ABOUT)
+   ========================================================================== */
+
+.bg-default{
+  background:#f7f8fa; /* fallback */
+  background:color-mix(in srgb, var(--line) 40%, transparent); /* modern */
+}
+
+/* Grid 2 kolom untuk section About, khusus row pertama di section ini */
+section.bg-default .row{
+  display:grid; gap:var(--gap);
+}
+@media (min-width: 900px){
+  section.bg-default .row{
+    grid-template-columns: 1fr 1.1fr; align-items:center;
+  }
+}
+
+.well-block{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:20px;
+}
+.img-responsive{
+  width:100%; height:auto; border-radius:var(--radius);
+}
+
+/* =========================
+   ABOUT — Modern 2025 Pro
+   ========================= */
+.about-2025{
+  position: relative;
+  padding: clamp(48px, 7vw, 96px) 0;
+  /* ambience tipis di background */
+  background:
+    radial-gradient(900px 420px at 10% -10%,
+      color-mix(in srgb, var(--accent) 10%, transparent) 0%,
+      transparent 60%) no-repeat;
+}
+
+/* Grid 2 kolom (stack di mobile) */
+.about-2025 .about-grid{
+  display: grid;
+  gap: clamp(18px, 3.2vw, 28px);
+}
+@media (min-width: 900px){
+  .about-2025 .about-grid{
+    grid-template-columns: 1.05fr 1fr;
+    align-items: center;
+  }
+}
+
+/* =========================
+   Media (gambar + glow)
+   ========================= */
+.about-2025 .about-media{
+  position: relative;
+  overflow: hidden;
+  border-radius: clamp(16px, 2.2vw, 24px);
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--line) 40%, transparent);
+  aspect-ratio: 4 / 3;
+  isolation: isolate;
+  box-shadow: 0 14px 40px color-mix(in srgb, #000 16%, transparent);
+}
+
+.about-2025 .about-media img{
+  width: 100%; height: 100%;
+  display: block; object-fit: cover;
+  transform: scale(1.02);
+  transition: transform .6s ease, filter .6s ease;
+}
+
+.about-2025 .about-media:hover img{
+  transform: scale(1.04);
+}
+
+/* Glow ambience di bawah gambar */
+.about-2025 .media-glow{
+  position: absolute; inset: auto -25% -22% -25%; height: 52%;
+  background: radial-gradient(60% 80% at 50% 0%,
+             color-mix(in srgb, var(--accent) 22%, transparent) 0%,
+             transparent 70%);
+  filter: blur(28px);
+  z-index: -1; pointer-events: none;
+}
+
+/* Sedikit punch warna di mode terang */
+@media (prefers-color-scheme: light){
+  .about-2025 .about-media img{
+    filter: saturate(1.04) contrast(1.02);
+  }
+}
+
+/* =========================
+   Copy
+   ========================= */
+.about-2025 .about-badge{
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 10px; border-radius: 999px;
+  background: color-mix(in srgb, var(--line) 60%, transparent);
+  border: 1px solid var(--line);
+  color: var(--text);
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+
+.about-2025 .about-title{
+  font-size: clamp(26px, 4.6vw, 40px);
+  line-height: 1.1;
+  letter-spacing: .2px;
+  margin: 6px 0 10px;
+}
+
+.about-2025 .about-lede{
+  color: var(--muted);
+  margin: 0 0 14px;
+}
+
+/* Keunggulan (bullet dengan ikon check) */
+.about-2025 .about-points{
+  display: grid; gap: 8px;
+  padding: 0; margin: 0 0 14px;
+  list-style: none;
+}
+.about-2025 .about-points li{
+  display: flex; align-items: flex-start; gap: 10px;
+  color: var(--text);
+}
+.about-2025 .about-points svg{
+  width: 18px; height: 18px; flex: 0 0 auto;
+  fill: none; stroke: var(--brand); stroke-width: 2;
+  stroke-linecap: round; stroke-linejoin: round;
+  margin-top: 2px;
+}
+
+/* =========================
+   Stats ringkas
+   ========================= */
+.about-2025 .about-stats{
+  display: flex; flex-wrap: wrap; gap: 10px;
+  margin: 6px 0 12px;
+}
+.about-2025 .stat{
+  min-width: 110px;
+  display: flex; flex-direction: column; align-items: flex-start;
+  padding: 8px 12px; border-radius: 12px;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--line) 55%, transparent);
+  backdrop-filter: saturate(1.1) blur(6px);
+}
+.about-2025 .stat strong{
+  font-size: clamp(16px, 2.2vw, 20px);
+  line-height: 1; color: var(--brand);
+}
+.about-2025 .stat span{
+  font-size: 13px; color: var(--muted);
+  margin-top: 4px;
+}
+
+/* =========================
+   Actions
+   ========================= */
+.about-2025 .about-actions{
+  display: flex; gap: 10px;
+  margin-top: 8px;
+}
+@media (max-width: 560px){
+  .about-2025 .about-actions .btn{
+    flex: 1 1 auto; text-align: center;
+  }
+}
+
+/* =========================
+   Hairline divider (opsional)
+   Tambahkan class .--with-divider pada .about-copy
+   ========================= */
+.about-2025 .about-copy.--with-divider{
+  position: relative; padding-top: 14px;
+}
+.about-2025 .about-copy.--with-divider::before{
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 1.25px;
+  background:
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      color-mix(in srgb, var(--line) 82%, transparent) 12%,
+      color-mix(in srgb, var(--line) 100%, transparent) 50%,
+      color-mix(in srgb, var(--line) 82%, transparent) 88%,
+      transparent 100%
+    );
+  opacity: .95; transform: translateZ(0);
+}
+
+/* =========================
+   Reveal-on-scroll (CSS only)
+   — jika kamu menambahkan JS observer, cukup toggle .is-visible
+   ========================= */
+.about-2025 [data-reveal]{
+  opacity: 1; transform: none; /* visible by default */
+  transition: opacity .5s ease, transform .5s ease;
+}
+.about-2025 [data-reveal].is-visible{
+  opacity: 1; transform: none;
+}
+@media (prefers-reduced-motion: no-preference){
+  .about-2025 [data-reveal]{ opacity: 0; transform: translateY(10px); }
+  .about-2025 [data-reveal].is-visible{ opacity: 1; transform: none; }
+  /* Ken Burns lembut ketika sudah visible */
+  @keyframes aboutKenBurns{ from{ transform: scale(1.02); } to{ transform: scale(1.06); } }
+  .about-2025 .about-media.is-visible img{ animation: aboutKenBurns 14s ease-in-out both; }
+}
+
+/* =========================
+   Dark mode tweaks
+   ========================= */
+html[data-theme="dark"] .about-2025 .about-media{
+  border-color: color-mix(in srgb, var(--line) 70%, transparent);
+  background: color-mix(in srgb, var(--line) 30%, transparent);
+  box-shadow: 0 14px 36px rgba(0,0,0,.35);
+}
+html[data-theme="dark"] .about-2025 .media-glow{
+  background: radial-gradient(60% 80% at 50% 0%,
+             color-mix(in srgb, var(--accent) 16%, transparent) 0%,
+             transparent 70%);
+  filter: blur(26px);
+}
+html[data-theme="dark"] .about-2025 .about-copy.--with-divider::before{
+  background:
+    linear-gradient(
+      90deg,
+      transparent 0%,
+      color-mix(in srgb, #ffffff 18%, var(--line)) 15%,
+      color-mix(in srgb, #ffffff 28%, var(--line)) 50%,
+      color-mix(in srgb, #ffffff 18%, var(--line)) 85%,
+      transparent 100%
+    );
+  opacity: .85;
+}
+
+/* =========================
+   Aksesibilitas / Motion
+   ========================= */
+@media (prefers-reduced-motion: reduce){
+  .about-2025 .about-media img,
+  .about-2025 [data-reveal]{
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+
+/* ==========================================================================
+   9) CTA (CALL TO ACTION)
+   ========================================================================== */
+.cta-section{
+  position: relative;
+  overflow: clip;
+  padding: clamp(56px, 8vw, 108px) 0;
+  /* ambience belakang (subtle, tidak ganggu teks) */
+  background:
+    radial-gradient(900px 420px at 20% -10%,
+      color-mix(in srgb, var(--accent) 12%, transparent) 0%,
+      transparent 65%) no-repeat,
+    radial-gradient(900px 420px at 80% 120%,
+      color-mix(in srgb, var(--brand) 10%, transparent) 0%,
+      transparent 70%) no-repeat;
+}
+
+/* grid halus seperti “aurora lines” */
+.cta-section::after{
+  content:"";
+  position:absolute; inset:0; pointer-events:none; opacity:.25;
+  background:
+    linear-gradient(0deg, transparent 46%, color-mix(in srgb, var(--line) 90%, transparent) 50%, transparent 54%),
+    linear-gradient(90deg, transparent 46%, color-mix(in srgb, var(--line) 90%, transparent) 50%, transparent 54%);
+  background-size: 28px 28px, 28px 28px; /* kotak kecil halus */
+  mask: radial-gradient(60% 60% at 50% 50%, #000 0%, transparent 100%);
+}
+
+/* “kartu” di tengah tanpa ubah HTML */
+.cta-section .container{
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  max-width: 920px;
+  margin-inline: auto;
+
+  /* frosted card */
+  border: 1px solid var(--line);
+  border-radius: clamp(14px, 2.2vw, 22px);
+  padding: clamp(22px, 3.2vw, 34px);
+  background: color-mix(in srgb, var(--card) 70%, transparent);
+  backdrop-filter: saturate(1.1) blur(10px);
+  box-shadow: 0 14px 40px color-mix(in srgb, #000 14%, transparent);
+}
+
+/* judul: tebal, ada underline gradien */
+.cta-title{
+  font-size: clamp(24px, 4.8vw, 40px);
+  line-height: 1.12;
+  letter-spacing: .2px;
+  margin: 0 0 10px;
+  position: relative;
+}
+.cta-title::after{
+  content:"";
+  display:block;
+  width: clamp(120px, 30%, 220px);
+  height: 2px;
+  margin: 10px auto 0;
+  background: linear-gradient(90deg,
+              transparent 0%,
+              color-mix(in srgb, var(--accent) 60%, transparent) 20%,
+              color-mix(in srgb, var(--brand) 70%, transparent) 80%,
+              transparent 100%);
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--accent) 35%, transparent));
+  opacity:.9;
+}
+
+/* deskripsi */
+.cta-text{
+  color: var(--muted);
+  max-width: 62ch;
+  margin: 10px auto 18px;
+}
+
+/* tombol: pakai .btn global, tapi beri efek shine khusus di CTA */
+.cta-section .btn.btn-default{
+  min-height: 48px;
+  padding-inline: 22px;
+  font-weight: 700;
+  letter-spacing: .2px;
+  position: relative;
+  overflow: hidden; /* untuk shine */
+}
+
+/* shine lembut periodik (tanpa hover) */
+.cta-section .btn.btn-default::after{
+  content:"";
+  position:absolute; inset:0;
+  background:
+    linear-gradient(110deg,
+      transparent 0%,
+      rgba(255,255,255,.25) 45%,
+      rgba(255,255,255,.75) 50%,
+      rgba(255,255,255,.25) 55%,
+      transparent 100%);
+  mix-blend-mode: screen;
+  transform: translateX(-120%);
+  opacity:.0;
+  animation: ctaShine 6.6s linear infinite;
+}
+@keyframes ctaShine{
+  0%   { transform: translateX(-120%); opacity:0; }
+  8%   { opacity:.9; }
+  18%  { transform: translateX(120%); opacity:.0; }
+  100% { transform: translateX(120%); opacity:0; }
+}
+
+/* hover: sedikit naik + shadow lebih dalam (pakai aturan tombol global juga) */
+.cta-section .btn.btn-default:hover{
+  transform: translateY(-1px);
+  box-shadow: 0 14px 32px color-mix(in srgb, var(--brand) 26%, transparent);
+}
+
+/* spacing responsif */
+@media (max-width: 560px){
+  .cta-section .container{ padding: 20px; }
+  .cta-text{ margin-bottom: 16px; }
+}
+
+/* Dark mode: kontras & ambience disesuaikan */
+html[data-theme="dark"] .cta-section{
+  background:
+    radial-gradient(900px 420px at 20% -10%,
+      color-mix(in srgb, var(--accent) 10%, transparent) 0%,
+      transparent 65%) no-repeat,
+    radial-gradient(900px 420px at 82% 120%,
+      color-mix(in srgb, var(--brand) 8%, transparent) 0%,
+      transparent 70%) no-repeat;
+}
+html[data-theme="dark"] .cta-section .container{
+  background: color-mix(in srgb, var(--card) 45%, transparent);
+  border-color: color-mix(in srgb, var(--line) 72%, transparent);
+  box-shadow: 0 16px 42px rgba(0,0,0,.35);
+}
+html[data-theme="dark"] .cta-section::after{
+  opacity:.18; /* grid lebih halus di OLED */
+}
+html[data-theme="dark"] .cta-title::after{
+  filter: drop-shadow(0 0 4px color-mix(in srgb, var(--accent) 26%, transparent));
+  opacity:.85;
+}
+
+/* Reduce motion: matikan shine & transisi berat */
+@media (prefers-reduced-motion: reduce){
+  .cta-section .btn.btn-default::after{ animation:none !important; opacity:0 !important; }
+  .cta-section .container,
+  .cta-section .cta-title::after,
+  .cta-section .btn{ transition:none !important; }
+}
+
+
+/* ==========================================================================
+   10) UTILITAS AKSESIBILITAS & MISC
+   ========================================================================== */
+
+/* Hanya untuk screen reader */
+.sr-only,
+.visually-hidden{
+  position:absolute !important; width:1px !important; height:1px !important;
+  padding:0 !important; margin:-1px !important; overflow:hidden !important;
+  clip:rect(0,0,0,0) !important; white-space:nowrap !important; border:0 !important;
+}
+
+/* Gambar dekoratif opsional (jika perlu) */
+.decoration{ pointer-events:none; user-select:none; }
+
+/* Spasi umum section terakhir sebelum footer (opsional) */
+/* .page-end{ margin-bottom:56px; } */
+
+
+/* toast */
+.sa-toast{ position:fixed; left:50%; bottom:18px; transform:translateX(-50%); z-index:9999; pointer-events:none; }
+.sa-toast__bubble{
+  background:#111827; color:#fff; border:1px solid rgba(255,255,255,.12);
+  border-radius:999px; padding:9px 14px; box-shadow:0 10px 26px rgba(0,0,0,.2);
+  opacity:0; transform:translateY(6px); transition:opacity .18s, transform .18s;
+  font-size:14px;
+}
+.sa-toast.is-show .sa-toast__bubble{ opacity:1; transform:translateY(0); }
+.sa-toast.is-hide .sa-toast__bubble{ opacity:0; transform:translateY(6px); }
+
+/* highlight tujuan komentar */
+#ulasan{ scroll-margin-top: 80px; }            /* jika header sticky */
+.pulse-highlight{
+  animation: ulasanPulse .9s cubic-bezier(.2,.7,.2,1);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+@keyframes ulasanPulse{
+  0%{ box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--accent) 55%, transparent); }
+  100%{ box-shadow: inset 0 0 0 0 rgba(0,0,0,0); }
+}

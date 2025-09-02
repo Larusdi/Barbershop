@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="id">
+    <head>
+        <!-- ===== Meta dasar & tampilan ===== -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+        <meta name="description" content="Adam jr | Hair Studio - Profesional grooming & penataan rambut pria.">
+        <meta name="keywords" content="barbershop, hair studio, potong rambut pria, beard trim, grooming, salon">
+        <meta name="color-scheme" content="light dark">
+        <meta name="referrer" content="strict-origin-when-cross-origin">
+        <!-- Saat staging & belum ingin diindeks, hapus komentar baris di bawah -->
+        <!-- <meta name="robots" content="noindex,nofollow"> -->
+
+        <title>Adam jr | Hair Studio</title>
+        <link rel="icon" type="image/x-icon" href="images/favicon.png">
+
+        <!-- ===== PWA / Ikon (opsional, sesuaikan jika file tersedia) ===== -->
+        <link rel="manifest" href="site.webmanifest">
+        <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
+        <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+        <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+        <meta name="theme-color" content="#0b0d11" media="(prefers-color-scheme: dark)">
+
+        <!-- ===== Open Graph / Twitter (tanpa domain dulu) ===== -->
+        <meta property="og:title" content="Adam jr | Hair Studio">
+        <meta property="og:description" content="Premium grooming & personalisasi gaya rambut pria.">
+        <meta property="og:image" content="images/about-img.jpg">
+        <meta property="og:type" content="business.business">
+        <meta property="og:locale" content="id_ID">
+
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="Adam jr | Hair Studio">
+        <meta name="twitter:description" content="Premium grooming & personalisasi gaya rambut pria.">
+        <meta name="twitter:image" content="images/about-img.jpg">
+
+        <!-- ===== Preload aset penting (logo header) ===== -->
+        <link rel="preload" as="image" href="images/logo.png" fetchpriority="high">
+
+        <!-- ===== Styles utama (CSS terpisah) ===== -->
+        <link rel="stylesheet" href="css/app.css">
+        <link rel="stylesheet" href="css/theme-toggle.css">
+        <link rel="stylesheet" href="css/media-quaries.css">
+        <link rel="stylesheet" href="css/aoe.css">
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/footer.css">
+    </head>
+
+    <body>
+        <!-- ===== HEADER / Navigasi ===== -->
+        <header class="header" role="banner" id="site-header">
+            <div class="container">
+                <div class="row">
+                    <!-- Logo -->
+                    <a href="index.html" class="site-brand" aria-label="Beranda Adam jr | Hair Studio">
+                        <img class="site-logo" src="images/logo.png" alt="Adam jr | Hair Studio" width="160" height="48" decoding="async">
+                    </a>
+
+                    <!-- Tombol hamburger (muncul di mobile) -->
+                    <button class="nav-toggle" type="button"
+                        aria-label="Buka menu" aria-controls="site-nav" aria-expanded="false">
+                        <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+                    </button>
+
+                    <!-- Menu (jadi drawer di mobile) -->
+                    <nav id="site-nav" class="navigation" aria-label="Navigasi utama" hidden>
+                        <ul>
+                            <li class="active"><a href="index.html" title="Beranda">Home</a></li>
+                            <li><a href="services.html" title="Layanan">Services</a></li>
+                            <li><a href="payments.html" title="Pembayaran">Payments</a></li>
+                            <li><a href="about.html" title="Tentang Kami">About</a></li>
+                            <li><a href="contact.html" title="Kontak">Contact</a></li>
+                            <li><a href="store.html" title="Store">Store</a></li>
+
+                            <!-- Toggle Tema (dipindah ke dalam nav) -->
+                            <li>
+                                <button id="theme-toggle" class="theme-toggle" type="button"
+                                    aria-label="Ganti tema gelap/terang" aria-pressed="false">
+                                    <span class="theme-switch" aria-hidden="true">
+                                        <svg class="icon sun" viewBox="0 0 24 24" width="18" height="18">
+                                            <path d="M12 4V2m0 20v-2M4.93 4.93 3.52 3.52m16.96 16.96-1.41-1.41M4 12H2m20 0h-2M4.93 19.07l-1.41 1.41m16.96-16.96-1.41 1.41M12 8a4 4 0 1 1 0 8 4 4 0 0 1 0-8Z"/>
+                                        </svg>
+                                        <span class="theme-thumb"></span>
+                                        <svg class="icon moon" viewBox="0 0 24 24" width="18" height="18">
+                                            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/>
+                                        </svg>
+                                    </span>
+                                    <span class="sr-only">Ganti tema</span>
+                                </button>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </header>
+
+        <!-- ===== HERO ===== -->
+        <section class="hero-section hero-2025" aria-labelledby="hero-title">
+            <div class="container">
+                <div class="hero-grid">
+                    <!-- Kolom kiri: copy (versi 2025 pro) -->
+                    <div class="hero-copy" data-aoe="fade-up" data-aoe-delay="40">
+                        <!-- Status buka (bisa di-update via JS ringan) -->
+                        <span class="hero-badge" id="open-badge" aria-live="polite" data-aoe="fade-in" data-aoe-delay="80">
+                            Buka hari ini • <time datetime="11:00">11:00</time>–<time datetime="23:00">23:00</time>
+                        </span>
+
+                        <span class="hero-clock" id="hero-clock">
+                            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.75a10.25 10.25 0 1 0 0 20.5 10.25 10.25 0 0 0 0-20.5zm-.75 3.5h1.5v5.1l4 2.4-.75 1.3L11.25 12V6.75z"/></svg>
+                            <time id="clock-wib" datetime="00:00:00">00:00:00</time>
+                            <span class="tz">WIB</span>
+                        </span>
+
+                        <h1 id="hero-title" class="hero-title" data-aoe="slide-up" data-aoe-delay="100">
+                            Adam jr <span aria-hidden="true">|</span> Hair Studio
+                        </h1>
+
+                        <div class="hero-actions --with-divider"></div>
+
+                        <!-- Rotating hero text (fade+slide) -->
+                        <p class="hero-text" aria-live="polite" data-aoe="fade-up" data-aoe-delay="120">
+                            <strong>
+                                <span id="hero-rotator"
+                                    class="hero-rotator"
+                                    data-phrases='[
+                                        "Potongan rapi, detail presisi, hasil tahan lama.",
+                                        "Custom haircut mengikuti bentuk wajah & gaya hidupmu.",
+                                        "Tampil maksimal styling personal, hasil yang yakin.",
+                                        "Quality Over Quantity."
+                                    ]'>
+                                    Gaya modern & presisi, disesuaikan dengan wajah dan karakter kamu.
+                                </span>
+                            </strong>
+                        </p>
+
+                        <!-- Meta ringkas: harga, durasi, peta, dll -->
+                        <ul class="hero-meta" aria-label="Info singkat" data-aoe-stagger="60">
+                            <!-- Harga -->
+                            <li class="meta-pill">
+                                <!-- ikon tag harga -->
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M20 10.59 13.41 4a2 2 0 0 0-1.41-.59H6a2 2 0 0 0-2 2v6a2 2 0 0 0 .59 1.41L11.18 20a2 2 0 0 0 2.83 0l6-6a2 2 0 0 0 0-2.83zM7.5 8A1.5 1.5 0 1 1 9 6.5 1.5 1.5 0 0 1 7.5 8z"/>
+                                </svg>
+                                <span>Mulai <b>Rp25K</b></span>
+                            </li>
+
+                            <!-- Pembayaran -->
+                            <li class="meta-pill">
+                                <!-- ikon kartu/QR -->
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M3 5h18a2 2 0 0 1 2 2v3H1V7a2 2 0 0 1 2-2zm-2 7h22v4a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-4zm5 3h4v2H6z"/>
+                                </svg>
+                                <span>Pembayaran <b>QRIS</b> / Cash</span>
+                            </li>
+
+                            <!-- Durasi -->
+                            <li class="meta-pill">
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M12 1.75a10.25 10.25 0 1 0 0 20.5 10.25 10.25 0 0 0 0-20.5zm0 1.5a8.75 8.75 0 1 1 0 17.5 8.75 8.75 0 0 1 0-17.5zm-.75 3.5h1.5v5.1l4 2.4-.75 1.3L11.25 12V6.75z"/>
+                                </svg>
+                                <span>Durasi 30–45 menit</span>
+                            </li>
+
+                            <!-- Peta -->
+                            <li class="meta-pill">
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/>
+                                </svg>
+                                <a href="https://maps.app.goo.gl/nZq79M4P2rXddajx6?g_st=ac" target="_blank" rel="noopener">Lihat peta</a>
+                            </li>
+
+                            <!-- OPSIONAL -->
+                            <li class="meta-pill hide-sm">
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M12 18.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zm-7.8-6.1 1.1 1.1A9 9 0 0 1 12 11c2.4 0 4.7.9 6.6 2.5l1.2-1.1A11 11 0 0 0 12 9c-3 0-5.8 1.1-7.8 3.4zm3.2 3 1.1 1.1A6 6 0 0 1 12 15c1.6 0 3.1.6 4.3 1.6l1.2-1.1A7.9 7.9 0 0 0 12 13.5c-2.1 0-4 .8-5.6 1.9z"/>
+                                </svg>
+                                <span>Wi-Fi</span>
+                            </li>
+
+                            <li class="meta-pill hide-sm">
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M6 3h7a5 5 0 0 1 0 10H9v8H6V3zm3 3v4h4a2 2 0 1 0 0-4H9z"/>
+                                </svg>
+                                <span>Parkir</span>
+                            </li>
+
+                            <li class="meta-pill hide-sm">
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M4 8h10v4a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V8zm10 1h3a3 3 0 1 1 0 6h-1"/>
+                                </svg>
+                                <span>Santai</span>
+                            </li>
+
+                            <li class="meta-pill hide-sm">
+                                <svg viewBox="0 0 24 24" aria-hidden="true">
+                                    <!-- disc -->
+                                    <circle cx="12" cy="12" r="9"/>
+                                    <!-- grooves (outline-friendly) -->
+                                    <path d="M12 7.5a4.5 4.5 0 0 1 4.5 4.5"/>
+                                    <path d="M12 9.5a2.5 2.5 0 0 1 2.5 2.5"/>
+                                    <path d="M7.5 12A4.5 4.5 0 0 1 12 7.5"/>
+                                    <path d="M9.5 12A2.5 2.5 0 0 1 12 9.5"/>
+                                    <!-- label & spindle hole -->
+                                    <circle cx="12" cy="12" r="3.2"/>
+                                    <circle cx="12" cy="12" r="1.1"/>
+                                </svg>
+                                <span>Musik</span>
+                            </li>
+                        </ul>
+
+                        <!-- Layanan populer -->
+                        <ul class="hero-chips" aria-label="Model rambut populer" data-aoe-stagger="40">
+                            <li class="chip" data-style="crop-fade">Crop Fade</li>
+                            <li class="chip" data-style="french-crop">French Crop</li>
+                            <li class="chip" data-style="pompadour">Pompadour</li>
+                            <li class="chip" data-style="slick-back">Slick Back</li>
+                            <li class="chip" data-style="side-part">Belah Samping (Side Part)</li>
+                            <li class="chip" data-style="two-block">Two Block (Korean)</li>
+                            <li class="chip" data-style="buzz-cut">Buzz Cut</li>
+                            <li class="chip" data-style="mullet-modern">Mullet Modern</li>
+                        </ul>
+
+                        <div class="hero-actions --with-divider"></div>
+
+                        <!-- Aksi utama -->
+                        <div class="hero-actions" data-aoe="zoom-in" data-aoe-delay="160">
+                            <a href="contact.html" class="btn btn-default">Order Now</a>
+                            <a href="tel:+6281234567890" class="btn btn-outline" aria-label="Telepon Adam jr Hair Studio">Call</a>
+                            <a href="https://wa.me/6281374154373" class="btn btn-outline" rel="noopener" aria-label="WhatsApp Adam jr Hair Studio">WhatsApp</a>
+                        </div>
+                        <p class="action-note" data-aoe="fade-in" data-aoe-delay="180">Respon cepat • Tidak ada biaya pembatalan</p>
+
+                        <!-- Social proof (aksesibel) -->
+                        <div class="hero-proof" data-rating="4.9" data-count="300" data-aoe="fade-up" data-aoe-delay="200">
+                            <!-- Bintang animasi (tetap) -->
+                            <div class="stars is-animated" role="img" aria-label="Rating 4.9 dari 5">
+                                <span class="star"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.3l7.2-.6L12 2l2.8 6.7 7.2.6-5.5 4.6 1.7 7.1z"/></svg></span>
+                                <span class="star"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.3l7.2-.6L12 2l2.8 6.7 7.2.6-5.5 4.6 1.7 7.1z"/></svg></span>
+                                <span class="star"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.3l7.2-.6L12 2l2.8 6.7 7.2.6-5.5 4.6 1.7 7.1z"/></svg></span>
+                                <span class="star"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.3l7.2-.6L12 2l2.8 6.7 7.2.6-5.5 4.6 1.7 7.1z"/></svg></span>
+                                <span class="star"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 17.3l-6.2 3.7 1.7-7.1L2 9.3l7.2-.6L12 2l2.8 6.7 7.2.6-5.5 4.6 1.7 7.1z"/></svg></span>
+                            </div>
+
+                            <!-- Rating ringkas (tidak duplikatif) -->
+                            <span class="rating-chip" role="img"
+                                aria-label="Rating 4.9 dari 5 berdasarkan 300+ ulasan">
+                                <strong class="val">4.9</strong>
+                                <span class="dot" aria-hidden="true">•</span>
+                                <span class="count">300+ ulasan</span>
+                            </span>
+
+                            <!-- Aksi sosial -->
+                            <div class="social-actions" role="group" aria-label="Aksi sosial">
+                                <!-- Like -->
+                                <button class="icon-btn like-btn" type="button"
+                                    aria-pressed="false" data-count="1200" aria-live="polite" aria-label="Suka">
+                                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M12.1 8.64 11 7.5C9.14 5.64 6.1 6.12 4.6 8.09c-1.38 1.86-1.2 4.5.43 6.13l6.97 6.97 6.97-6.97c1.63-1.63 1.81-4.27.43-6.13-1.5-1.97-4.54-2.45-6.4-.59l-1.1 1.14z"/>
+                                    </svg>
+                                    <span class="count">1.2k</span>
+                                </button>
+
+                                <!-- Komentar  -->
+                                <a class="icon-btn" href="#ulasan" aria-label="Baca 300+ komentar">
+                                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M20 2H4a2 2 0 0 0-2 2v14l4-4h14a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z"/>
+                                    </svg>
+                                    <span class="count">300</span>
+                                </a>
+
+                                <!-- Share -->
+                                <button class="icon-btn share-btn" type="button" aria-label="Bagikan">
+                                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                                        <path d="M18 8a3 3 0 1 0-2.83-4H15a3 3 0 0 0 .17 1L8.91 8.7a3 3 0 1 0 0 6.6l6.26 3.7A3 3 0 1 0 16 17a2.99 2.99 0 0 0-1.1.21l-6.26-3.7A3 3 0 0 0 8.9 10l6.01-3.47c.31.29.67.53 1.08.69A3 3 0 0 0 18 8z"/>
+                                    </svg>
+                                    <span class="label">Share</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Kolom kanan: media -->
+                    <div class="hero-media" data-aoe="zoom-in" data-aoe-delay="120" data-aoe-blur="sm">
+                        <picture>
+                        <source srcset="images/hero.png" type="image/png">
+                            <img
+                            src="images/hero.png"
+                            width="640" height="760"
+                            alt="Barber memotong rambut di Adam jr Hair Studio"
+                            decoding="async" fetchpriority="high">
+                            </picture>
+                    <div class="hero-glow" aria-hidden="true"></div>
+                </div>
+            </div>
+            <!-- Scroll cue ke bawah -->
+            <button class="scroll-cue" aria-label="Gulir ke konten"
+                onclick="window.scrollTo({ top: document.querySelector('[data-after-hero]')?.offsetTop || window.innerHeight, behavior: 'smooth' });">
+                <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+                    <!-- chevron down -->
+                    <path d="M7.41 8.59 12 13.17 16.59 8.59 18 10l-6 6-6-6z"/>
+                </svg>
+            </button>
+        </section>
+
+        <!-- Penanda untuk tombol scroll (taruh di atas section berikutnya) -->
+        <div data-after-hero></div>
+
+        <!-- ===== LAYANAN UNGGULAN ===== -->
+        <section class="space-medium" aria-labelledby="section-services">
+            <div class="container">
+                <!-- Judul section -->
+                <div class="row">
+                    <div class="text-center">
+                        <div class="section-title mb60"
+                            data-aoe="fade-up" data-aoe-delay="40">
+                            <h2 id="section-services">Our Services</h2>
+                            <p class="small-title">Kami bantu kamu tampil maksimal</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grid layanan -->
+                <div class="row service-list">
+                    <!-- Service 1 -->
+                    <article class="service-block"
+                            data-aoe="slide-up" data-aoe-delay="0">
+                        <div class="service-icon mb20">
+                            <img src="images/service-icon-1.png" alt="Ikon Potongan Rambut Klasik" loading="lazy" decoding="async" width="56" height="56">
+                        </div>
+                        <div class="service-content">
+                            <h3><a href="#" class="title">Modern Classic</a></h3>
+                            <p>Gaya rapi dan bersih dengan teknik gunting/clipper, disesuaikan dengan bentuk wajah, garis rambut, dan preferensi Anda. Ideal untuk tampilan profesional sehari-hari maupun acara formal.</p>
+                            <div class="price">Rp 25.000</div>
+                        </div>
+                    </article>
+
+                    <!-- Service 2 -->
+                    <article class="service-block"
+                        data-aoe="slide-up" data-aoe-delay="320">
+                        <div class="service-icon mb20">
+                            <img src="images/private.png"
+                            alt="Ikon Full Service Grooming (masker, pijat kepala, perawatan wajah)"
+                            loading="lazy" decoding="async"
+                            width="56" height="56">
+                        </div>
+                        <div class="service-content">
+                            <h3><a href="#" class="title">Full Service</a></h3>
+                            <p>Ritual relaksasi lengkap: wash & scalp detox ringan, hot towel, face mask, pijat kepala–leher–bahu, tonik penutrisi, lalu blow & styling final. Pilihan tepat setelah hari panjang atau sebelum acara penting.</p>
+                            <div class="price">Mulai Rp 90.000</div>
+                        </div>
+                    </article>
+
+                    <!-- Service 3 -->
+                    <article class="service-block"
+                            data-aoe="slide-up" data-aoe-delay="240">
+                        <div class="service-icon mb20">
+                            <img src="images/service-3.png"
+                            alt="Ikon Color & Tone (Cat Rambut)"
+                            loading="lazy" decoding="async"
+                            width="56" height="56">
+                        </div>
+                        <div class="service-content">
+                            <h3><a href="#" class="title">Color & Tone (Cat Rambut)</a></h3>
+                            <p>Konsultasi warna berbasis undertone kulit & gaya, penentuan level–tone, lalu aplikasi presisi untuk hasil merata dan sehat. Opsi: <em>grey blending</em> halus, full color, atau toning/gloss untuk menetralkan kuning–oranye dan memberi kilau natural. Produk ramah kulit kepala & finishing protectant.</p>
+                            <div class="price">Mulai Rp 120.000</div>
+                        </div>
+                    </article>
+
+                    <!-- Service 4 -->
+                    <article class="service-block"
+                            data-aoe="slide-up" data-aoe-delay="400">
+                        <div class="service-icon mb20">
+                            <img src="images/training.png"
+                            alt="Ikon Pelatihan Barber (Barber Training)"
+                            loading="lazy" decoding="async"
+                            width="56" height="56">
+                        </div>
+                        <div class="service-content">
+                            <h3><a href="contact.html" class="title">Barber Training</a></h3>
+                            <p>Program intensif (1–1/kelas kecil) untuk membangun skill barber modern: sectioning presisi, scissor-over-comb, clipper fade & blending, teksturisasi, beard line-up & finishing, serta standar sanitasi. Fokus praktik dengan feedback langsung & workflow siap kerja.</p>
+                            <div class="price">Mulai Rp 350.000/sesi</div>
+                        </div>
+                    </article>
+
+                    <!-- Service 5 -->
+                    <article class="service-block" data-link="contact.html"
+                    data-aoe="slide-up" data-aoe-delay="80">
+                    <div class="service-icon mb20">
+                        <img src="images/VIP.png"
+                            alt="Ikon Layanan Potong Rambut Privat (House/Hotel Call)"
+                            loading="lazy" decoding="async" width="56" height="56">
+                    </div>
+
+                    <div class="service-content">
+                        <!-- judul langsung ke contact -->
+                        <h3><a href="contact.html" class="title">Layanan Eksklusif</a></h3>
+
+                        <p>Sesi potong & styling privat di rumah/hotel. Fokus satu klien, higienis, dan tepat waktu—ideal jelang meeting, pemotretan, atau acara penting.</p>
+
+                        <!-- CTA ke contact -->
+                        <a href="contact.html" class="btn btn-default"
+                        aria-label="Hubungi untuk Layanan Eksklusif">Hubungi</a>
+                    </div>
+                    </article>
+
+                    <!-- Service 6 -->
+                    <article class="service-block" data-aoe="slide-up" data-aoe-delay="160">
+                        <div class="service-icon mb20">
+                            <img src="images/store.png"
+                                alt="Ikon Barber Store"
+                                loading="lazy" decoding="async"
+                                width="56" height="56">
+                        </div>
+                        <div class="service-content">
+                            <!-- judul ikut ke store.html -->
+                            <h3><a href="store.html" class="title">Barber Store</a></h3>
+
+                            <p>Pomade, clay, sea-salt spray, tonic, shampoo, hingga aftershave — kurasi barber. Produk original, aman, dan sesuai tipe rambut. Konsultasi produk gratis.</p>
+
+                            <!-- tombol Belanja langsung ke store.html -->
+                            <a href="store.html" class="btn btn-default" aria-label="Belanja di Barber Store">Belanja</a>
+                        </div>
+                    </article>
+                    
+                </div>
+
+                <!-- CTA ke halaman semua layanan -->
+                <div class="text-center mt30"
+                    data-aoe="fade-up" data-aoe-delay="120">
+                    <a href="services.html" class="btn btn-default">Lihat Semua Layanan</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== TENTANG KAMI ===== -->
+        <section class="space-medium about-2025 bg-default" aria-labelledby="about-title">
+            <div class="container">
+                <div class="about-grid">
+                    <!-- Media -->
+                    <figure class="about-media" aria-describedby="about-caption"
+                            data-aoe="slide-up" data-aoe-delay="0">
+                        <picture>
+                            <!-- pakai jika punya -->
+                            <source srcset="images/about-img.jpg" type="image/jpg">
+                            <img
+                                src="images/about-img.jpg"
+                                alt="Suasana Adam jr Hair Studio yang bersih dan profesional"
+                                width="720" height="540" loading="lazy" decoding="async">
+                        </picture>
+                        <div class="media-glow" aria-hidden="true"></div>
+                        <figcaption id="about-caption" class="sr-only">
+                            Ruang barbershop yang higienis dan nyaman.
+                        </figcaption>
+                    </figure>
+
+                    <!-- Copy -->
+                    <div class="about-copy">
+                        <span class="about-badge"
+                            data-aoe="fade-up" data-aoe-delay="60">Adam jr | Hair Studio • Sejak 2015</span>
+
+                        <h2 id="about-title" class="about-title"
+                            data-aoe="fade-up" data-aoe-delay="120">Tentang Adam jr | Hair Studio</h2>
+
+                        <p class="about-lede"
+                            data-aoe="fade-up" data-aoe-delay="180">
+                            <strong>Grooming presisi, hasil rapi, dan pengalaman nyaman—disesuaikan dengan bentuk wajah, tekstur rambut, dan gaya personal kamu.</strong>
+                        </p>
+
+                        <ul class="about-points" role="list">
+                            <li data-aoe="slide-up" data-aoe-delay="220">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                                Konsultasi sebelum potong (shape & lifestyle fit)
+                            </li>
+                            <li data-aoe="slide-up" data-aoe-delay="260">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                                Teknik modern: fade presisi, teksturisasi, razor detail
+                            </li>
+                            <li data-aoe="slide-up" data-aoe-delay="300">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>
+                                Higienis & steril: alat disanitasi setiap sesi
+                            </li>
+                        </ul>
+
+                        <div class="about-actions"
+                            data-aoe="fade-up" data-aoe-delay="340">
+                            <a href="about.html" class="btn btn-default">Pelajari Lebih Lanjut</a>
+                            <a href="contact.html" class="btn btn-outline">Order Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ===== CTA UTAMA ===== -->
+        <section class="cta-section" aria-labelledby="cta-title">
+            <div class="container text-center">
+                <h2 id="cta-title" class="cta-title"
+                    data-aoe="fade-up" data-aoe-delay="0">Booking Jadwalmu Hari Ini</h2>
+
+                <p class="cta-text"
+                    data-aoe="fade-up" data-aoe-delay="100">
+                    Rasakan premium grooming di Adam jr | Hair Studio. Masuk penuh percaya diri, keluar dengan style tinggi.
+                </p>
+
+                <a href="contact.html" class="btn btn-default"
+                data-aoe="zoom-in" data-aoe-delay="180">Hubungi Kami</a>
+            </div>
+        </section>
+
+        <!-- ===== FOOTER ===== -->
+        <footer class="footer" role="contentinfo">
+            <div class="container">
+                <div class="footer-block">
+                    <div class="row">
+                        <!-- Alamat (kolom kiri) -->
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <div class="footer-widget">
+                                <h2 class="widget-title">Alamat Barbershop</h2>
+                                <ul class="listnone contact">
+                                    <li>
+                                        <svg aria-hidden="true" width="18" height="18"><use href="#icon-map"></use></svg>
+                                        Jl. Talao Mundam No.55, Katapiang, Kec. Batang Anai, Kabupaten Padang Pariaman, Sumatera Barat 25586
+                                    </li>
+                                    <li>
+                                        <svg aria-hidden="true" width="18" height="18"><use href="#icon-phone"></use></svg>
+                                        <a href="tel:+6281374154373">+62 813-7415-4373</a>
+                                    </li>
+                                    <li>
+                                        <svg aria-hidden="true" width="18" height="18"><use href="#icon-mail"></use></svg>
+                                        <a href="mailto:latifrusdi15@gmail.com">latifrusdi15@gmail.com</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Sosial (tengah) -->
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div class="footer-widget footer-social">
+                                <h2 class="widget-title">Ikuti Kami</h2>
+                                <ul class="listnone social-png">
+                                    <li>
+                                        <a class="social-chip" href="#" rel="noopener">
+                                            <img class="social-ico" src="images/social/tiktok.png"
+                                                srcset="images/social/tiktok.png 1x, images/social/tiktok.png 2x"
+                                                alt="" aria-hidden="true">
+                                            <span>TikTok</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="social-chip" href="https://www.instagram.com/ajrhairstudio?igsh=b2lkZXhnbTB5MTlr" target="_blank" rel="noopener">
+                                            <img class="social-ico" src="images/social/instagram.png"
+                                                srcset="images/social/instagram.png 1x, images/social/instagram.png 2x"
+                                                alt="" aria-hidden="true">
+                                            <span>Instagram</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="social-chip" href="#" rel="noopener">
+                                            <img class="social-ico" src="images/social/x.png"
+                                                srcset="images/social/x.png 1x, images/social/x.png 2x"
+                                                alt="" aria-hidden="true">
+                                            <span>Twitter</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="social-chip" href="https://maps.app.goo.gl/nZq79M4P2rXddajx6?g_st=ac" target="_blank" rel="noopener">
+                                            <img class="social-ico" src="images/social/gps.png"
+                                                srcset="images/social/gps.png 1x, images/social/gps.png 2x"
+                                                alt="" aria-hidden="true">
+                                            <span>Maps</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Newsletter (kanan) -->
+                        <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+                            <div class="footer-widget widget-newsletter">
+                                <h2 class="widget-title">Berlangganan</h2>
+                                <p>Masukkan email untuk menerima style, promo, dan update terbaru.</p>
+                                <div class="input-group">
+                                    <input type="email" class="form-control" placeholder="Alamat email" aria-label="Alamat email">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="button">Subscribe</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hak Cipta -->
+                    <div class="tiny-footer">
+                        <div class="row">
+                        <div class="col-lg-12">
+                            <div class="copyright-content">
+                            <p>© 2025 Adam jr | Hair Studio — All Rights Reserved</p>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <!-- ===== SVG Sprite (ikon ringan, tanpa Font Awesome) ===== -->
+        <svg style="display:none" aria-hidden="true">
+            <symbol id="icon-map" viewBox="0 0 24 24">
+                <path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/>
+            </symbol>
+            <symbol id="icon-phone" viewBox="0 0 24 24">
+                <path d="M6.6 10.8a15.5 15.5 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25c1.1.37 2.3.57 3.5.57a1 1 0 0 1 1 1V20a2 2 0 0 1-2 2C9.6 22 2 14.4 2 5a2 2 0 0 1 2-2h2.5a1 1 0 0 1 1 1c0 1.2.2 2.4.57 3.5a1 1 0 0 1-.25 1L6.6 10.8z"/>
+            </symbol>
+            <symbol id="icon-mail" viewBox="0 0 24 24">
+                <path d="M4 6h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2zm0 2 8 5 8-5"/>
+            </symbol>
+        </svg>
+
+        <script>
+            (() => {
+            const BP = 900;
+            const html = document.documentElement;
+            const header = document.getElementById('site-header') || document.querySelector('.header');
+            const nav = document.getElementById('site-nav') || document.querySelector('.navigation');
+            const toggle = header ? header.querySelector('.nav-toggle') : null;
+
+            if (!nav || !toggle) return;
+
+            // overlay: buat otomatis kalau belum ada
+            let overlay = document.querySelector('.nav-overlay');
+            if (!overlay) {
+                overlay = document.createElement('div');
+                overlay.className = 'nav-overlay';
+                overlay.hidden = true;
+                document.body.appendChild(overlay);
+            }
+
+            const focusSel = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+            let lastFocused = null;
+
+            function trapFocus(e){
+                if (e.key !== 'Tab') return;
+                const nodes = nav.querySelectorAll(focusSel);
+                if (!nodes.length) return;
+                const first = nodes[0], last = nodes[nodes.length - 1];
+                if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+                else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+            }
+
+            function openNav(){
+                lastFocused = document.activeElement;
+                nav.hidden = false;
+                overlay.hidden = false;
+                requestAnimationFrame(() => {
+                nav.classList.add('is-open');
+                overlay.classList.add('is-open');
+                });
+                toggle.setAttribute('aria-expanded', 'true');
+                html.classList.add('no-scroll');
+                document.addEventListener('keydown', onKeydown);
+                document.addEventListener('keydown', trapFocus);
+                // fokus ke item pertama
+                const first = nav.querySelector(focusSel);
+                first && first.focus();
+            }
+
+            function closeNav(){
+                nav.classList.remove('is-open');
+                overlay.classList.remove('is-open');
+                toggle.setAttribute('aria-expanded', 'false');
+                html.classList.remove('no-scroll');
+                const tidy = () => {
+                nav.hidden = true;
+                overlay.hidden = true;
+                nav.removeEventListener('transitionend', tidy);
+                };
+                nav.addEventListener('transitionend', tidy);
+                document.removeEventListener('keydown', onKeydown);
+                document.removeEventListener('keydown', trapFocus);
+                // kembalikan fokus
+                lastFocused && lastFocused.focus && lastFocused.focus();
+            }
+
+            function onKeydown(e){
+                if (e.key === 'Escape') closeNav();
+            }
+
+            // Toggle
+            toggle.addEventListener('click', () => {
+                const expanded = toggle.getAttribute('aria-expanded') === 'true';
+                expanded ? closeNav() : openNav();
+            });
+
+            // Tutup saat klik overlay atau klik link di menu
+            overlay.addEventListener('click', closeNav);
+            nav.addEventListener('click', (e) => {
+                const a = e.target.closest('a');
+                if (a) closeNav();
+            });
+
+            // Auto reset saat melebar ke desktop
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > BP && !nav.hidden) closeNav();
+            });
+            })();
+        </script>
+
+        <script src="js/theme-toggle.js" defer></script>
+        <script src="js/hero-rotator.js" defer></script>
+        <script src="js/social-proof.js" defer></script>
+        <script src="js/aoe.js" defer></script>
+        <script src="js/main.js" defer></script>
+    </body>
+</html>

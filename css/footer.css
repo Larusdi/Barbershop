@@ -1,0 +1,248 @@
+/* ==========================================================================
+   FOOTER 2025 PRO — clean, konsisten, tanpa “cahaya lewat”
+   - Tidak mengubah :root / token global (ikut tema utama)
+   - Hover halus (tanpa idle animation), dark-mode siap
+   ========================================================================== */
+
+/* ===== Wrapper ========================================================== */
+.footer{
+  position: relative;
+  margin-top: clamp(28px, 4vw, 48px);
+  border-top: 1px solid var(--line);
+  background: color-mix(in srgb, var(--card) 85%, transparent);
+  overflow: clip;
+}
+.footer .footer-block{ padding-block: clamp(24px, 4vw, 36px); }
+
+/* ambience lembut (statis, bukan animasi) */
+.footer::before{
+  content:"";
+  position:absolute; inset:-20% -20% auto -20%;
+  height:36%;
+  background:
+    radial-gradient(60% 60% at 18% 0%,
+      color-mix(in srgb, var(--accent) 10%, transparent) 0%,
+      transparent 70%),
+    radial-gradient(60% 60% at 82% 38%,
+      color-mix(in srgb, var(--brand) 8%, transparent) 0%,
+      transparent 72%);
+  filter: blur(24px);
+  pointer-events:none; opacity:.42;
+}
+
+/* ===== Grid kolom (konsisten di semua halaman) ========================= */
+.footer .row{
+  display: grid;
+  gap: clamp(14px, 2.4vw, 24px);
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  align-items: start;
+}
+
+/* ===== Judul widget ==================================================== */
+.footer .widget-title{
+  margin: 0 0 10px;
+  font-weight: 800;
+  letter-spacing: .2px;
+  font-size: clamp(16px, 2vw, 18px);
+  position: relative;
+  display: inline-block;
+  color: var(--text);
+}
+.footer .widget-title::after{
+  content:"";
+  display:block; height:2px; margin-top:6px;
+  width: clamp(64px, 18vw, 120px);
+  border-radius:2px; opacity:.95;
+  background: linear-gradient(90deg,
+    color-mix(in srgb, var(--accent) 70%, transparent),
+    color-mix(in srgb, var(--brand) 70%, transparent));
+}
+
+/* ===== Card dasar tiap widget (glassy & rapi) ========================= */
+.footer .footer-widget{
+  border:1px solid var(--line);
+  border-radius: clamp(14px, 2vw, 20px);
+  padding: clamp(16px, 2vw, 18px);
+  background: color-mix(in srgb, var(--card) 72%, transparent);
+  backdrop-filter: blur(6px) saturate(105%);
+  box-shadow: 0 12px 28px rgba(0,0,0,.10);
+  transition: transform .2s cubic-bezier(.2,.8,.2,1), box-shadow .2s ease, border-color .18s ease;
+}
+.footer .footer-widget:hover{
+  transform: translateY(-2px);
+  box-shadow: 0 16px 36px color-mix(in srgb, var(--brand) 16%, transparent);
+  border-color: color-mix(in srgb, var(--brand) 28%, var(--line));
+}
+
+/* ===== Reset list ====================================================== */
+.listnone{ list-style:none; padding:0; margin:0; }
+
+/* ===== Kontak ========================================================== */
+.contact li{
+  display:flex; align-items:flex-start; gap:10px;
+  padding:8px 0;
+  color: var(--muted);
+}
+.contact a{ color:inherit; text-decoration:none; }
+.contact a:hover{ text-decoration:underline; }
+
+.contact svg{
+  flex:0 0 18px; width:18px; height:18px; margin-top:3px;
+}
+.contact svg, .contact svg *{
+  fill:none;
+  stroke: color-mix(in srgb, var(--muted) 90%, transparent);
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke .15s ease, transform .15s ease;
+}
+.contact a:hover svg{ stroke: var(--brand); transform: translateY(-1px); }
+
+/* ===== Sosial (chip PNG) ============================================== */
+.footer-widget.footer-social .social-png{
+  display:flex; flex-wrap:wrap;
+  gap:12px 14px; padding:0; margin:8px 0 0;
+}
+.footer-widget.footer-social .social-chip{
+  --chip-bg: color-mix(in srgb, var(--card) 92%, transparent);
+  --chip-bd: var(--line);
+  --chip-fg: var(--text);
+
+  position:relative;
+  display:inline-flex; align-items:center; gap:10px;
+  min-height:40px; padding:8px 12px; border-radius:999px;
+  background:var(--chip-bg); border:1px solid var(--chip-bd);
+  color:var(--chip-fg); text-decoration:none; font-weight:800; letter-spacing:.2px; line-height:1;
+  -webkit-tap-highlight-color:transparent;
+  box-shadow: 0 8px 20px rgba(0,0,0,.08);
+  transition: transform .18s cubic-bezier(.2,.8,.2,1), box-shadow .18s ease, border-color .18s ease, background-color .18s ease;
+}
+.footer-widget.footer-social .social-chip:hover{
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--brand) 34%, var(--line));
+  box-shadow: 0 12px 26px color-mix(in srgb, var(--brand) 14%, transparent);
+}
+.footer-widget.footer-social .social-chip:focus-visible{
+  outline:2px solid var(--accent); outline-offset:2px;
+}
+
+/* Icon PNG fix size + crisp */
+.footer-widget.footer-social .social-ico{
+  width:20px !important; height:20px !important; flex:0 0 20px !important;
+  display:block; object-fit:contain; max-width:none !important; -webkit-user-drag:none;
+  filter: drop-shadow(0 .6px .6px rgba(0,0,0,.18));
+}
+.footer-widget.footer-social .social-chip > span{ color:var(--chip-fg); }
+
+/* ===== Newsletter ====================================================== */
+.input-group{
+  position: relative;
+  display:flex; align-items:stretch; gap:10px; width:100%;
+}
+.form-control{
+  flex:1 1 auto;
+  min-height: 44px;
+  padding: 10px 12px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background: var(--card);
+  color: var(--text);
+  transition: border-color .15s ease, box-shadow .15s ease, background-color .15s ease;
+}
+.form-control::placeholder{ color: var(--muted); }
+.input-group:focus-within .form-control{
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--line));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
+}
+.input-group .btn{
+  min-height: 44px;
+  border-radius:12px;
+  display:inline-flex; align-items:center; justify-content:center;
+  white-space:nowrap;
+  margin-left: -1px;
+  border-left-color: transparent;
+}
+
+/* Validasi inline (opsional) */
+@supports(selector(:has(*))){
+  .input-group:has(input[type="email"]:invalid:not(:placeholder-shown)) .form-control{
+    border-color: #e5484d;
+    box-shadow: 0 0 0 3px color-mix(in srgb, #e5484d 22%, transparent);
+  }
+  .input-group:has(input[type="email"]:valid) .form-control{
+    border-color: color-mix(in srgb, #16c784 60%, var(--line));
+    box-shadow: 0 0 0 3px color-mix(in srgb, #16c784 18%, transparent);
+  }
+}
+
+/* Autofill (Chrome) */
+.form-control:-webkit-autofill{
+  -webkit-text-fill-color: var(--text);
+  box-shadow: inset 0 0 0 1000px var(--card);
+  transition: background-color 9999s ease 0s;
+}
+
+/* Hover halus */
+.form-control:hover{
+  border-color: color-mix(in srgb, var(--line) 80%, var(--brand) 20%);
+}
+
+/* Mobile: stack vertikal */
+@media (max-width:420px){
+  .input-group{ flex-direction: column; gap:8px; }
+  .input-group .btn{
+    width:100%;
+    margin-left: 0;
+    border-left-color: var(--line);
+  }
+}
+
+/* ===== Copyright ======================================================= */
+.tiny-footer{
+  position: relative;
+  padding: 14px 0 clamp(16px, 3vw, 22px);
+  text-align:center;
+  color: var(--muted);
+  font-size: 14px;
+  margin-top: clamp(12px, 2.6vw, 20px);
+}
+.tiny-footer::before{
+  content:"";
+  position:absolute; left:0; right:0; top:0; height:1.5px; pointer-events:none;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    color-mix(in srgb, var(--line) 90%, transparent) 12%,
+    color-mix(in srgb, var(--line) 100%, transparent) 50%,
+    color-mix(in srgb, var(--line) 90%, transparent) 88%,
+    transparent 100%);
+  opacity:.95;
+}
+
+/* ===== Link & aksesibilitas =========================================== */
+.footer a{ color: var(--brand); }
+.footer a:focus-visible{ outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ===== Dark mode tweaks =============================================== */
+html[data-theme="dark"] .footer{
+  background: color-mix(in srgb, var(--card) 40%, transparent);
+  border-top-color: color-mix(in srgb, var(--line) 75%, transparent);
+}
+html[data-theme="dark"] .footer::before{ opacity:.35; }
+html[data-theme="dark"] .contact svg, html[data-theme="dark"] .contact svg *{
+  stroke: color-mix(in srgb, var(--muted) 85%, transparent);
+}
+
+/* ===== Reduce motion =================================================== */
+@media (prefers-reduced-motion: reduce){
+  .footer *{ transition:none !important; animation:none !important; }
+}
+
+/* ===== High-contrast (forced colors) ================================== */
+@media (forced-colors: active){
+  .footer, .footer .footer-widget{
+    border-color: CanvasText; background: Canvas !important; box-shadow:none;
+  }
+  .footer .widget-title::after{ background: CanvasText; }
+  .contact svg, .contact svg *{ stroke: CanvasText; }
+}

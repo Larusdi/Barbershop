@@ -1,0 +1,165 @@
+:root{
+  --aoe-dur:.6s;
+  --aoe-ease:cubic-bezier(.2,.7,.2,1);
+  --aoe-dist:14px;
+  --aoe-stagger:70ms; /* default jeda stagger */
+}
+
+/* ===== State awal (tanpa blur default agar tidak muncul “garis loading”) ===== */
+[data-aoe],
+[data-aoe-stagger] > *{
+  opacity: 0;
+  transform: translate3d(var(--aoe-x,0), var(--aoe-y,var(--aoe-dist)), 0) scale(var(--aoe-scale,1));
+  transition:
+    transform var(--aoe-dur) var(--aoe-ease),
+    opacity  var(--aoe-dur) var(--aoe-ease);
+  will-change: transform, opacity;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden; /* iOS Safari fix */
+  contain: paint; /* cegah bleed/hairline di tepi elemen saat animasi */
+}
+
+/* Hanya aktifkan blur kalau diminta (hindari komposit “garis” di default) */
+[data-aoe][data-aoe-blur]{
+  filter: blur(var(--aoe-blur,6px));
+  transition:
+    transform var(--aoe-dur) var(--aoe-ease),
+    opacity  var(--aoe-dur) var(--aoe-ease),
+    filter   var(--aoe-dur) var(--aoe-ease);
+}
+
+/* ===== Saat masuk viewport ===== */
+[data-aoe].is-inview{
+  opacity: 1;
+  transform: translate3d(0,0,0) scale(1);
+}
+[data-aoe][data-aoe-blur].is-inview{
+  filter: none;
+}
+
+/* ===== Varian efek ===== */
+[data-aoe="fade-in"]    { --aoe-y:0; }
+[data-aoe="fade-up"]    { --aoe-y: var(--aoe-dist); }
+[data-aoe="fade-down"]  { --aoe-y: calc(var(--aoe-dist)*-1); }
+[data-aoe="slide-left"] { --aoe-x: var(--aoe-dist); --aoe-y:0; }
+[data-aoe="slide-right"]{ --aoe-x: calc(var(--aoe-dist)*-1); --aoe-y:0; }
+[data-aoe="zoom-in"]    { --aoe-y:0; --aoe-scale:.96; }
+
+/* ===== Durasi/opsi tambahan ===== */
+[data-aoe][data-aoe-duration="fast"] { --aoe-dur:.38s; }
+[data-aoe][data-aoe-duration="slow"] { --aoe-dur:.9s; }
+
+/* ===== Stagger container (grid/list) ===== */
+[data-aoe-stagger] > *{
+  opacity: 0;
+  transform: translate3d(0, var(--aoe-dist), 0);
+}
+[data-aoe-stagger].is-inview > *{
+  opacity: 1;
+  transform: none;
+  transition:
+    transform var(--aoe-dur) var(--aoe-ease),
+    opacity  var(--aoe-dur) var(--aoe-ease);
+}
+
+/* Stagger sederhana via nth-child (tanpa JS) — sampai 12 item */
+[data-aoe-stagger].is-inview > *{ transition-delay: var(--_aoe-delay, 0ms); }
+[data-aoe-stagger].is-inview > *:nth-child(1) { --_aoe-delay: calc(var(--aoe-stagger) * 0); }
+[data-aoe-stagger].is-inview > *:nth-child(2) { --_aoe-delay: calc(var(--aoe-stagger) * 1); }
+[data-aoe-stagger].is-inview > *:nth-child(3) { --_aoe-delay: calc(var(--aoe-stagger) * 2); }
+[data-aoe-stagger].is-inview > *:nth-child(4) { --_aoe-delay: calc(var(--aoe-stagger) * 3); }
+[data-aoe-stagger].is-inview > *:nth-child(5) { --_aoe-delay: calc(var(--aoe-stagger) * 4); }
+[data-aoe-stagger].is-inview > *:nth-child(6) { --_aoe-delay: calc(var(--aoe-stagger) * 5); }
+[data-aoe-stagger].is-inview > *:nth-child(7) { --_aoe-delay: calc(var(--aoe-stagger) * 6); }
+[data-aoe-stagger].is-inview > *:nth-child(8) { --_aoe-delay: calc(var(--aoe-stagger) * 7); }
+[data-aoe-stagger].is-inview > *:nth-child(9) { --_aoe-delay: calc(var(--aoe-stagger) * 8); }
+[data-aoe-stagger].is-inview > *:nth-child(10){ --_aoe-delay: calc(var(--aoe-stagger) * 9); }
+[data-aoe-stagger].is-inview > *:nth-child(11){ --_aoe-delay: calc(var(--aoe-stagger) * 10); }
+[data-aoe-stagger].is-inview > *:nth-child(12){ --_aoe-delay: calc(var(--aoe-stagger) * 11); }
+
+/* ===== Reduce motion ===== */
+@media (prefers-reduced-motion: reduce){
+  [data-aoe],
+  [data-aoe-stagger] > *{
+    transition: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}
+
+
+/* ===== Nav 2025 Pro ===== */
+.navigation ul{
+  display:flex; align-items:center; gap:14px;
+  position:relative; /* buat indikator */
+  padding-inline:4px;
+}
+
+/* Link look */
+.navigation a{
+  display:inline-flex; align-items:center; gap:8px;
+  padding:10px 12px; border-radius:10px;
+  color: var(--text, #111); text-decoration:none;
+  transition: color .2s ease, transform .08s ease, background-color .2s ease;
+}
+
+/* Hover = chip halus */
+.navigation a:hover{
+  background: color-mix(in srgb, var(--line) 22%, transparent);
+}
+
+/* Tekan (klik) */
+.navigation a:active{
+  transform: translateY(1px) scale(0.985);
+}
+
+/* Fokus keyboard */
+.navigation a:focus-visible{
+  outline: 2px solid color-mix(in srgb, var(--accent) 60%, transparent);
+  outline-offset: 2px;
+  border-radius: 12px;
+}
+
+/* Halaman aktif */
+.navigation li.active > a{
+  color: color-mix(in srgb, var(--brand) 95%, #000);
+}
+
+/* ===== Magic line (indikator geser) ===== */
+.navigation .nav-indicator{
+  position:absolute; left:0; bottom:-2px;
+  height:2px; width:0; opacity:0;
+  border-radius:2px;
+  background: linear-gradient(90deg,
+      color-mix(in srgb, var(--accent) 70%, transparent),
+      color-mix(in srgb, var(--brand) 70%, transparent));
+  transition: transform .24s cubic-bezier(.2,.7,.2,1), width .24s cubic-bezier(.2,.7,.2,1), opacity .2s ease;
+  pointer-events:none;
+}
+
+/* Desktop saja pakai indikator; di mobile (drawer vertikal) disembunyikan */
+@media (max-width: 900px){
+  .navigation .nav-indicator{ display:none; }
+}
+
+/* Dark mode sentuhan */
+html[data-theme="dark"] .navigation a{
+  color: color-mix(in srgb, #fff 92%, var(--muted));
+}
+html[data-theme="dark"] .navigation a:hover{
+  background: color-mix(in srgb, var(--line) 36%, transparent);
+}
+html[data-theme="dark"] .navigation li.active > a{
+  color:#fff;
+}
+html[data-theme="dark"] .navigation .nav-indicator{
+  background: linear-gradient(90deg,
+    color-mix(in srgb, #8ad 80%, transparent),
+    color-mix(in srgb, #6df 80%, transparent));
+}
+
+/* Respect reduced motion */
+@media (prefers-reduced-motion: reduce){
+  .navigation .nav-indicator{ transition:none; }
+  .navigation a{ transition:none; }
+}

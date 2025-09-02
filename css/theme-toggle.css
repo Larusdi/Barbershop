@@ -1,0 +1,262 @@
+/* ==========================================================================
+   THEME OVERRIDE (manual)
+   - data-theme="light" / "dark" ➜ paksa tema
+   - tanpa data-theme ➜ ikut sistem (prefers-color-scheme)
+   ========================================================================== */
+
+html[data-theme="light"]{
+  --bg:#ffffff; --text:#0f1115; --muted:#6b7280;
+  --brand:#111315; --card:#ffffff; --line:#eef0f3; --accent:#d4af37;
+}
+html[data-theme="dark"]{
+  --bg:#0b0d11; --text:#e7e9ee; --muted:#98a1b3;
+  --brand:#e7e9ee; --card:#11141a; --line:#1a1e26; --accent:#e6c35a;
+}
+
+/* ==========================================================================
+   TOGGLE TEMA — MINIMAL iPhone Pro
+   - track pill halus, thumb menggeser
+   - super clean (tanpa ikon visual)
+   ========================================================================== */
+
+:root{
+  /* ukuran toggle */
+  --tgl-w: 54px;          /* lebar track */
+  --tgl-h: 30px;          /* tinggi track */
+  --tgl-pad: 2px;         /* padding dalam track */
+  --tgl-r: 999px;         /* radius maksimal */
+  --tgl-thumb: calc(var(--tgl-h) - var(--tgl-pad)*2); /* diameter thumb */
+  --tgl-dur: .18s;        /* durasi transisi */
+}
+
+
+/* tombol kontainer */
+.theme-toggle{
+  border:0; background:transparent; padding:0;
+  cursor:pointer; display:inline-flex; align-items:center; justify-content:center;
+}
+.theme-toggle:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+
+/* track (pill) */
+.theme-switch{
+  position:relative;
+  width:var(--tgl-w); height:var(--tgl-h);
+  border-radius:var(--tgl-r);
+  /* fallback */
+  background: var(--line);
+  /* modern */
+  background: color-mix(in srgb, var(--line) 70%, transparent);
+  box-shadow: inset 0 0 0 1px var(--line);
+  display:flex; align-items:center; justify-content:center;
+  transition: background var(--tgl-dur) ease, box-shadow var(--tgl-dur) ease, opacity var(--tgl-dur) ease;
+}
+
+/* thumb */
+.theme-thumb{
+  position:absolute; top:var(--tgl-pad); left:var(--tgl-pad);
+  width:var(--tgl-thumb); height:var(--tgl-thumb);
+  border-radius:50%;
+  background: var(--card);
+  /* depth ringan */
+  box-shadow:
+    0 1px 1px rgba(0,0,0,.06),
+    0 4px 12px rgba(0,0,0,.12),
+    inset 0 0 0 1px var(--line);
+  transition:
+    transform var(--tgl-dur) cubic-bezier(.2,.7,.3,1),
+    background var(--tgl-dur) ease,
+    box-shadow var(--tgl-dur) ease;
+}
+
+/* hover/active micro-interaction */
+.theme-toggle:hover .theme-switch{ box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--line) 80%, transparent); }
+.theme-toggle:active .theme-thumb{ transform: translateX(0) scale(.98); }
+html[data-theme="dark"] .theme-toggle:active .theme-thumb{
+  transform: translateX(calc(var(--tgl-w) - var(--tgl-thumb) - var(--tgl-pad)*2)) scale(.98);
+}
+
+/* state DARK: track lebih gelap, thumb tetap terang agar kontras (mirip iOS) */
+html[data-theme="dark"] .theme-switch{
+  background: color-mix(in srgb, var(--line) 30%, transparent);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--line) 70%, transparent);
+}
+html[data-theme="dark"] .theme-thumb{
+  background: #f4f6fa; /* lebih terang dari --card dark agar terlihat jelas */
+}
+
+/* posisi thumb saat DARK (ke kanan) */
+html[data-theme="dark"] .theme-thumb{
+  transform: translateX(calc(var(--tgl-w) - var(--tgl-thumb) - var(--tgl-pad)*2));
+}
+
+/* sembunyikan ikon agar ultra-minimal */
+.theme-switch .icon{ display:none; }
+
+/* aksesibilitas: reduce motion */
+@media (prefers-reduced-motion: reduce){
+  .theme-switch, .theme-thumb{ transition:none !important; }
+}
+
+/* ukuran kecil */
+@media (max-width:480px){
+  :root{
+    --tgl-w: 50px;
+    --tgl-h: 28px;
+  }
+}
+
+/* === Nudge vertikal toggle di header (turunkan sedikit) === */
+:root{
+  --tgl-nudge: 1.5px;     /* coba 1px–2px, sesuaikan selera */
+}
+
+/* pastikan item nav center */
+.navigation ul{ display:flex; align-items:center; gap:14px; }
+.navigation ul > li{ display:flex; align-items:center; }
+
+/* apply ke tombol toggle */
+.navigation .theme-toggle{
+  height: 36px;           /* tinggi bar nav (boleh 34–40) */
+  display:inline-flex; align-items:center; justify-content:center;
+  transform: translateY(var(--tgl-nudge));
+}
+
+/* kalau mau yang digeser cuma track-nya (opsional) */
+:root{ --tgl-track-nudge: 0px; }  /* + turun, - naik */
+.theme-switch{ position:relative; top: var(--tgl-track-nudge); }
+
+
+
+/* ===== Meta-Pop DARK — 2025 Pro (Noir + Electric) ===== */
+
+/* Backdrop: lebih gelap + blur & sedikit saturasi biar glossy */
+html[data-theme="dark"] .meta-pop__backdrop{
+  background: rgba(3, 7, 18, .72) !important; /* #030712 */
+  backdrop-filter: blur(10px) saturate(110%) !important;
+  opacity: 1 !important;
+}
+
+/* Card: kaca gelap modern dengan aksen halus */
+html[data-theme="dark"] .meta-pop__card{
+  background:
+    linear-gradient(160deg, rgba(9,14,28,.96) 0%,
+                           rgba(8,13,24,.94) 50%,
+                           rgba(9,18,28,.92) 100%) !important;
+  border-color: rgba(120, 210, 255, .18) !important; /* garis beraksen cyan */
+  box-shadow:
+    0 36px 88px rgba(0,0,0,.66),
+    0 12px 32px rgba(0,0,0,.45) !important;
+  color: #eaf2ff !important;
+  scrollbar-color: rgba(255,255,255,.28) transparent !important;
+}
+html[data-theme="dark"] .meta-pop__card::-webkit-scrollbar-thumb{
+  background: rgba(255,255,255,.28) !important;
+}
+
+/* Judul & teks */
+html[data-theme="dark"] .meta-pop__title{ color:#fbfdff !important; }
+html[data-theme="dark"] .meta-pop__prose{ color:#c9d5e7 !important; }
+
+/* Icon box di header */
+html[data-theme="dark"] .meta-pop__icon{
+  background: rgba(255,255,255,.05) !important;
+  border-color: rgba(120,210,255,.22) !important;
+}
+html[data-theme="dark"] .meta-pop__icon svg *{
+  /* electric cyan */
+  stroke:#7ee6ff !important;
+}
+
+/* Tombol close */
+html[data-theme="dark"] .meta-pop__close{
+  background: rgba(255,255,255,.06) !important;
+  border-color: rgba(120,210,255,.22) !important;
+  transition: transform .15s ease, background-color .15s ease, border-color .15s ease !important;
+}
+html[data-theme="dark"] .meta-pop__close:hover{
+  transform: scale(1.04);
+  background: rgba(255,255,255,.10) !important;
+}
+html[data-theme="dark"] .meta-pop__x::before,
+html[data-theme="dark"] .meta-pop__x::after{ background:#f1f7ff !important; }
+
+/* Tombol aksi: glassy cyan+violet */
+html[data-theme="dark"] .meta-pop__btn{
+  background:
+    linear-gradient(135deg,
+      rgba(34,211,238,.16) 0%,
+      rgba(168,85,247,.12) 100%) !important;   /* cyan → violet */
+  border-color: rgba(34,211,238,.38) !important;
+  color:#f6fbff !important;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.04);
+}
+html[data-theme="dark"] .meta-pop__btn:hover{
+  background:
+    linear-gradient(135deg,
+      rgba(34,211,238,.22),
+      rgba(168,85,247,.18)) !important;
+  box-shadow:
+    0 18px 44px rgba(7, 182, 230, .25),
+    inset 0 0 0 1px rgba(255,255,255,.06) !important;
+}
+html[data-theme="dark"] .meta-pop__btn:focus-visible{
+  outline: 2px solid rgba(34,211,238,.55) !important;
+  outline-offset: 2px !important;
+}
+
+/* State tombol audio saat playing (dari JS: data-playing="true") */
+html[data-theme="dark"] .meta-pop__btn[data-playing="true"]{
+  background:
+    linear-gradient(135deg,
+      rgba(34,211,238,.30),
+      rgba(168,85,247,.24)) !important;
+  box-shadow:
+    0 0 0 2px rgba(34,211,238,.28) inset,
+    0 8px 24px rgba(7,182,230,.25) !important;
+}
+
+/* Mini kontrol audio di pill */
+html[data-theme="dark"] .pill-audio-ctrl{
+  background:
+    linear-gradient(135deg,
+      rgba(34,211,238,.14),
+      rgba(168,85,247,.10)) !important;
+  border-color: rgba(34,211,238,.36) !important;
+}
+html[data-theme="dark"] .pill-audio-ctrl svg *{ stroke:#86eaff !important; }
+
+/* Divider opsional dalam prose */
+html[data-theme="dark"] .meta-pop__prose hr{
+  border:0; height:1px;
+  background: linear-gradient(90deg,
+    rgba(34,211,238,.25), rgba(168,85,247,.18)) !important;
+  margin:12px 0;
+}
+
+
+/* ==== TINT IKON PNG AGAR TERLIHAT DI LIGHT & DARK ==== */
+/* ikon PNG putih → jadikan gelap (muted) di mode terang */
+.service-icon img{
+  filter: brightness(0) saturate(100%); /* jadi hitam */
+  opacity: .85;
+}
+
+/* di mode gelap balikkan jadi terang */
+html[data-theme="dark"] .service-icon img{
+  filter: brightness(0) invert(1);      /* jadi putih */
+  opacity: .92;
+}
+
+/* (opsional) kasih latar lembut biar selalu kebaca */
+.service-icon{
+  display:grid; place-items:center;
+  width: clamp(44px, 10vw, 56px); height: clamp(44px, 10vw, 56px);
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--card) 90%, var(--text) 10%);
+}
+html[data-theme="dark"] .service-icon{
+  background: color-mix(in srgb, #000 12%, var(--card) 88%);
+}
+
+/* jaga supaya gambar tidak melebihi box & tidak blur */
+.service-icon img{ max-width: 80%; height: auto; image-rendering: -webkit-optimize-contrast; }

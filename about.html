@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <!-- Meta dasar -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="description" content="Tentang Adam jr | Hair Studio — sejarah singkat, nilai, dan pengalaman layanan.">
+  <meta name="keywords" content="barbershop, hair studio, about, profil, sejarah">
+  <meta name="color-scheme" content="light dark">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>Tentang | Adam jr | Hair Studio</title>
+  <link rel="icon" type="image/x-icon" href="images/favicon.png">
+
+  <!-- PWA / Ikon (opsional) -->
+  <link rel="manifest" href="site.webmanifest">
+  <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b0d11" media="(prefers-color-scheme: dark)">
+
+  <!-- OG / Twitter -->
+  <meta property="og:title" content="About | Adam jr | Hair Studio">
+  <meta property="og:description" content="Kenal lebih dekat dengan Adam jr | Hair Studio.">
+  <meta property="og:image" content="images/about-img.jpg">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="id_ID">
+
+  <!-- ===== Styles utama (CSS terpisah) ===== -->
+        <link rel="stylesheet" href="css/app.css">
+        <link rel="stylesheet" href="css/theme-toggle.css">
+        <link rel="stylesheet" href="css/media-quaries.css">
+        <link rel="stylesheet" href="css/aoe.css">
+        <link rel="stylesheet" href="css/main.css">
+        <link rel="stylesheet" href="css/footer.css">
+</head>
+
+<body>
+  <!-- ===== HEADER / NAV ===== -->
+  <header class="header" role="banner" id="site-header">
+    <div class="container">
+      <div class="row">
+        <a href="index.html" class="site-brand" aria-label="Beranda Adam jr | Hair Studio">
+          <img class="site-logo" src="images/logo.png" alt="Adam jr | Hair Studio" width="160" height="48" decoding="async">
+        </a>
+
+        <button class="nav-toggle" type="button"
+                aria-label="Buka menu" aria-controls="site-nav" aria-expanded="false">
+          <span class="bar"></span><span class="bar"></span><span class="bar"></span>
+        </button>
+
+        <nav id="site-nav" class="navigation" aria-label="Navigasi utama" hidden>
+          <ul>
+            <li><a href="index.html" title="Beranda">Home</a></li>
+            <li><a href="services.html" title="Layanan">Services</a></li>
+            <li><a href="payments.html" title="Pembayaran">Payments</a></li>
+            <li class="active"><a href="about.html" title="Tentang Kami">About</a></li>
+            <li><a href="contact.html" title="Kontak">Contact</a></li>
+            <li><a href="store.html" title="Store">Store</a></li>
+            <li>
+              <button id="theme-toggle" class="theme-toggle" type="button"
+                      aria-label="Ganti tema gelap/terang" aria-pressed="false">
+                <span class="theme-switch" aria-hidden="true">
+                  <svg class="icon sun" viewBox="0 0 24 24" width="18" height="18">
+                    <path d="M12 4V2m0 20v-2M4.93 4.93 3.52 3.52m16.96 16.96-1.41-1.41M4 12H2m20 0h-2M4.93 19.07l-1.41 1.41m16.96-16.96-1.41 1.41M12 8a4 4 0 1 1 0 8 4 4 0 0 1 0-8Z"/>
+                  </svg>
+                  <span class="theme-thumb"></span>
+                  <svg class="icon moon" viewBox="0 0 24 24" width="18" height="18">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"/>
+                  </svg>
+                </span>
+                <span class="sr-only">Ganti tema</span>
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <!-- ===== PAGE HERO (kompak) + badge & clock ===== -->
+  <section class="hero-section hero-2025 --compact" aria-labelledby="hero-title" style="padding-block:48px">
+    <div class="container">
+      <div class="hero-grid">
+        <div class="hero-copy" data-aoe="fade-up" data-aoe-delay="40">
+          <span class="hero-badge" id="open-badge" aria-live="polite">
+            Buka hari ini • <time datetime="11:00">11:00</time>–<time datetime="23:00">23:00</time>
+          </span>
+          <span class="hero-clock" id="hero-clock">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1.75a10.25 10.25 0 1 0 0 20.5 10.25 10.25 0 0 0 0-20.5zm-.75 3.5h1.5v5.1l4 2.4-.75 1.3L11.25 12V6.75z"/></svg>
+            <time id="clock-wib" datetime="00:00:00">00:00:00</time>
+            <span class="tz">WIB</span>
+          </span>
+
+          <h1 id="hero-title" class="hero-title" data-aoe="slide-up" data-aoe-delay="80">
+            Tentang Kami
+          </h1>
+          <nav class="page-breadcrumb" aria-label="Breadcrumb" data-aoe="fade-in" data-aoe-delay="120">
+            <ol class="breadcrumb">
+              <li><a href="index.html">Home</a></li>
+              <li aria-current="page">About</li>
+            </ol>
+          </nav>
+        </div>
+
+        <div class="hero-media" aria-hidden="true" data-aoe="zoom-in" data-aoe-delay="80">
+          <picture>
+            <source srcset="images/hero.png" type="image/png">
+            <img src="images/hero.png" width="520" height="620" alt="" loading="lazy" decoding="async">
+          </picture>
+          <div class="hero-glow"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== ABOUT SECTION ===== -->
+  <section class="space-medium about-2025" aria-labelledby="about-title">
+    <div class="container">
+      <div class="about-grid">
+        <!-- Media -->
+        <figure class="about-media" aria-describedby="about-caption" data-aoe="slide-up" data-aoe-delay="0">
+          <picture>
+            <source srcset="images/about-img.jpg" type="image/jpg">
+            <img src="images/about-img.jpg" alt="Suasana studio yang rapi & higienis" width="720" height="540" loading="lazy" decoding="async">
+          </picture>
+          <div class="media-glow" aria-hidden="true"></div>
+          <figcaption id="about-caption" class="sr-only">
+            Ruang barbershop yang higienis dan nyaman.
+          </figcaption>
+        </figure>
+
+        <!-- Copy -->
+        <div class="about-copy">
+          <span class="about-badge" data-aoe="fade-up" data-aoe-delay="60">Adam jr | Hair Studio • Sejak 2015</span>
+
+          <h2 id="about-title" class="about-title" data-aoe="fade-up" data-aoe-delay="120">Misi & Cerita Kami</h2>
+
+          <p class="about-lede" data-aoe="fade-up" data-aoe-delay="180">
+            <strong>Kami percaya potongan rambut yang baik mengubah rasa percaya diri.</strong>
+            Fokus kami: presisi bentuk, kesehatan rambut & kulit kepala, dan pengalaman yang nyaman.
+          </p>
+
+          <ul class="about-points" role="list">
+            <li data-aoe="slide-up" data-aoe-delay="220">Konsultasi bentuk wajah & gaya hidup sebelum mulai</li>
+            <li data-aoe="slide-up" data-aoe-delay="260">Teknik modern: fade presisi, teksturisasi, razor detail</li>
+            <li data-aoe="slide-up" data-aoe-delay="300">Higienis & steril—alat disanitasi setiap sesi</li>
+            <li data-aoe="slide-up" data-aoe-delay="340">Rekomendasi perawatan & produk sesuai tipe rambut</li>
+          </ul>
+
+          <div class="about-actions" data-aoe="fade-up" data-aoe-delay="380">
+            <a href="services.html" class="btn btn-default">Lihat Layanan</a>
+            <a href="contact.html" class="btn btn-outline">Order Now</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== CTA ===== -->
+  <section class="cta-section" aria-labelledby="cta-title">
+    <div class="container text-center">
+      <h2 id="cta-title" class="cta-title" data-aoe="fade-up" data-aoe-delay="0">Siap Datang ke Studio?</h2>
+      <p class="cta-text" data-aoe="fade-up" data-aoe-delay="80">Booking jadwalmu atau tanya dulu lewat WhatsApp.</p>
+      <a href="contact.html" class="btn btn-default" data-aoe="zoom-in" data-aoe-delay="140">Hubungi Kami</a>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+        <footer class="footer" role="contentinfo">
+            <div class="container">
+                <div class="footer-block">
+                    <div class="row">
+                        <!-- Alamat (kolom kiri) -->
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <div class="footer-widget">
+                                <h2 class="widget-title">Alamat Barbershop</h2>
+                                <ul class="listnone contact">
+                                    <li>
+                                        <svg aria-hidden="true" width="18" height="18"><use href="#icon-map"></use></svg>
+                                        Jl. Talao Mundam No.55, Katapiang, Kec. Batang Anai, Kabupaten Padang Pariaman, Sumatera Barat 25586
+                                    </li>
+                                    <li>
+                                        <svg aria-hidden="true" width="18" height="18"><use href="#icon-phone"></use></svg>
+                                        <a href="tel:+6281374154373">+62 813-7415-4373</a>
+                                    </li>
+                                    <li>
+                                        <svg aria-hidden="true" width="18" height="18"><use href="#icon-mail"></use></svg>
+                                        <a href="mailto:info@adamjrhairstudio.com">info@adamjrhairstudio.com</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Sosial (tengah) -->
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                            <div class="footer-widget footer-social">
+                                <h2 class="widget-title">Ikuti Kami</h2>
+                                <ul class="listnone social-png">
+                                    <li>
+                                        <a class="social-chip" href="#" rel="noopener">
+                                            <img class="social-ico" src="images/social/tiktok.png"
+                                                srcset="images/social/tiktok.png 1x, images/social/tiktok.png 2x"
+                                                alt="" aria-hidden="true">
+                                            <span>TikTok</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="social-chip" href="https://www.instagram.com/ajrhairstudio?igsh=b2lkZXhnbTB5MTlr" target="_blank" rel="noopener">
+                                            <img class="social-ico" src="images/social/instagram.png"
+                                                srcset="images/social/instagram.png 1x, images/social/instagram.png 2x"
+                                                alt="" aria-hidden="true">
+                                            <span>Instagram</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="social-chip" href="#" rel="noopener">
+                                            <img class="social-ico" src="images/social/x.png"
+                                                srcset="images/social/x.png 1x, images/social/x.png 2x"
+                                                alt="" aria-hidden="true">
+                                            <span>Twitter</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="social-chip" href="https://maps.app.goo.gl/nZq79M4P2rXddajx6?g_st=ac" target="_blank" rel="noopener">
+                                            <img class="social-ico" src="images/social/gps.png"
+                                                srcset="images/social/gps.png 1x, images/social/gps.png 2x"
+                                                alt="" aria-hidden="true">
+                                            <span>Maps</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <!-- Newsletter (kanan) -->
+                        <div class="col-lg-5 col-md-5 col-sm-12 col-xs-12">
+                            <div class="footer-widget widget-newsletter">
+                                <h2 class="widget-title">Berlangganan</h2>
+                                <p>Masukkan email untuk menerima style, promo, dan update terbaru.</p>
+                                <div class="input-group">
+                                    <input type="email" class="form-control" placeholder="Alamat email" aria-label="Alamat email">
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="button">Subscribe</button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Hak Cipta -->
+                    <div class="tiny-footer">
+                        <div class="row">
+                        <div class="col-lg-12">
+                            <div class="copyright-content">
+                            <p>© 2025 Adam jr | Hair Studio — All Rights Reserved</p>
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div><!-- /.footer-block -->
+            </div>
+        </footer>
+
+  <!-- ===== Nav drawer (sama seperti index) ===== -->
+        <svg style="display:none" aria-hidden="true">
+            <symbol id="icon-map" viewBox="0 0 24 24">
+                <path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5z"/>
+            </symbol>
+            <symbol id="icon-phone" viewBox="0 0 24 24">
+                <path d="M6.6 10.8a15.5 15.5 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25c1.1.37 2.3.57 3.5.57a1 1 0 0 1 1 1V20a2 2 0 0 1-2 2C9.6 22 2 14.4 2 5a2 2 0 0 1 2-2h2.5a1 1 0 0 1 1 1c0 1.2.2 2.4.57 3.5a1 1 0 0 1-.25 1L6.6 10.8z"/>
+            </symbol>
+            <symbol id="icon-mail" viewBox="0 0 24 24">
+                <path d="M4 6h16a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2zm0 2 8 5 8-5"/>
+            </symbol>
+        </svg>
+
+        <script>
+            (() => {
+            const BP = 900;
+            const html = document.documentElement;
+            const header = document.getElementById('site-header') || document.querySelector('.header');
+            const nav = document.getElementById('site-nav') || document.querySelector('.navigation');
+            const toggle = header ? header.querySelector('.nav-toggle') : null;
+
+            if (!nav || !toggle) return;
+
+            // overlay: buat otomatis kalau belum ada
+            let overlay = document.querySelector('.nav-overlay');
+            if (!overlay) {
+                overlay = document.createElement('div');
+                overlay.className = 'nav-overlay';
+                overlay.hidden = true;
+                document.body.appendChild(overlay);
+            }
+
+            const focusSel = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+            let lastFocused = null;
+
+            function trapFocus(e){
+                if (e.key !== 'Tab') return;
+                const nodes = nav.querySelectorAll(focusSel);
+                if (!nodes.length) return;
+                const first = nodes[0], last = nodes[nodes.length - 1];
+                if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+                else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+            }
+
+            function openNav(){
+                lastFocused = document.activeElement;
+                nav.hidden = false;
+                overlay.hidden = false;
+                requestAnimationFrame(() => {
+                nav.classList.add('is-open');
+                overlay.classList.add('is-open');
+                });
+                toggle.setAttribute('aria-expanded', 'true');
+                html.classList.add('no-scroll');
+                document.addEventListener('keydown', onKeydown);
+                document.addEventListener('keydown', trapFocus);
+                // fokus ke item pertama
+                const first = nav.querySelector(focusSel);
+                first && first.focus();
+            }
+
+            function closeNav(){
+                nav.classList.remove('is-open');
+                overlay.classList.remove('is-open');
+                toggle.setAttribute('aria-expanded', 'false');
+                html.classList.remove('no-scroll');
+                const tidy = () => {
+                nav.hidden = true;
+                overlay.hidden = true;
+                nav.removeEventListener('transitionend', tidy);
+                };
+                nav.addEventListener('transitionend', tidy);
+                document.removeEventListener('keydown', onKeydown);
+                document.removeEventListener('keydown', trapFocus);
+                // kembalikan fokus
+                lastFocused && lastFocused.focus && lastFocused.focus();
+            }
+
+            function onKeydown(e){
+                if (e.key === 'Escape') closeNav();
+            }
+
+            // Toggle
+            toggle.addEventListener('click', () => {
+                const expanded = toggle.getAttribute('aria-expanded') === 'true';
+                expanded ? closeNav() : openNav();
+            });
+
+            // Tutup saat klik overlay atau klik link di menu
+            overlay.addEventListener('click', closeNav);
+            nav.addEventListener('click', (e) => {
+                const a = e.target.closest('a');
+                if (a) closeNav();
+            });
+
+            // Auto reset saat melebar ke desktop
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > BP && !nav.hidden) closeNav();
+            });
+            })();
+        </script>
+
+        <script src="js/theme-toggle.js" defer></script>
+        <script src="js/hero-rotator.js" defer></script>
+        <script src="js/social-proof.js" defer></script>
+        <script src="js/aoe.js" defer></script>
+        <script src="js/main.js" defer></script>
+    </body>
+</html>
