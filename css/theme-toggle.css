@@ -52,6 +52,10 @@ html[data-theme="dark"]{
 }
 
 /* thumb */
+/* pastikan ikon di atas thumb */
+.theme-switch .icon { z-index: 2; }
+.theme-thumb        { z-index: 1; }
+
 .theme-thumb{
   position:absolute; top:var(--tgl-pad); left:var(--tgl-pad);
   width:var(--tgl-thumb); height:var(--tgl-thumb);
@@ -89,8 +93,8 @@ html[data-theme="dark"] .theme-thumb{
   transform: translateX(calc(var(--tgl-w) - var(--tgl-thumb) - var(--tgl-pad)*2));
 }
 
-/* sembunyikan ikon agar ultra-minimal */
-.theme-switch .icon{ display:none; }
+/* sembunyikan ikon agar ultra-minimal 
+.theme-switch .icon{ display:none; } */
 
 /* aksesibilitas: reduce motion */
 @media (prefers-reduced-motion: reduce){
@@ -260,3 +264,56 @@ html[data-theme="dark"] .service-icon{
 
 /* jaga supaya gambar tidak melebihi box & tidak blur */
 .service-icon img{ max-width: 80%; height: auto; image-rendering: -webkit-optimize-contrast; }
+
+
+/* tampilkan/hilangkan ikon sesuai tema */
+/* --- Ikon dasar --- */
+.icon { 
+  position: absolute;
+  width: 18px; height: 18px;
+  object-fit: contain;
+  pointer-events: none;
+  opacity: 0;                                  /* default tersembunyi */
+  transform: translateY(-50%) scale(.9);      /* start kecil dikit */
+  transition:
+    opacity .18s ease,
+    transform .24s cubic-bezier(.2,.7,.3,1),
+    filter .24s ease;
+  filter: drop-shadow(0 1px 2px rgba(0,0,0,.28));
+}
+
+/* Posisi kiri/kanan dalam track */
+.icon.sun  { left: 6px;  top: 50%; }
+.icon.moon { right: 6px; top: 50%; }
+
+/* Tampilkan ikon aktif per tema */
+html[data-theme="light"] .icon.sun  { opacity: 1; transform: translateY(-50%) scale(1); }
+html[data-theme="dark"]  .icon.moon { opacity: 1; transform: translateY(-50%) scale(1); }
+
+/* Ikon pasif tetap redup (kalau ingin total hilang, biarkan saja opacity:0) */
+html[data-theme="light"] .icon.moon { filter: brightness(0) saturate(100%) opacity(.65); }
+html[data-theme="dark"]  .icon.sun  { filter: brightness(0) invert(1) opacity(.65); }
+
+/* Glow lembut biar mewah */
+html[data-theme="light"] .icon.sun  { filter: drop-shadow(0 0 6px rgba(212,175,55,.35)); } /* gold */
+html[data-theme="dark"]  .icon.moon { filter: drop-shadow(0 0 6px rgba(126,230,255,.38)); } /* cyan */
+
+/* --- Animasi “loncat imut” saat ikon MUNCUL --- */
+@keyframes pop-bounce {
+  0%   { transform: translateY(-50%) scale(.6);   opacity: 0; }
+  60%  { transform: translateY(-56%) scale(1.12); opacity: 1; }
+  100% { transform: translateY(-50%) scale(1.0);  opacity: 1; }
+}
+.icon.-pop { animation: pop-bounce .28s cubic-bezier(.2,.8,.25,1) both; }
+
+/* Mikro-interaksi saat ditekan (thumb & track sudah ada di CSS kamu) */
+.theme-toggle:active .theme-thumb { transform: translateX(0) scale(.98); }
+html[data-theme="dark"] .theme-toggle:active .theme-thumb{
+  transform: translateX(calc(var(--tgl-w) - var(--tgl-thumb) - var(--tgl-pad)*2)) scale(.98);
+}
+
+/* Reduced motion: matikan animasi “loncat” */
+@media (prefers-reduced-motion: reduce){
+  .icon { transition: none !important; }
+  .icon.-pop { animation: none !important; }
+}
